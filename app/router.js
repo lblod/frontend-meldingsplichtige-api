@@ -7,6 +7,11 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('mock-login');
+
+  this.route('route-not-found', {
+    path: '/*wildcard'
+  });
 });
 
 export default Router;

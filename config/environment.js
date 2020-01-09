@@ -20,6 +20,19 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    torii: {
+      disableRedirectInitializer: true,
+      providers: {
+        'acmidm-oauth2': {
+          apiKey: 'a2c0d6ea-01b4-4f68-920b-10834a943c27',
+          baseUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/auth',
+          scope: 'openid rrn vo profile abb_loketLB',
+          redirectUri: 'https://loket.lblod.info/authorization/callback',
+          switchUrl: 'https://loket.lblod.info/switch-login',
+          logoutUrl: 'https://authenticatie-ti.vlaanderen.be/op/v1/logout'
+        }
+      }
     }
   };
 
