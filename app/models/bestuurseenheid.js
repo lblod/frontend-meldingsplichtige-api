@@ -3,7 +3,7 @@ const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
   naam: attr('string'),
-  alternatieveNaam: attr('string-set'),
+  alternatieveNaam: attr(),
   classificatie: belongsTo('bestuurseenheid-classificatie-code'),
   bestuursorganens: hasMany('bestuursorgaan')
 });
