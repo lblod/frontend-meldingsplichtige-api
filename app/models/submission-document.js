@@ -2,6 +2,7 @@ import DS from 'ember-data';
 const { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
+  uri: attr(),
   publicationDate: attr('date'),
   reportYear: attr('gyear'),
   firstDateInForce: attr('date'),

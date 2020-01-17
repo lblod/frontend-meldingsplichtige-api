@@ -7,5 +7,6 @@ export default Model.extend({
   publisher: belongsTo('vendor'),
   submittedResource: belongsTo('submission-document'),
   status: belongsTo('submission-document-status'),
-  files: hasMany('file')
+  files: hasMany('file'),
+  task: belongsTo('automatic-submission-task')
 });

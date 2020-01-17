@@ -1,22 +1,27 @@
 {{outlet}}
+
+<h1 class="h1">Test Loket voor meldingen</h1>
 {{#data-table
   content=model
   isLoading=isLoadingModel
   filter=filter
   sort=sort
   page=page
-  size=size
+     size=size
+     onClickRow=(action "showTriples")
   as |t|
 }}
   {{#t.content as |c|}}
     {{#c.header}}
       {{th-sortable field='href' currentSorting=sort label='Link'}}
+      {{th-sortable field='task.created' currentSorting=sort label='Datum'}}
       {{th-sortable field='organization.naam' currentSorting=sort label='Bestuurseenheid'}}
       {{th-sortable field='publisher.name' currentSorting=sort label='Vendor'}}
       {{th-sortable field='status.label' currentSorting=sort label='Status'}}
     {{/c.header}}
     {{#c.body as |row|}}
-      <td>{{row.url}}</td>
+      <td>{{row.href}}</td>
+      <td>{{row.task.created}}</td>
       <td>{{row.organization.naam}}</td>
       <td>{{row.publisher.name}}</td>
       <td>{{row.status.label}}</td>
