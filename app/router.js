@@ -13,4 +13,8 @@ Router.map(function() {
     path: '/*wildcard'
   });
   this.route('login');
+
+  this.route('forms', function() {
+    this.route('edit');
+  });
 });
