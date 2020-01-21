@@ -45,7 +45,7 @@ export default class FormFieldModel {
   constructor( uri, options ) {
     const { store, formGraph } = options;
     this.uri = uri;
-    this.rdflibLabel = store.any( uri, SHACL("label"), undefined, formGraph );
+    this.rdflibLabel = store.any( uri, SHACL("name"), undefined, formGraph );
     this.rdflibDescription = store.any( uri, SHACL("description"), undefined, formGraph );
     this.rdflibOrder = store.any( uri, SHACL("order"), undefined, formGraph );
     this.rdflibDisplayType = store.any( uri, FORM("displayType"), undefined, formGraph );
