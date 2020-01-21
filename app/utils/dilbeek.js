@@ -16,6 +16,7 @@ export default `
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ext: <http://mu.semte.ch/vocabularies/ext/>.
 
 <> ns1:usesVocabulary besluit: .
 
@@ -52,6 +53,8 @@ export default `
     eli:date_publication "2019-12-27"^^xsd:date ;
     eli:passed_by <http://data.lblod.info/id/bestuursorganen/6b4945e1679b127d12ea8c9c70ba06b77abd0213d2e15c1300c7f232e49daa65> ;
     dct:type <https://data.vlaanderen.be/id/concept/BesluitDocumentType/3fa67785-ffdc-4b30-8880-2b99d97b4dee> .
+
+<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:humanPublicationUrl "http://lblod.info/tatataa" .
 
 <http://data.lblod.info/id/bestuursorganen/6b4945e1679b127d12ea8c9c70ba06b77abd0213d2e15c1300c7f232e49daa65> a besluit:Bestuursorgaan ;
     mandaat:isTijdspecialisatieVan <http://data.lblod.info/id/bestuursorganen/ed04026321d1ae83e687f621dd5b055f7eeaccb112a5c37d939c402e8f9ed9cf> .
