@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField } from '../../../../utils/import-triples-for-form';
-import { check } from '../../../../utils/constraints';
 import { RDF, FORM, SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
@@ -16,7 +15,7 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   @tracked
   errors = [];
 
-  storeOptions: {};
+  storeOptions = {};
 
   @action
   loadData(){
