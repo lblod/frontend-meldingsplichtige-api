@@ -1,0 +1,31 @@
+<div {{did-insert this.loadData}}>
+
+  {{#each this.propertyGroups as |propertyGroup|}}
+    <p>
+      [{{propertyGroup.order}}] <b>{{propertyGroup.name}}</b>
+      <br />
+      {{propertyGroup.description}}
+    </p>
+
+    <ul>
+      {{#each propertyGroup.sortedFields as |field|}}
+        <li>
+          [{{field.order}}] <b>{{field.label}}</b>
+          <br />
+          This field is rendered as a {{field.displayType}} with options {{field.options}}.
+          <br />
+          {{field.description}}
+          <br />
+          Component: {{component (component-for-display-type-edit field.displayType)
+                       field=field
+                       formStore=this.args.formStore
+                       graphs=this.graphs
+                       sourceNode=this.sourceNode
+                     }}
+        </li>
+      {{/each}}
+    </ul>
+  {{/each}}
+</div>
+
+{{yield}}

@@ -1,0 +1,10 @@
+<div {{did-insert this.loadData}}>
+  <PowerSelect  @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
+  {{typeDossier.label}}
+  </PowerSelect>
+</div>
+{{#if errors}}
+  {{#each errors as |error|}}
+     <span style="color: red"> {{error.resultMessage}} </span>
+  {{/each}}
+{{/if}}
