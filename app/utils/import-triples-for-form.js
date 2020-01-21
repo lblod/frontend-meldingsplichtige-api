@@ -165,10 +165,14 @@ function validateForm(form, options) {
   return fieldValidations.reduce((acc, value) => acc && value, true);
 }
 
-function validateField(field, options) {
+function validateField(fieldUri, options) {
+  return validationResultsForField(fieldUri, options).reduce((acc, value) => acc && value.valid, true);
+}
+
+function validationResultsForField(fieldUri, options){
   const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
   const validationConstraints = store
-        .match(field, FORM("validations"), undefined, formGraph)
+        .match(fieldUri, FORM("validations"), undefined, formGraph)
         .map(t => t.object);
 
   const validationResults = [];
@@ -176,9 +180,8 @@ function validateField(field, options) {
     const validationResult = check( constraintUri, options);
     validationResults.push(validationResult);
   }
-
-  return validationResults.reduce((acc, value) => acc && value.valid, true);
+  return validationResults;
 }
 
 export default importTriplesForForm;
-export { triplesForPath, fieldsForForm, validateForm, validateField };
+export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField };

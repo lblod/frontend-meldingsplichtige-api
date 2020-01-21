@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { triplesForPath } from '../../../../utils/import-triples-for-form';
+import { triplesForPath, validationResultsForField } from '../../../../utils/import-triples-for-form';
 import { check } from '../../../../utils/constraints';
 import { RDF, FORM, SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
@@ -38,25 +38,14 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   }
 
   loadValidations(){
-    const validationConstraintUris = this.args.formStore
-          .match(this.args.field.uri, FORM("validations"), undefined, this.args.graphs.formGraph)
-          .map(t => t.object);
-
-    let validationResults = [];
-
-    for(let constraintUri of validationConstraintUris){
-      const options = {
-        formGraph: this.args.graphs.formGraph,
-        sourceNode: this.args.sourceNode,
-        sourceGraph: this.args.graphs.sourceGraph,
-        metaGraph: this.args.graphs.metaGraph,
-        store: this.args.formStore
-      };
-      const validationResult = check(constraintUri, options);
-      validationResults.push(validationResult);
-    }
-
-    this.errors = validationResults.filter(r => !r.valid);
+    const options = {
+      formGraph: this.args.graphs.formGraph,
+      sourceNode: this.args.sourceNode,
+      sourceGraph: this.args.graphs.sourceGraph,
+      metaGraph: this.args.graphs.metaGraph,
+      store: this.args.formStore
+    };
+    this.errors = validationResultsForField(this.args.field.uri, options).filter(r => !r.valid);
   }
 
   loadProvidedValue(){
