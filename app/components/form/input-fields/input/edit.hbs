@@ -1,4 +1,2 @@
-<div {{did-insert this.loadData}}>
-  {{this.value}}
-</div>
-{{yield}}
+<label {{did-insert this.loadData}}>{{@field.label}}</label>
+<Input @value={{this.value}} />

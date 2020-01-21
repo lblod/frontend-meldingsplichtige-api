@@ -1,23 +1,40 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { triplesForPath } from '../../../../utils/import-triples-for-form';
+import { triplesForPath, validationResultsForField } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsInputEditComponent extends Component {
   @tracked
   value = null;
 
+  @tracked
+  errors = [];
+
+  storeOptions = {};
+
   @action
   loadData(){
-    const matches = triplesForPath({
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath,
+    this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph
-    });
+      sourceGraph: this.args.graphs.sourceGraph,
+      metaGraph: this.args.graphs.metaGraph,
+      store: this.args.formStore,
+      path: this.args.field.rdflibPath
+    };
 
+    this.loadValidations();
+    this.loadProvidedValue();
+  }
+
+  loadValidations(){
+    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
+  }
+
+  loadProvidedValue(){
+    const matches = triplesForPath(this.storeOptions);
     if(matches.values.length > 0)
       this.value = matches.values[0].value;
   }
+
 }
