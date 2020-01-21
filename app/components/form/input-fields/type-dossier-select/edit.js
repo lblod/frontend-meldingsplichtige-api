@@ -16,8 +16,20 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   @tracked
   errors = [];
 
+  storeOptions: {};
+
   @action
   loadData(){
+
+    this.storeOptions = {
+      formGraph: this.args.graphs.formGraph,
+      sourceNode: this.args.sourceNode,
+      sourceGraph: this.args.graphs.sourceGraph,
+      metaGraph: this.args.graphs.metaGraph,
+      store: this.args.formStore,
+      path: this.args.field.rdflibPath
+    };
+
     this.loadOptions();
     this.loadValidations();
     if(this.errors.length == 0){
@@ -38,25 +50,12 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   }
 
   loadValidations(){
-    const options = {
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph,
-      metaGraph: this.args.graphs.metaGraph,
-      store: this.args.formStore
-    };
-    this.errors = validationResultsForField(this.args.field.uri, options).filter(r => !r.valid);
+    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   loadProvidedValue(){
     // Assumes valid input
-    const matches = triplesForPath({
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath,
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph
-    });
+    const matches = triplesForPath(this.storeOptions);
 
     const subject = matches.values.find(v => {
       return this.args.formStore.any(v, SKOS('inScheme'), undefined, this.args.graphs.metaGraph);
@@ -70,13 +69,7 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   @action
   updateSelection(option){
     //gather triples to remove on path
-    const matches = triplesForPath({
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath,
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph
-    });
+    const matches = triplesForPath(this.storeOptions);
 
     const documentTypes = matches.values.filter(v => {
       return this.args.formStore.any(v, SKOS('inScheme'), undefined, this.args.graphs.metaGraph);
