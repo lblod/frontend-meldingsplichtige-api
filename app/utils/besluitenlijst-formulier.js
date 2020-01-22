@@ -96,6 +96,7 @@ fields:meetingDate a form:Field ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
+        sh:resultMessage "Dit is een verplicht veld.";
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ],
       [ a sh:PropertyShape ;
         form:grouping form:MatchEvery ;
@@ -140,7 +141,12 @@ fields:humanPublicationUrl a form:Field ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
-        sh:path ext:humanPublicationUrl ] ;
+        sh:resultMessage "Dit veld is verplicht";
+        sh:path ext:humanPublicationUrl ],
+      [ a form:UriConstraint ;
+        form:grouping form:MatchEvery ;
+        sh:resultMessage "Gelieve een geldige URI op te geven.";
+        sh:path ext:humanPublicationUrl ];
     form:displayType displayTypes:defaultInput ;
     sh:group fields:aDynamicPropertyGroup .
 
