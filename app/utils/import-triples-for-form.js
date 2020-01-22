@@ -1,5 +1,8 @@
 import { RDF, FORM, SHACL } from './namespaces';
 import { check } from './constraints';
+import rdflib from 'ember-rdflib';
+import uuidv4 from 'uuid/v4';
+const URI_TEMPLATE = 'http://data.lblod.info/forms/nodes/';
 
 function importTriplesForForm( form, { store, formGraph, sourceGraph, sourceNode, metaGraph } ) {
   let datasetTriples = [];
@@ -74,33 +77,38 @@ function fieldsForFieldGroup( fieldGroup, options ) {
     .map( ({object}) => object );
 }
 
-function triplesForPath( options ){
+function triplesForPath( options, createMissingNodes = false ){
   const { store, path, formGraph, sourceNode, sourceGraph } = options;
-
   let solutions = {};
-
   if( path && path.termType === "Collection" ) {
-    return triplesForComplexPath( options );
+    return triplesForComplexPath( options, createMissingNodes );
   } else {
-    return triplesForSimplePath( options );
+    return triplesForSimplePath( options, createMissingNodes );
   }
 }
 
-function triplesForSimplePath( options ) {
+function triplesForSimplePath( options, createMissingNodes = false ) {
   const { store, path, formGraph, sourceNode, sourceGraph } = options;
   let datasetTriples = [];
 
   if( path ) {
-    store
-      .match(sourceNode, path, undefined, sourceGraph)
-      .map( (item) => {
-        datasetTriples.push(item);
-      } );
+    const triples = store.match(sourceNode, path, undefined, sourceGraph);
+
+    if(createMissingNodes && triples.length == 0) {
+      triples.push( new rdflib.Statement(
+        sourceNode,
+        path,
+        new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
+        sourceGraph
+      ));
+    }
+
+    triples.map( (item) => { datasetTriples.push(item); } );
   }
   return { triples: datasetTriples, values: datasetTriples.map( ({object}) => object ) };
 }
 
-function triplesForComplexPath( options ) {
+function triplesForComplexPath( options, createMissingNodes = false ) {
   const { store, path, formGraph, sourceNode, sourceGraph } = options;
   let datasetTriples = [];
 
@@ -127,21 +135,42 @@ function triplesForComplexPath( options ) {
 
     for( let startingPoint of startingPoints ) {
       if( currentPathElement.inversePath ) {
+
         // inverse path, walk in other direction
-        store
-          .match( undefined, currentPathElement.inversePath, startingPoint, sourceGraph )
-          .map( (triple) => {
-            datasetTriples.push(triple);
-            nextStartingPoints.push( triple.subject );
-          });
+        const triples = store.match( undefined, currentPathElement.inversePath, startingPoint, sourceGraph );
+
+        if(createMissingNodes && triples.length == 0) {
+          triples.push( new rdflib.Statement(
+            new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
+            currentPathElement.inversePath,
+            startingPoint,
+            sourceGraph
+          ));
+        }
+
+        triples.map( (triple) => {
+          datasetTriples.push(triple);
+          nextStartingPoints.push( triple.subject );
+        });
+
       } else {
+
         // regular path, walk in normal direction
-        store
-          .match( startingPoint, currentPathElement.path, undefined, sourceGraph )
-          .map( (triple) => {
+        const triples = store.match( startingPoint, currentPathElement.path, undefined, sourceGraph );
+
+        if(createMissingNodes && triples.length == 0) {
+          triples.push( new rdflib.Statement(
+            startingPoint,
+            currentPathElement.path,
+            new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
+            sourceGraph
+          ));
+        }
+
+        triples.map( (triple) => {
             datasetTriples.push(triple);
             nextStartingPoints.push( triple.object );
-          });
+        });
       }
     }
 
