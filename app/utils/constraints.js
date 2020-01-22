@@ -6,6 +6,7 @@ import codelist from './constraints/codelist';
 import singleCodelistValue from './constraints/single-codelist-value';
 import exactValue from './constraints/exact-value';
 import besluittype from './constraints/besluittype';
+import validUri from './constraints/valid-uri';
 
 
 export default function constraintForUri(uri) {
@@ -20,6 +21,8 @@ export default function constraintForUri(uri) {
       return exactValue;
     case "http://lblod.data.gift/vocabularies/forms/BesluittypeConstraint":
       return besluittype;
+    case "http://lblod.data.gift/vocabularies/forms/UriConstraint":
+      return validUri;
     default:
       return missingConstraint;
   }
@@ -49,7 +52,7 @@ function check(constraintUri, options){
     validationResult = validator( values, validationOptions );
   } else if( groupingType == FORM("MatchSome").value ) {
     validationResult = values.some( (value) => validator( value, validationOptions ) );
-  } else if( groupingType == FORM("MatchEvery" .value) ) {
+  } else if( groupingType == FORM("MatchEvery").value ) {
     validationResult = values.every( (value) => validator( value, validationOptions ) );
   }
 
