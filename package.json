@@ -64,6 +64,7 @@
     "edition": "octane"
   },
   "dependencies": {
+    "ember-moment": "^8.0.0",
     "uuid": "^3.4.0"
   }
 }

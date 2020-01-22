@@ -2,6 +2,7 @@ import DS from 'ember-data';
 const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
+  uri: attr(),
   naam: attr('string'),
   alternatieveNaam: attr(),
   classificatie: belongsTo('bestuurseenheid-classificatie-code'),
