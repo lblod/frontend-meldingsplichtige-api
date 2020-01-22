@@ -2,7 +2,7 @@ import { RDF, FORM, SHACL } from './namespaces';
 import { check } from './constraints';
 import rdflib from 'ember-rdflib';
 import uuidv4 from 'uuid/v4';
-const URI_TEMPLATE = 'http://data.lblod.info/forms/nodes/';
+const URI_TEMPLATE = 'http://data.lblod.info/form-data/nodes/';
 
 function importTriplesForForm( form, { store, formGraph, sourceGraph, sourceNode, metaGraph } ) {
   let datasetTriples = [];
@@ -242,7 +242,7 @@ function updateSimpleFormValue(value, options){
      *   <customUri> <prov:startedAtTime> "datum".
      *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
      *
-     * Note: this is for now a best guess. And further tweaking will be needed. If this if our model:
+     * TODO: this is for now a best guess. And further tweaking will be needed. If this if our model:
      *  <zitting> a <Zitting>
      *  <zitting> <prov:startedAtTime> "datum".
      *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
