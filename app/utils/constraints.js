@@ -8,7 +8,6 @@ import exactValue from './constraints/exact-value';
 import besluittype from './constraints/besluittype';
 import validUri from './constraints/valid-uri';
 
-
 export default function constraintForUri(uri) {
   switch (String(uri)) {
     case "http://lblod.data.gift/vocabularies/forms/RequiredConstraint":
@@ -24,7 +23,7 @@ export default function constraintForUri(uri) {
     case "http://lblod.data.gift/vocabularies/forms/UriConstraint":
       return validUri;
     default:
-      return missingConstraint;
+      return false; //TODO: TBD
   }
 }
 

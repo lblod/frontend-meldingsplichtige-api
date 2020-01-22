@@ -102,6 +102,7 @@ fields:meetingDate a form:Field ;
         form:grouping form:MatchEvery ;
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ;
         sh:dataType xsd:dateTime ;
+        sh:resultMessage "Geeft een geldige datum en tijd op.";
         sh:nodeKind sh:Literal ] ;
     form:displayType displayTypes:dateTime ;
     sh:group fields:anIntermediatePropertyGroup .
@@ -118,6 +119,7 @@ fields:publicationDate a form:Field ;
       [ a sh:PropertyShape ;
         form:grouping form:MatchSome ;
         sh:path eli:date_publication ;
+        sh:resultMessage "Geeft een geldige datum op.";
         sh:dataType xsd:date ;
         sh:nodeKind sh:Literal ] ;
     form:displayType displayTypes:date ;
