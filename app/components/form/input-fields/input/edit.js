@@ -42,5 +42,5 @@ export default class FormInputFieldsInputEditComponent extends Component {
     e.preventDefault();
     updateSimpleFormValue(this.value, this.storeOptions);
   }
-  
+
 }
