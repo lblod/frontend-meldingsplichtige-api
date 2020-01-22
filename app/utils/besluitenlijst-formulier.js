@@ -84,6 +84,7 @@ fields:administrativeBody a form:Field ;
         sh:path eli:passed_by ],
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
+        sh:resultMessage "Dit veld is verplicht."@nl;
         sh:path eli:passed_by ] ;
     form:displayType displayTypes:bestuursorgaanSelect ;
     sh:group fields:anIntermediatePropertyGroup .
@@ -115,6 +116,7 @@ fields:publicationDate a form:Field ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
+        sh:resultMessage "Dit is een verplicht veld.";
         sh:path eli:date_publication ],
       [ a sh:PropertyShape ;
         form:grouping form:MatchSome ;
