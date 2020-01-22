@@ -39,14 +39,6 @@ export default class FormInputFieldsDateEditComponent extends Component {
       this.value = matches.values[0].value;
   }
 
-
-  lastPathElemnt(path){
-    if(path.termType == "NamedNode"){
-      return path;
-    }
-    return path.elements.slice[-1][0];
-  }
-
   @action
   updateValue(e){
     e.preventDefault();
