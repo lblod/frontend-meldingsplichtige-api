@@ -216,12 +216,18 @@ function updateSimpleFormValue(value, options){
   const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
   const triples = triplesForPath(options);
 
-  //This field only shows one value so max one triple to remove
-  const tripleForRemoval = triples.values.length > 0 && triples.triples.slice(-1)[0];
+  let triplesForRemoval = [];
+  //so we have 1 or more values linked to the path. (If more, we have broken form)
+  if(triples.values.length > 0){
+    //we need to find the triples linked to the values
+    triplesForRemoval = triples.
+      triples
+      .filter(t => triples.values.find(v => t.object.equals(v)));
+  }
 
   let triplesToAdd = [];
 
-  if(!tripleForRemoval && value){
+  if(triplesForRemoval.length == 0 && value){
     /* This might be tricky. The triple didn't exist upfront. So we need to find a subject and predicate to attached it to.
      * Furthermore, the path might contain several hops, and some of them don't necessarly exist.
      *
@@ -260,12 +266,12 @@ function updateSimpleFormValue(value, options){
     triplesToAdd.slice(-1)[0].object = value;
   }
 
-  else if(tripleForRemoval && value){
-    triplesToAdd = [{subject: tripleForRemoval.subject, predicate: tripleForRemoval.predicate, object: value, graph: sourceGraph}];
+  else if(triplesForRemoval.length > 0 && value){
+    triplesToAdd = [{subject: triplesForRemoval[0].subject, predicate: triplesForRemoval[0].predicate, object: value, graph: sourceGraph}];
   }
 
-  if(tripleForRemoval){
-    store.removeStatements([tripleForRemoval]);
+  if(triplesForRemoval.length > 0){
+    store.removeStatements(triplesForRemoval);
   }
 
   if(triplesToAdd.length > 0){
