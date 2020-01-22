@@ -212,5 +212,66 @@ function validationResultsForField(fieldUri, options){
   return validationResults;
 }
 
+function updateSimpleFormValue(value, options){
+  const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+  const triples = triplesForPath(options);
+
+  //This field only shows one value so max one triple to remove
+  const tripleForRemoval = triples.values.length > 0 && triples.triples.slice(-1)[0];
+
+  let triplesToAdd = [];
+
+  if(!tripleForRemoval && value){
+    /* This might be tricky. The triple didn't exist upfront. So we need to find a subject and predicate to attached it to.
+     * Furthermore, the path might contain several hops, and some of them don't necessarly exist.
+     *
+     *  Suppose our path is
+     *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
+     *
+     *  and we only have
+     *
+     *  <besluitenlijst> a <Besluitenlijst>
+     *
+     *  A path will then be constructed with
+     *   <customUri> <prov:startedAtTime> "datum".
+     *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
+     *
+     * Note: this is for now a best guess. And further tweaking will be needed. If this if our model:
+     *  <zitting> a <Zitting>
+     *  <zitting> <prov:startedAtTime> "datum".
+     *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+     *  <besluitenlijst> a <Besluitenlijst>
+     *
+     * And suppose we miss:
+     *  <zitting> <prov:startedAtTime> "datum".
+     *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+     *
+     * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
+     */
+
+    //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
+    const constructedTriples = triplesForPath(options, true).triples;
+
+    if(constructedTriples.length != triples.triples.length){
+      triplesToAdd = constructedTriples.filter(t => ! triples.triples.find(existingT => t.equals(existingT)));
+    }
+
+    //Add the value as the object to the last triple. We know it exists. And is always the object.
+    triplesToAdd.slice(-1)[0].object = value;
+  }
+
+  else if(tripleForRemoval && value){
+    triplesToAdd = [{subject: tripleForRemoval.subject, predicate: tripleForRemoval.predicate, object: value, graph: sourceGraph}];
+  }
+
+  if(tripleForRemoval){
+    store.removeStatements([tripleForRemoval]);
+  }
+
+  if(triplesToAdd.length > 0){
+    store.addAll(triplesToAdd);
+  }
+}
+
 export default importTriplesForForm;
-export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField };
+export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField, updateSimpleFormValue };
