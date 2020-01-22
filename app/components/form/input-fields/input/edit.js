@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { triplesForPath, validationResultsForField } from '../../../../utils/import-triples-for-form';
+import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsInputEditComponent extends Component {
   @tracked
@@ -37,4 +37,10 @@ export default class FormInputFieldsInputEditComponent extends Component {
       this.value = matches.values[0].value;
   }
 
+  @action
+  updateValue(e){
+    e.preventDefault();
+    updateSimpleFormValue(this.value, this.storeOptions);
+  }
+  
 }
