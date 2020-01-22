@@ -1,14 +1,15 @@
 {{outlet}}
 
 <h1 class="h1">Test Loket voor meldingen</h1>
+{{#link-to 'forms.new'}}Maak nieuw formulier aan{{/link-to}}
 {{#data-table
-  content=model
-  isLoading=isLoadingModel
-  filter=filter
-  sort=sort
-  page=page
-  size=size
-  as |t|
+   content=model
+   isLoading=isLoadingModel
+   filter=filter
+   sort=sort
+   page=page
+   size=size
+   as |t|
 }}
   {{#t.content as |c|}}
     {{#c.header}}

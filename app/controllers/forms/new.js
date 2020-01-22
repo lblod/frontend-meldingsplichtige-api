@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { validateForm }  from '../../utils/import-triples-for-form';
 
-export default class FormsEditController extends Controller {
+export default class FormsNewController extends Controller {
   @tracked
   formStore;
 

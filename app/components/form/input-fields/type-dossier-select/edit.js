@@ -68,7 +68,8 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
   @action
   updateSelection(option){
     //gather triples to remove on path
-    const matches = triplesForPath(this.storeOptions);
+    // We create missing paths if we don't have them
+    const matches = triplesForPath(this.storeOptions, true);
 
     let triple = {};
 
@@ -93,8 +94,7 @@ export default class FormInputFieldsTypeDossierSelectEditComponent extends Compo
       //This is a best guess, we need to find a potential subject do add the documentype to.
       //TODO: if multiple exist, I really don't know what to do.
       if(!matches.values.length == 1){
-        alert(`Algemene fout voor formulier ${this.args.sourceNode}`);
-        return;
+        console.warn(`We have too many matches on rdf:type for ${this.args.sourceNode}`);
       }
       triple = {subject: matches.triples[0].subject, predicate: RDF('type'), object: option.subject, graph: this.args.graphs.sourceGraph};
     }

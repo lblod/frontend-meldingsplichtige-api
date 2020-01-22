@@ -16,5 +16,6 @@ Router.map(function() {
 
   this.route('forms', function() {
     this.route('edit');
+    this.route('new');
   });
 });
