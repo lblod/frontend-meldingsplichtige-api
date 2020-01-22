@@ -11,6 +11,7 @@ export default class FormInputFieldsDateEditComponent extends Component {
   @tracked
   errors = [];
 
+  @tracked
   storeOptions = {};
 
   @action

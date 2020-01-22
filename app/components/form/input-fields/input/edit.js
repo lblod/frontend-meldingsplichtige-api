@@ -10,6 +10,7 @@ export default class FormInputFieldsInputEditComponent extends Component {
   @tracked
   errors = [];
 
+  @tracked
   storeOptions = {};
 
   @action

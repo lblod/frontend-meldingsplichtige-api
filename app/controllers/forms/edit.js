@@ -5,6 +5,18 @@ import { RDF, FORM } from '../../utils/namespaces';
 import { validateForm }  from '../../utils/import-triples-for-form';
 
 export default class FormsEditController extends Controller {
+  @tracked
+  formStore;
+
+  @tracked
+  graphs;
+
+  @tracked
+  sourceNode;
+
+  @tracked
+  form;
+
   @action
   send(){
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
