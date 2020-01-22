@@ -214,69 +214,54 @@ function validationResultsForField(fieldUri, options){
 
 function updateSimpleFormValue(value, options){
   const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
-  const triples = triplesForPath(options);
 
-  let triplesForRemoval = [];
-  //so we have 1 or more values linked to the path. (If more, we have broken form)
-  if(triples.values.length > 0){
-    //we need to find the triples linked to the values
-    triplesForRemoval = triples.
-      triples
-      .filter(t => triples.values.find(v => t.object.equals(v)));
-  }
+  /* This might be tricky.We need to find a subject and predicate to attach the object to.
+   * The path might contain several hops, and some of them don't necessarly exist. Consider:
+   *
+   *  Suppose our path is
+   *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
+   *
+   *  and we only have
+   *
+   *  <besluitenlijst> a <Besluitenlijst>
+   *
+   *  A path will then be constructed with
+   *   <customUri> <prov:startedAtTime> "datum".
+   *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
+   *
+   * TODO: this is for now a best guess. And further tweaking will be needed. If this needs to be our model:
+   *  <zitting> a <Zitting>
+   *  <zitting> <prov:startedAtTime> "datum".
+   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+   *  <besluitenlijst> a <Besluitenlijst>
+   *
+   * And suppose the data store does not have:
+   *  <zitting> <prov:startedAtTime> "datum".
+   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+   *
+   * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
+   */
+
+  //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
+  const dataset = triplesForPath(options, true);
+
+  store.removeStatements(dataset.triples);
 
   let triplesToAdd = [];
-
-  if(triplesForRemoval.length == 0 && value){
-    /* This might be tricky. The triple didn't exist upfront. So we need to find a subject and predicate to attached it to.
-     * Furthermore, the path might contain several hops, and some of them don't necessarly exist.
-     *
-     *  Suppose our path is
-     *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
-     *
-     *  and we only have
-     *
-     *  <besluitenlijst> a <Besluitenlijst>
-     *
-     *  A path will then be constructed with
-     *   <customUri> <prov:startedAtTime> "datum".
-     *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
-     *
-     * TODO: this is for now a best guess. And further tweaking will be needed. If this if our model:
-     *  <zitting> a <Zitting>
-     *  <zitting> <prov:startedAtTime> "datum".
-     *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-     *  <besluitenlijst> a <Besluitenlijst>
-     *
-     * And suppose we miss:
-     *  <zitting> <prov:startedAtTime> "datum".
-     *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-     *
-     * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
-     */
-
-    //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
-    const constructedTriples = triplesForPath(options, true).triples;
-
-    if(constructedTriples.length != triples.triples.length){
-      triplesToAdd = constructedTriples.filter(t => ! triples.triples.find(existingT => t.equals(existingT)));
-    }
-
-    //Add the value as the object to the last triple. We know it exists. And is always the object.
-    triplesToAdd.slice(-1)[0].object = value;
+  // The reason why it is more complicated. If we encounter > 1 values for a path, the I expect this form
+  // to be broken. This is a way for ther user to correct and remove both values.
+  if(dataset.values.length > 0){
+    triplesToAdd = dataset.triples.filter(t => !dataset.values.find(v => t.object.equals(v)));
   }
 
-  else if(triplesForRemoval.length > 0 && value){
-    triplesToAdd = [{subject: triplesForRemoval[0].subject, predicate: triplesForRemoval[0].predicate, object: value, graph: sourceGraph}];
+  if(value){
+    const newTriple = dataset.triples.slice(-1)[0];
+    newTriple.object = value;
+    triplesToAdd.push(newTriple);
   }
 
-  if(triplesForRemoval.length > 0){
-    store.removeStatements(triplesForRemoval);
-  }
+  store.addAll(triplesToAdd);
 
-  if(triplesToAdd.length > 0){
-    store.addAll(triplesToAdd);
-  }
 }
 
 export default importTriplesForForm;
