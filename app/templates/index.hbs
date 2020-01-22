@@ -7,8 +7,7 @@
   filter=filter
   sort=sort
   page=page
-     size=size
-     onClickRow=(action "showTriples")
+  size=size
   as |t|
 }}
   {{#t.content as |c|}}
@@ -18,6 +17,7 @@
       {{th-sortable field='organization.naam' currentSorting=sort label='Bestuurseenheid'}}
       {{th-sortable field='publisher.name' currentSorting=sort label='Vendor'}}
       {{th-sortable field='status.label' currentSorting=sort label='Status'}}
+      <th>Actie</th>
     {{/c.header}}
     {{#c.body as |row|}}
       <td>{{row.href}}</td>
@@ -25,6 +25,7 @@
       <td>{{row.organization.naam}}</td>
       <td>{{row.publisher.name}}</td>
       <td>{{row.status.label}}</td>
+      <td>{{#link-to 'forms.edit'}}details{{/link-to}}</td>
     {{/c.body}}
   {{/t.content}}
 {{/data-table}}
