@@ -7,6 +7,6 @@ export default Model.extend({
   bindingStart: attr('date'),
   bestuurseenheid: belongsTo('bestuurseenheid'),
   classificatie: belongsTo('bestuursorgaan-classificatie-code'),
-  isTijdsspecialisatieVan: belongsTo('bestuursorgaan'),
-  heeftTijdsspecialisaties: hasMany('bestuursorgaan')
+  isTijdsspecialisatieVan: belongsTo('bestuursorgaan', { inverse: 'heeftTijdsspecialisaties' }),
+  heeftTijdsspecialisaties: hasMany('bestuursorgaan', { inverse: 'isTijdsspecialisatieVan' })
 });
