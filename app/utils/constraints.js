@@ -56,7 +56,7 @@ function check(constraintUri, options){
     validationResult = values.every( (value) => validator( value, validationOptions ) );
   }
 
-  console.log(`Validation ${validationType} [${groupingType}] is ${validationResult}`);
+  console.log(`Validation ${validationType} [${groupingType}] with values ${values.join(',')} is ${validationResult}`);
   return { hasValidation: true, valid: validationResult, resultMessage };
 }
 
