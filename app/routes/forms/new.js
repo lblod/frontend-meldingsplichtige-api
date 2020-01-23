@@ -33,7 +33,7 @@ export default class FormsNewRoute extends Route {
     controller.graphs = { formGraph, sourceGraph, metaGraph  };
 
     //TODO: how do i get this
-    controller.sourceNode =new rdflib.NamedNode("http://data.lblod.info/forms/meldingsplicht/208ee6e0-28b1-11ea-972c-8915ff690069");;
+    controller.sourceNode = new rdflib.NamedNode(`http://data.lblod.info/forms/meldingsplicht/${uuidv4()}`);
     controller.formStore.parse(model.form, formGraph, "text/turtle");
     controller.formStore.parse(documentTypeCodelist, metaGraph, "text/turtle");
 
