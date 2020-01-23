@@ -1,3 +1,13 @@
 <LinkTo @route="index">Back</LinkTo>
 <Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
 <button {{on "click" this.send}}>Verzenden</button>
+
+<h1
+  {{did-insert this.registerObserver}}
+  {{did-insert this.setTriplesForTable}}>
+
+  Triples in source graph {{this.graphs.sourceGraph}}
+
+</h1>
+<h2>Found {{this.datasetTriples.length}} triples</h2>
+<TriplesTable @triples={{this.datasetTriples}} />
