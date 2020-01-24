@@ -5,11 +5,19 @@ import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
 import documentTypeCodelist from '../../utils/codelist/document-type';
+import fetch from 'fetch';
 
 export default class FormsEditRoute extends Route {
 
-  model(){
-    return {form, formData: dilbeek};
+  async model(params){
+    const response = await fetch(`/submission-forms/${params.id}`);
+    if(response.status !== 200 ){
+      return {form, formData: dilbeek, disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'};
+    }
+    else{
+      const formData = await response.json();
+      return { form, formData: formData.source };
+    }
   }
 
   setupController(controller, model){

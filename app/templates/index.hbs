@@ -26,7 +26,7 @@
       <td>{{row.organization.naam}}</td>
       <td>{{row.publisher.name}}</td>
       <td>{{row.status.label}}</td>
-      <td>{{#link-to 'forms.edit'}}details{{/link-to}}</td>
+      <td>{{#link-to 'forms.edit' row.id}}details{{/link-to}}</td>
     {{/c.body}}
   {{/t.content}}
 {{/data-table}}
