@@ -40,8 +40,7 @@ export default class FormsEditRoute extends Route {
         return model;
       }
       const formData = await response.json();
-      model = {...model, formData: formData.source, sourceNode: submissionDocument.uri, graphs };
-      return model;
+      return { form, formData: formData.source, graphs, sourceNode: submissionDocument.uri };
     }
   }
 
