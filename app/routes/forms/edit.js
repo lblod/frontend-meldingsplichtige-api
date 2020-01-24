@@ -7,18 +7,19 @@ import { RDF, FORM } from '../../utils/namespaces';
 import documentTypeCodelist from '../../utils/codelist/document-type';
 import fetch from 'fetch';
 
-//TODO: clean
+//TODO: clean up
 export default class FormsEditRoute extends Route {
 
   async model(params){
     const formGraph = new rdflib.NamedNode("http://data.lblod.info/form");
-    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/${params.id}`); //TODO: not correct
     const metaGraph = new rdflib.NamedNode("http://data.lblod.info/metagraph");
-    const graphs = { formGraph, sourceGraph, metaGraph  };
 
-    const response = await fetch(`/submission-forms/${params.id}`);
-    if(response.status !== 200 ){
-      //example form
+    const submission = await this.store.find('submission', params.id);
+    const submissionDocument = await submission.submittedResource;
+
+    if(!submissionDocument){
+      const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
+      const graphs = { formGraph, sourceGraph, metaGraph };
       return { form,
                formData: dilbeek,
                graphs: graphs,
@@ -26,9 +27,17 @@ export default class FormsEditRoute extends Route {
                disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!',
                id: params.id };
     }
+
     else{
+      const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
+      const graphs = { formGraph, sourceGraph, metaGraph };
+      const response = await fetch(`/submission-forms/${submissionDocument.id}`);
       const formData = await response.json();
-      return { form, formData: formData.source, id: params.id, graphs, sourceNode: null };
+      return { form,
+               formData: formData.source,
+               id: params.id,
+               graphs,
+               sourceNode: submissionDocument.uri };
     }
   }
 
@@ -38,7 +47,6 @@ export default class FormsEditRoute extends Route {
     controller.formStore = new forkingStore();
     controller.graphs = model.graphs;
 
-    //TODO: how do i get this
     controller.sourceNode = model.sourceNode;
 
     controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
