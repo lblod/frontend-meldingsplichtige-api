@@ -19,13 +19,13 @@ export default class FormsEditRoute extends Route {
 
 
     //default form
-    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
-    const graphs = { formGraph, sourceGraph, metaGraph };
-    const model = { form,
-                    formData: dilbeek,
-                    graphs: graphs,
-                    sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
-                    disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'
+    let sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
+    let graphs = { formGraph, sourceGraph, metaGraph };
+    let model = { form,
+                  formData: dilbeek,
+                  graphs: graphs,
+                  sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
+                  disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'
                   };
 
     if(!submissionDocument){
@@ -40,7 +40,7 @@ export default class FormsEditRoute extends Route {
         return model;
       }
       const formData = await response.json();
-      model = {...model, formData: formData.source, sourceNode: submissionDocument.uri };
+      model = {...model, formData: formData.source, sourceNode: submissionDocument.uri, graphs };
       return model;
     }
   }
