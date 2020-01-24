@@ -27,9 +27,9 @@ export default class FormsNewRoute extends Route {
 
     controller.formStore = new forkingStore();
 
-    const formGraph = new rdflib.NamedNode("http://mu.semte.ch/form");
+    const formGraph = new rdflib.NamedNode("http://data.lblod.info/form");
     const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/meldingsplicht/bestuurseenheid/${this.bestuurseenheid.id}/id/${uuidv4()}`);
-    const metaGraph = new rdflib.NamedNode("http://mu.semte.ch/metagraph");
+    const metaGraph = new rdflib.NamedNode("http://data.lblod.info/metagraph");
     controller.graphs = { formGraph, sourceGraph, metaGraph  };
 
     //TODO: how do i get this
