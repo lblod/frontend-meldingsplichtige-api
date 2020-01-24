@@ -12,11 +12,11 @@ export default class FormsEditRoute extends Route {
   async model(params){
     const response = await fetch(`/submission-forms/${params.id}`);
     if(response.status !== 200 ){
-      return {form, formData: dilbeek, disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'};
+      return { form, formData: dilbeek, disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!' };
     }
     else{
       const formData = await response.json();
-      return { form, formData: formData.source };
+      return { form, formData: formData.source, id: params.id };
     }
   }
 
@@ -26,7 +26,7 @@ export default class FormsEditRoute extends Route {
     controller.formStore = new forkingStore();
 
     const formGraph = new rdflib.NamedNode("http://mu.semte.ch/form");
-    const sourceGraph = new rdflib.NamedNode("http://mu.semte.ch/dilbeek");
+    const sourceGraph = new rdflib.NamedNode(`http://mu.semte.ch/${model.id}`);
     const metaGraph = new rdflib.NamedNode("http://mu.semte.ch/metagraph");
     controller.graphs = { formGraph, sourceGraph, metaGraph  };
 
