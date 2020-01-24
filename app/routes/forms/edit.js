@@ -17,27 +17,31 @@ export default class FormsEditRoute extends Route {
     const submission = await this.store.find('submission', params.id);
     const submissionDocument = await submission.submittedResource;
 
+
+    //default form
+    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
+    const graphs = { formGraph, sourceGraph, metaGraph };
+    const model = { form,
+                    formData: dilbeek,
+                    graphs: graphs,
+                    sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
+                    disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'
+                  };
+
     if(!submissionDocument){
-      const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
-      const graphs = { formGraph, sourceGraph, metaGraph };
-      return { form,
-               formData: dilbeek,
-               graphs: graphs,
-               sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
-               disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!',
-               id: params.id };
+      return model;
     }
 
     else{
-      const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
-      const graphs = { formGraph, sourceGraph, metaGraph };
+      sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
+      graphs = { formGraph, sourceGraph, metaGraph };
       const response = await fetch(`/submission-forms/${submissionDocument.id}`);
+      if(response.status !== 200){
+        return model;
+      }
       const formData = await response.json();
-      return { form,
-               formData: formData.source,
-               id: params.id,
-               graphs,
-               sourceNode: submissionDocument.uri };
+      model = {...model, formData: formData.source, sourceNode: submissionDocument.uri };
+      return model;
     }
   }
 
