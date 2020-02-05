@@ -12,6 +12,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -23,11 +24,19 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks .
+    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks, fields:remark .
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
     form:hasField fields:meetingDate.
+
+fields:remark a form:Field ;
+    mu:uuid "0cdfe85f-ec65-498f-bd26-0ec611967de0" ;
+    sh:name "Opmerking" ;
+    sh:order 500 ;
+    sh:path rdfs:comment ;
+    form:displayType displayTypes:textArea;
+    sh:group fields:aDynamicPropertyGroup .
 
 fields:submissionType a form:Field ;
     mu:uuid "0827fafe-ad19-49e1-8b2e-105d2c08a54a" ;
