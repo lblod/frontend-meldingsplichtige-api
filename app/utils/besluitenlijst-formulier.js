@@ -127,12 +127,10 @@ fields:publicationDate a form:Field ;
         form:grouping form:Bag ;
         sh:resultMessage "Dit is een verplicht veld.";
         sh:path eli:date_publication ],
-      [ a sh:PropertyShape ;
-        form:grouping form:MatchSome ;
+      [ a form:ValidDate ;
+        form:grouping form:Bag ;
         sh:path eli:date_publication ;
-        sh:resultMessage "Geeft een geldige datum op.";
-        sh:dataType xsd:date ;
-        sh:nodeKind sh:Literal ] ;
+        sh:resultMessage "Geeft een geldige datum op." ] ;
     form:displayType displayTypes:date ;
     form:hasConditionalFieldGroup fields:humanPublicationConditionalGroup ;
     sh:group fields:anIntermediatePropertyGroup .
