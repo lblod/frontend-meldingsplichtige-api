@@ -40,7 +40,7 @@ export default class FormsEditRoute extends Route {
         return model;
       }
       const formData = await response.json();
-      return { form, formData: formData.source, graphs, sourceNode: submissionDocument.uri };
+      return { form, formData: formData.source, graphs, sourceNode: new rdflib.NamedNode(submissionDocument.uri) };
     }
   }
 
