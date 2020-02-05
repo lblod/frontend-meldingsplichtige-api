@@ -128,7 +128,7 @@ fields:publicationDate a form:Field ;
         sh:resultMessage "Dit is een verplicht veld.";
         sh:path eli:date_publication ],
       [ a form:ValidDate ;
-        form:grouping form:Bag ;
+        form:grouping form:MatchSome ;
         sh:path eli:date_publication ;
         sh:resultMessage "Geeft een geldige datum op." ] ;
     form:displayType displayTypes:date ;
