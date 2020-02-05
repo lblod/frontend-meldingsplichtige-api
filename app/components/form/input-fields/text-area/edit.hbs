@@ -1,1 +1,7 @@
-<p>I'm a text-area</p>
+<label {{did-insert this.loadData}}>{{@field.label}}</label>
+<Textarea  {{on "blur" this.updateValue}} @value={{this.value}} />
+{{#if errors}}
+  {{#each errors as |error|}}
+    <span style="color: red"> {{error.resultMessage}} </span>
+  {{/each}}
+{{/if}}
