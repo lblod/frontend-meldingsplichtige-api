@@ -3,7 +3,7 @@
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
 <Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
-<button {{on "click" this.send}}>Verzenden</button>
+<button {{on "click" this.save}}>Opslaan</button>
 
 <h1
   {{did-insert this.registerObserver}}

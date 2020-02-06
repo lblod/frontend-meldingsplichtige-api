@@ -43,7 +43,7 @@ export default class FormsEditController extends Controller {
   }
 
   @action
-  async send(){
+  async save(){
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
     const isValid = validateForm(this.form, options);
     if(!isValid){
