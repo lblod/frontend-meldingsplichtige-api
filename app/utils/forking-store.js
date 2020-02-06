@@ -60,6 +60,17 @@ export default class ForkingStore {
     await this.fetcher.load( source );
   }
 
+  loadDataWithAddAndDelGraph(content, graph, additions, removals, format){
+    const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
+    rdflib.parse( content, this.graph, graphValue , format );
+    if(additions){
+      rdflib.parse( additions, this.graph, addGraphFor( graph ).value, format );
+    }
+    if(removals){
+      rdflib.parse( removals, this.graph, delGraphFor( graph ).value, format );
+    }
+  }
+
   /**
    * Parses content from a file into a specified graph.
    */
