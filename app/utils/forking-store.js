@@ -71,6 +71,14 @@ export default class ForkingStore {
     }
   }
 
+  serializeDataWithAddAndDelGraph(graph, format = 'text/turtle'){
+    return {
+      graph: rdflib.serialize(graph, this.graph, format),
+      additions: rdflib.serialize(addGraphFor(graph), this.graph, format),
+      removals: rdflib.serialize(delGraphFor(graph), this.graph, format)
+    };
+  }
+
   /**
    * Parses content from a file into a specified graph.
    */
@@ -228,21 +236,6 @@ export default class ForkingStore {
         deletes, inserts,
         resolve, reject );
     } );
-  }
-
-  /**
-   * Serialize methods
-   */
-  serialize(graph, format = 'text/turtle'){
-    return rdflib.serialize(graph, this.graph, format);
-  }
-
-  serializeAddGraphForGraph(graph, format = 'text/turtle'){
-    return rdflib.serialize(addGraphFor(graph), this.graph, format);
-  }
-
-  serializeDelGraphForGraph(graph, format = 'text/turtle'){
-    return rdflib.serialize(delGraphFor(graph), this.graph, format);
   }
 
   /**
