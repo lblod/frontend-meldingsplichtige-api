@@ -56,9 +56,7 @@ export default class FormsEditController extends Controller {
         body: JSON.stringify(
           {
             subject: this.model.submissionDocument.uri,
-            source: this.formStore.serialize(this.graphs.sourceGraph),
-            additions: this.formStore.serializeAddGraphForGraph(this.graphs.sourceGraph),
-            removals: this.formStore.serializeDelGraphForGraph(this.graphs.sourceGraph)
+            ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
           }
         )
       });
