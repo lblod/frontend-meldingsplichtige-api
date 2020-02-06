@@ -40,9 +40,6 @@ export default class FormInputFieldsDateEditComponent extends Component {
 
   @action
   updateValue(){
-    // Cutting of the time because we don't need it.
-    console.log(this.value);
-    // this.value.value = this.value.value.split("T")[0];
     updateSimpleFormValue(this.value, this.storeOptions);
   }
 }
