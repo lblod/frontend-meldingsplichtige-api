@@ -220,6 +220,21 @@ export default class ForkingStore {
   }
 
   /**
+   * Serialize methods
+   */
+  serialize(graph, format = 'text/turtle'){
+    return rdflib.serialize(graph, this.graph, format);
+  }
+
+  serializeAddGraphForGraph(graph, format = 'text/turtle'){
+    return rdflib.serialize(addGraphFor(graph), this.graph, format);
+  }
+
+  serializeDelGraphForGraph(graph, format = 'text/turtle'){
+    return rdflib.serialize(delGraphFor(graph), this.graph, format);
+  }
+
+  /**
    * Registers an observer, optionally with a key.  The observer will
    * be called with objects of the shape { deletes, inserts } for any
    * change that is passed through `this.update`.
