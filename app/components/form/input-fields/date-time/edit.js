@@ -1,11 +1,21 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
+import {action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
+import {
+  triplesForPath,
+  validationResultsForField,
+  updateSimpleFormValue
+} from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsDateTimeEditComponent extends Component {
   @tracked
-  value = null;
+  date = null;
+
+  @tracked
+  hour = null;
+
+  @tracked
+  minutes = null;
 
   @tracked
   errors = [];
@@ -14,7 +24,7 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   storeOptions = {};
 
   @action
-  loadData(){
+  loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -28,21 +38,26 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
     this.loadProvidedValue();
   }
 
-  loadValidations(){
+  loadValidations() {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  loadProvidedValue(){
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if(matches.values.length > 0)
-      this.value = matches.values[0].value;
+    if (matches.values.length > 0) {
+      let datobj = new Date(matches.values[0].value);
+      this.date = datobj;
+      this.hour = datobj.getHours();
+      this.minutes = datobj.getMinutes();
+    }
   }
 
   @action
-  updateValue(){
-    let oldDate = this.value;
-    let newDate = new Date();
-    newDate.setUTCDate(oldDate.getDate());
-    updateSimpleFormValue(newDate.toISOString(), this.storeOptions);
+  updateValue(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    this.date.setHours(this.hour, this.minutes, null, null);
+    updateSimpleFormValue(this.date, this.storeOptions);
   }
 }
