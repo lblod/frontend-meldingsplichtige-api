@@ -23,6 +23,14 @@ function delGraphFor( graph ) {
   return namedNode( `${base}?for=${graphQueryParam}` );
 }
 
+function mergedGraphFor( graph ) {
+  const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
+  const base = `${BASE_GRAPH_STRING}/graphs/merged`;
+  const graphQueryParam = encodeURIComponent( graphValue );
+  return namedNode( `${base}?for=${graphQueryParam}` );
+}
+
+
 function statementInGraph( quad, graph ) {
   return new Statement( quad.subject, quad.predicate, quad.object, graph );
 }
@@ -80,7 +88,7 @@ export default class ForkingStore {
   }
 
   serializeDataMergedGraph(graph, format = 'text/turtle'){
-    return rdflib.serialize(graph, this.graph, format);
+    return rdflib.serialize(this.mergedGraph(graph), this.graph, format);
   }
 
   /**
@@ -201,6 +209,40 @@ export default class ForkingStore {
     }
 
     return [...forGraphs];
+  }
+
+  mergedGraph( graph ) {
+    // recalculates the merged graph and returns the graph
+
+    const mergedGraph = mergedGraphFor( graph );
+    const delSource = delGraphFor( graph );
+    const addSource = addGraphFor( graph );
+
+    const baseContent =
+          this
+          .match( null, null, null, graph )
+          .map( (statement) => statementInGraph( statement, mergedGraph ) );
+    const delContent =
+          this
+          .match( null, null, null, delSource )
+          .map( (statement) => statementInGraph( statement, mergedGraph ) );
+    const  addContent =
+          this
+          .match( null, null, null, addSource )
+          .map( (statement) => statementInGraph( statement, mergedGraph ) );
+
+    // clear the graph
+    this.graph.removeMatches( null, null, null, mergedGraph );
+    // add baseContent
+    baseContent.forEach( (statement) => this.graph.add( statement ) );
+    // remove stuff
+    delContent.forEach( (statement) => {
+      try { this.graph.remove( statement ); } catch(e) {};
+    } );
+    // add stuff
+    addContent.forEach( (statement) => this.graph.add( statement ) );
+
+    return mergedGraph;
   }
 
   async pushGraphChanges( graph ) {
