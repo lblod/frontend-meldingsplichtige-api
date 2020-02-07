@@ -44,19 +44,33 @@ export default class FormsEditController extends Controller {
 
   @action
   async save(){
+    await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/vnd.api+json'},
+      body: JSON.stringify(
+        {
+          subject: this.model.submissionDocument.uri,
+          ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
+        }
+      )
+    });
+  }
+
+  @action
+  async submit(){
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
     const isValid = validateForm(this.form, options);
     if(!isValid){
       alert('Gelieve het formulier correct in te vullen');
     }
     else{
-      await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
-        method: 'PUT',
+      await fetch(`/submission-forms/${this.model.submissionDocument.id}/submit`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/vnd.api+json'},
         body: JSON.stringify(
           {
             subject: this.model.submissionDocument.uri,
-            ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
+            form: this.formStore.serializeDataMergedGraph(this.graphs.sourceGraph)
           }
         )
       });

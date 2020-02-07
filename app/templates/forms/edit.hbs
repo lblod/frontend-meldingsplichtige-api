@@ -4,7 +4,7 @@
 {{/if}}
 <Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
 <button {{on "click" this.save}}>Opslaan</button>
-
+<button {{on "click" this.submit}}>Verzenden</button>
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>

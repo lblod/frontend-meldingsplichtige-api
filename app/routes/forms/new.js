@@ -18,7 +18,45 @@ export default class FormsNewRoute extends Route {
     this.bestuurseenheid = await this.currentSession.group;
   }
 
-  model(){
+  async model(){
+    const formGraph = new rdflib.NamedNode("http://data.lblod.info/form");
+    const metaGraph = new rdflib.NamedNode("http://data.lblod.info/metagraph");
+
+    const submission = await this.store.createRecord('submission', params.id);
+    const submissionDocument = await submission.submittedResource;
+
+
+    //default form
+    let sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
+    let graphs = { formGraph, sourceGraph, metaGraph };
+    let model = { form,
+                  formData: dilbeek,
+                  graphs: graphs,
+                  sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
+                  disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'
+                  };
+
+    if(!submissionDocument){
+      return model;
+    }
+
+    else{
+      sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
+      graphs = { formGraph, sourceGraph, metaGraph };
+      const response = await fetch(`/submission-forms/${submissionDocument.id}`);
+      if(response.status !== 200){
+        return model;
+      }
+      const formData = await response.json();
+      return { form,
+               additions: formData.additions,
+               removals: formData.removals,
+               formData: formData.source,
+               graphs,
+               sourceNode: new rdflib.NamedNode(submissionDocument.uri),
+               submissionDocument
+             };
+    }
     return { form };
   }
 
