@@ -13,6 +13,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix elod: <http://linkedeconomy.org/ontology#>.
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -28,7 +29,25 @@ fieldGroups:besluitenlijstMain a form:FieldGroup ;
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:meetingDate.
+    form:hasField fields:meetingDate, fields:reportYear.
+
+fields:reportYear a form:Field ;
+    mu:uuid "41737f90-02d6-4036-8d60-5d5b6ccf939c" ;
+    sh:name "Rapportjaar" ;
+    sh:order 1800 ;
+    sh:path elod:financialYear ;
+    form:validations
+      [ a form:RequiredConstraint ;
+        form:grouping form:Bag ;
+        sh:path elod:financialYear ;
+        sh:resultMessage "Dit veld is verplicht."@nl
+      ],
+      [ a form:ValidYear ;
+        form:grouping form:MatchEvery ;
+        sh:path elod:financialYear ;
+        sh:resultMessage "Geef een geldig jaar op."@nl ] ;
+    form:displayType displayTypes:defaultInput;
+    sh:group fields:aDynamicPropertyGroup .
 
 fields:remark a form:Field ;
     mu:uuid "0cdfe85f-ec65-498f-bd26-0ec611967de0" ;
