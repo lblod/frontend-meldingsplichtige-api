@@ -1,11 +1,9 @@
 /**
- *  TODO sync with SENIOR
- *  We need to do some "hacky" stuff to validate only on date.
- *  This because something happens to the date from the component ot here, the validation.
- *
+ * Checks if the given string is an valid date format conform to xsd:date.
+ * Expected date format ex: 01-01-2020
  */
-export default function constraintValidDate(value) {
-  let dateString = value.value.split("T")[0];
+export default function constraintValidDate(value, options) {
+  let dateString = value.value;
 
   // First check for the pattern
   if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateString))

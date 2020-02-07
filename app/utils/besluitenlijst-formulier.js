@@ -108,12 +108,10 @@ fields:meetingDate a form:Field ;
         form:grouping form:Bag ;
         sh:resultMessage "Dit is een verplicht veld.";
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ],
-      [ a sh:PropertyShape ;
+      [ a form:ValidDateTime ;
         form:grouping form:MatchEvery ;
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ;
-        sh:dataType xsd:dateTime ;
-        sh:resultMessage "Geeft een geldige datum en tijd op.";
-        sh:nodeKind sh:Literal ] ;
+        sh:resultMessage "Geeft een geldige datum en tijd op."];
     form:displayType displayTypes:dateTime ;
     sh:group fields:anIntermediatePropertyGroup .
 
