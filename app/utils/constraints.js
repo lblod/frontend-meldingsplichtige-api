@@ -8,6 +8,7 @@ import exactValue from './constraints/exact-value';
 import besluittype from './constraints/besluittype';
 import validUri from './constraints/valid-uri';
 import validDate from './constraints/valid-date';
+import validDateTime from './constraints/valid-date-time';
 
 export default function constraintForUri(uri) {
   switch (String(uri)) {
@@ -25,6 +26,8 @@ export default function constraintForUri(uri) {
       return validUri;
     case "http://lblod.data.gift/vocabularies/forms/ValidDate":
       return validDate;
+    case "http://lblod.data.gift/vocabularies/forms/ValidDateTime":
+      return validDateTime;
     default:
       return false; //TODO: TBD
   }
