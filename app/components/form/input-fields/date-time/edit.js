@@ -40,7 +40,9 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
 
   @action
   updateValue(){
-    this.value = new Date();
-    updateSimpleFormValue(this.value, this.storeOptions);
+    let oldDate = this.value;
+    let newDate = new Date();
+    newDate.setUTCDate(oldDate.getDate());
+    updateSimpleFormValue(newDate.toISOString(), this.storeOptions);
   }
 }
