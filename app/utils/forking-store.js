@@ -79,6 +79,10 @@ export default class ForkingStore {
     };
   }
 
+  serializeDataMergedGraph(graph, format = 'text/turtle'){
+    return rdflib.serialize(graph, this.graph, format);
+  }
+
   /**
    * Parses content from a file into a specified graph.
    */
@@ -229,6 +233,7 @@ export default class ForkingStore {
 
   /**
    * Promise based version of update protocol
+   * private
    */
   update( deletes, inserts ) {
     return new Promise( ( resolve, reject ) =>  {
