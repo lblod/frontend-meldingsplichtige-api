@@ -213,39 +213,51 @@ function validationResultsForField(fieldUri, options){
 }
 
 function updateSimpleFormValue(value, options){
+ removeSimpleFormValue(value, options);
+ addSimpleFormValue(value, options);
+}
+
+function removeSimpleFormValue(value, options) {
   const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
 
   /* This might be tricky.We need to find a subject and predicate to attach the object to.
-   * The path might contain several hops, and some of them don't necessarly exist. Consider:
-   *
-   *  Suppose our path is
-   *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
-   *
-   *  and we only have
-   *
-   *  <besluitenlijst> a <Besluitenlijst>
-   *
-   *  A path will then be constructed with
-   *   <customUri> <prov:startedAtTime> "datum".
-   *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
-   *
-   * TODO: this is for now a best guess. And further tweaking will be needed. If this needs to be our model:
-   *  <zitting> a <Zitting>
-   *  <zitting> <prov:startedAtTime> "datum".
-   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-   *  <besluitenlijst> a <Besluitenlijst>
-   *
-   * And suppose the data store does not have:
-   *  <zitting> <prov:startedAtTime> "datum".
-   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-   *
-   * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
-   */
+ * The path might contain several hops, and some of them don't necessarly exist. Consider:
+ *
+ *  Suppose our path is
+ *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
+ *
+ *  and we only have
+ *
+ *  <besluitenlijst> a <Besluitenlijst>
+ *
+ *  A path will then be constructed with
+ *   <customUri> <prov:startedAtTime> "datum".
+ *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
+ *
+ * TODO: this is for now a best guess. And further tweaking will be needed. If this needs to be our model:
+ *  <zitting> a <Zitting>
+ *  <zitting> <prov:startedAtTime> "datum".
+ *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+ *  <besluitenlijst> a <Besluitenlijst>
+ *
+ * And suppose the data store does not have:
+ *  <zitting> <prov:startedAtTime> "datum".
+ *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+ *
+ * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
+ */
 
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
 
   store.removeStatements(dataset.triples);
+}
+
+function addSimpleFormValue(value, options) {
+  const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+
+  //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
+  const dataset = triplesForPath(options, true);
 
   let triplesToAdd = [];
   // The reason why it is more complicated. If we encounter > 1 values for a path, the I expect this form
@@ -261,8 +273,7 @@ function updateSimpleFormValue(value, options){
   }
 
   store.addAll(triplesToAdd);
-
 }
 
 export default importTriplesForForm;
-export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField, updateSimpleFormValue };
+export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField, updateSimpleFormValue, addSimpleFormValue, removeSimpleFormValue };

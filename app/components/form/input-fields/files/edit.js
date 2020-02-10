@@ -1,11 +1,19 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
+import {action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+
+import {
+  triplesForPath,
+  validationResultsForField,
+  addSimpleFormValue,
+  removeSimpleFormValue
+} from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsFilesEditComponent extends Component {
-  @tracked
-  value = null;
+
+  @service()
+  store;
 
   @tracked
   files = [];
@@ -17,7 +25,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   storeOptions = {};
 
   @action
-  loadData(){
+  async loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -28,22 +36,32 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     };
 
     this.loadValidations();
-    this.loadProvidedValue();
+    await this.loadProvidedValue();
   }
 
-  loadValidations(){
+  loadValidations() {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  loadProvidedValue(){
+  async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if(matches.values.length > 0)
-      this.value = matches.values[0].value;
+    if (matches.values.length > 0) {
+      for (let fileId of matches.values) {
+        const uploadedFile = await this.store.findRecord('file', fileId.value);
+        this.files.pushObject(uploadedFile);
+      }
+    }
   }
 
   @action
-  updateValue(e){
-    e.preventDefault();
-    updateSimpleFormValue(this.value, this.storeOptions);
+  addFile(file) {
+    // TODO try and remove hard coded URI
+    // addSimpleFormValue(`http://data.lblod.info/files/${file.id}`, this.storeOptions);
+    addSimpleFormValue(file.id, this.storeOptions);
+  }
+
+  @action
+  removeFile(file) {
+    removeSimpleFormValue(file.id, this.storeOptions);
   }
 }

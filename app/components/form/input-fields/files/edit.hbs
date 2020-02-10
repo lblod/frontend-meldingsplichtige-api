@@ -1,6 +1,6 @@
-<div class="form__row u-spacer--tb--tiny">
-  {{#each files as |file|}}
-    <VoMuFileCard/>
+<div class="form__row u-spacer--tb--tiny" {{did-insert this.loadData}}>
+  {{#each this.files as |file|}}
+    <VoMuFileCard @file={{file}} onDelete={{this.removeFile}}/>
   {{/each}}
-  <VoMuFileDropzone></VoMuFileDropzone>
+  <VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024"/>
 </div>

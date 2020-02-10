@@ -36,7 +36,6 @@ fields:files a form:Field ;
     sh:name "Bestanden" ;
     sh:order 3900 ;
     sh:path prov:atLocation ;
-    form:validations [];
     form:displayType displayTypes:files;
     sh:group fields:aDynamicPropertyGroup .
 
