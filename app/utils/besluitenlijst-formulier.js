@@ -25,11 +25,19 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks, fields:remark .
+    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:remark .
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
     form:hasField fields:meetingDate, fields:reportYear.
+
+fields:Files a form:Field ;
+    mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95a" ;
+    sh:name "Bestanden" ;
+    sh:order 3900 ;
+    sh:path prov:atLocation ;
+    #form:validations [];
+    form:displayType displayTypes:files.
 
 fields:reportYear a form:Field ;
     mu:uuid "41737f90-02d6-4036-8d60-5d5b6ccf939c" ;
