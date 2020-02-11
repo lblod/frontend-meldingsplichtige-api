@@ -1,1 +1,54 @@
-<p>file-addresses component</p>
+<div class="form__row u-padding--tb--tinier" {{did-insert this.loadData}}>
+  <table class="data-table u-spacer--bottom--tiny">
+    <tbody data-test-mn="url-box-list">
+    {{#each this.fileAddresses as |fileAddress|}}
+      <tr>
+        <td>
+          <Input
+                  class="input-field input-field--block input-field--small"
+                  placeholder="http://wwww.uw-bestuur.be/specifiek-document"
+                  @value={{fileAddress}}
+                  @focus-out={{fn this.updateFileAddresses fileAddress}}
+          />
+          <div class="grid">
+            <div class="col--7-12">
+              {{!-- TODO add validation --}}
+            </div>
+            <div class="col--5-12">
+              <div class="button-group u-spacer--top--tiny u-align-right">
+                <a href={{fileAddress}} target="_blank" rel="noopener"
+                   class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk
+                  link</a>
+                {{#if fileAddress.replicatedFile.downloadLink}}
+                  <a href={{fileAddress.replicatedFile.downloadLink}} download
+                     class="u-spacer--bottom--tiny button button--small button--alt"><i
+                          class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
+                {{/if}}
+                <a class="toggle u-spacer--bottom--tiny button button--small button--alt button--alt--warning" {{on
+                        "click" (fn this.delete fileAddress)}} role="button"><i class="vi vi-cross vi-u-xs"></i>Verwijder&nbsp;link</a>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    {{/each}}
+    <tr>
+      <td>
+        <div class="u-align-center">
+          {{#unless fileAddresses}}
+            <p class="u-spacer--tb--tiny">Nog geen links toegevoegd.</p>
+          {{/unless}}
+          <button class="button u-spacer--bottom--tiny" {{action "addUrlField"}}>
+            <i class="vi vi-plus button__icon" aria-hidden="true"></i> Voeg nieuwe link toe
+          </button>
+          <div>
+            <p class="small u-spacer--top--tiny">Enkel links naar specifieke documenten, geen overzichtspagina's.</p>
+            <p class="small u-spacer--bottom--tiny"><sup>*</sup>Op het moment van versturen, wordt er een versie<br>
+              gedownload van de pagina die op de link te vinden is.</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

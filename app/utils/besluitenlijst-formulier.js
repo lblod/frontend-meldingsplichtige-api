@@ -35,7 +35,7 @@ fields:fileAddresses a form:Field ;
     mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95b" ;
     sh:name "Links naar documenten" ;
     sh:order 3900 ;
-    sh:path prov:atLocation ;
+    sh:path prov:location ;
     form:displayType displayTypes:fileAddresses;
     sh:group fields:aDynamicPropertyGroup .
 

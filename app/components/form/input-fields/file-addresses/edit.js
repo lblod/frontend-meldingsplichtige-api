@@ -5,11 +5,56 @@ import {inject as service} from '@ember/service';
 
 import {
   triplesForPath,
-  validationResultsForField,
   addSimpleFormValue,
   removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsFileAddressesEditComponent extends Component {
 
+  @service
+  store;
+
+  @tracked
+  fileAddresses = [];
+
+  @action
+  loadData() {
+    this.storeOptions = {
+      formGraph: this.args.graphs.formGraph,
+      sourceNode: this.args.sourceNode,
+      sourceGraph: this.args.graphs.sourceGraph,
+      metaGraph: this.args.graphs.metaGraph,
+      store: this.args.formStore,
+      path: this.args.field.rdflibPath
+    };
+
+    // TODO
+    // this.loadValidations();
+    this.loadProvidedValue();
+  }
+
+  async loadProvidedValue() {
+    const matches = triplesForPath(this.storeOptions);
+    if (matches.values.length > 0) {
+      for (let path of matches.values) {
+        this.fileAddresses.pushObject(path.value.trim());
+      }
+    }
+  }
+
+  @action
+  addUrlField() {
+    this.fileAddresses.pushObject("");
+  }
+
+  @action
+  updateFileAddresses(prev, value) {
+    removeSimpleFormValue(prev, this.storeOptions);
+    addSimpleFormValue(value, this.storeOptions);
+  }
+
+  @action
+  delete(value) {
+    removeSimpleFormValue(value, this.storeOptions);
+  }
 }
