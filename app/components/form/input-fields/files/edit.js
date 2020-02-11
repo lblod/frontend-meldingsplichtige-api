@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import {inject as service} from '@ember/service';
 
 import {
   triplesForPath,
@@ -47,9 +47,13 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       for (let uri of matches.values) {
-        let id = uri.value.split("/").pop();
-        const uploadedFile = await this.store.findRecord('file', id);
-        this.files.pushObject(uploadedFile);
+        try {
+          let id = uri.value.split("/").pop();
+          const uploadedFile = await this.store.findRecord('file', id);
+          this.files.pushObject(uploadedFile);
+        } catch (error) {
+          this.errors.pushObject(`failed to retrieve file with uri ${uri.value}`);
+        }
       }
     }
   }
@@ -60,7 +64,13 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   }
 
   @action
-  removeFile(file) {
+  async removeFile(file) {
     removeSimpleFormValue(file.uri, this.storeOptions);
+    // we need to remove the uploaded file ourselves, as this is not done by the `VoMuFileCard` component.
+    try {
+      await (this.store.peekRecord('file', file.id)).destroyRecord();
+    } catch(error) {
+      // should probably be silently logged in later implementations
+    }
   }
 }

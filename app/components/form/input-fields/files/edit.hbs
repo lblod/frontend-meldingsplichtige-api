@@ -3,4 +3,11 @@
     <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
   {{/each}}
   <VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024"/>
+  {{#if this.errors}}
+    <WuAlert isError={{true}}>
+      {{#each this.errors as |error|}}
+        <li>{{error}}</li>
+      {{/each}}
+    </WuAlert>
+  {{/if}}
 </div>
