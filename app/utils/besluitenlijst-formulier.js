@@ -15,6 +15,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix elod: <http://linkedeconomy.org/ontology#>.
 @prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>.
+@prefix lblodBesluit: <http://lblod.data.gift/vocabularies/besluit/> .
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -30,7 +31,15 @@ fieldGroups:besluitenlijstMain a form:FieldGroup ;
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:meetingDate, fields:reportYear.
+    form:hasField fields:meetingDate, fields:reportYear, fields:opcentiem.
+
+fields:opcentiem a form:Field ;
+    mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95c" ;
+    sh:name "Opcentiem" ;
+    sh:order 3502 ;
+    sh:path lblodBesluit:taxRate ;
+    form:displayType displayTypes:vLabelOpcentiem ;
+    sh:group fields:aDynamicPropertyGroup .
 
 fields:fileAddresses a form:Field ;
     mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95b" ;
