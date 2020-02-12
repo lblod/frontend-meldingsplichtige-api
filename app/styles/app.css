@@ -1,16 +1,16 @@
-tr:nth-child(even) {
+.triple tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-th {
+.triple th {
   background-color: #4CAF50;
   color: white;
 }
 
-table {
+.triple table {
   border-collapse: collapse;
 }
 
-table, th, td {
+.triple table, th, td {
   border: 1px solid black;
 }
