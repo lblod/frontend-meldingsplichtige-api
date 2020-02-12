@@ -37,7 +37,7 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  async loadProvidedValue() {
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       for (let path of matches.values) {

@@ -1,5 +1,5 @@
-<div class="form__label">
-  <label class="form__label">TODO
+<div {{did-insert this.loadData}} class="form__label">
+  <label class="form__label">{{@field.label}}
   </label>
 </div>
 
@@ -28,10 +28,9 @@
       <tr>
         <td>
           <Input class="input-field input-field--block input-field--small"
-            {{!-- @value={{this.taxRate.amount}} --}}
-            {{!-- onchange=(mut taxRate.amount) --}}
                  placeholder="Bedrag"
-          />
+                 @value={{taxRate}}
+                 @focus-out={{fn this.update taxRate}}/>
         </td>
         <td>
           <button type="button"
