@@ -48,8 +48,8 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     if (matches.values.length > 0) {
       for (let uri of matches.values) {
         try {
-          let id = uri.value.split("/").pop();
-          const uploadedFile = await this.store.findRecord('file', id);
+          const files = await this.store.query('file', {'filter[:uri:]' : uri.value});
+          const uploadedFile = files.get('firstObject');
           this.files.pushObject(uploadedFile);
         } catch (error) {
           this.errors.pushObject(`failed to retrieve file with uri ${uri.value}`);
@@ -69,7 +69,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     // we need to remove the uploaded file ourselves, as this is not done by the `VoMuFileCard` component.
     try {
       await (this.store.peekRecord('file', file.id)).destroyRecord();
-    } catch(error) {
+    } catch (error) {
       // should probably be silently logged in later implementations
     }
   }
