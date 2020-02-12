@@ -1,13 +1,65 @@
+<div class="form__label">
+  <label class="form__label">TODO
+  </label>
+</div>
+
 {{#if this.showDifferentiatie }}
   <div class="form__row form__row--checkbox">
     <div class="form__label">
-      <label class="form__label" form="orgaan">Vink aan indien er sprake is van differentiatie</label>
+      <label class="form__label">Vink aan indien er sprake is van differentiatie</label>
     </div>
-    <WuCheckbox {{!-- @checked=differentiatie onClick=(action "toggleValue") --}}/>
+    <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDiff}}/>
   </div>
 {{else}}
   Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
   Klik 'verwijder' als u deze wel wenst in te geven.
 {{/if}}
+
+<table class="data-table data-table--zebra data-table--tight u-spacer--tb--small">
+  <thead>
+  <tr>
+    <th>Bedrag</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
+  <tbody>
+  {{#if this.showTable}}
+    {{#each this.taxRates as |taxRate|}}
+      <tr>
+        <td>
+          <Input class="input-field input-field--block input-field--small"
+            {{!-- @value={{this.taxRate.amount}} --}}
+            {{!-- onchange=(mut taxRate.amount) --}}
+                 placeholder="Bedrag"
+          />
+        </td>
+        <td>
+          <button type="button"
+                  class="toggle small link--icon u-spacer--bottom--small"
+            {{on "click" (fn this.delete taxRate)}}>
+            Verwijder
+          </button>
+        </td>
+      </tr>
+    {{/each}}
+    <tr>
+      <td colspan="5" class="data-table__add-row u-align-center">
+        <button type="button"
+                class="button button--narrow
+                      {{unless this.taxRates "u-spacer--tb--small" "button--alt u-spacer--tb--tiny" }}"
+          {{on "click"this.create}}>
+          <i class="vi vi-plus" aria-hidden="true"></i>Voeg bedrag opcentiem toe
+        </button>
+      </td>
+    </tr>
+  {{else}}
+    <tr>
+      <td colspan="5" class="data-table__add-row u-align-center">
+        Indien er sprake is van differentiatie, hoeft het bedrag niet ingevuld te worden.
+      </td>
+    </tr>
+  {{/if}}
+  </tbody>
+</table>
 
 {{yield}}
