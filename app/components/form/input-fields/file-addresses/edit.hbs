@@ -12,7 +12,12 @@
           />
           <div class="grid">
             <div class="col--7-12">
-              {{!-- TODO add validation --}}
+              {{#if this.errors}}
+                <p class="small u-spacer--tb--tinier form__error">Ongeldige link. Ongeldige links worden niet
+                  behandeld.</p>
+                <p class="small u-spacer--bottom--tinier">Zorg dat vooraan in de link altijd http://, https://, ftp://
+                  of sftp:// staat.</p>
+              {{/if}}
             </div>
             <div class="col--5-12">
               <div class="button-group u-spacer--top--tiny u-align-right">

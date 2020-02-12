@@ -46,6 +46,11 @@ fields:fileAddresses a form:Field ;
     sh:name "Links naar documenten" ;
     sh:order 3900 ;
     sh:path prov:atLocation ;
+    form:validations
+     [ a form:UriConstraint ;
+        form:grouping form:MatchEvery ;
+        sh:resultMessage "Gelieve een geldige URL op te geven.";
+         sh:path prov:atLocation ];
     form:displayType displayTypes:fileAddresses;
     sh:group fields:aDynamicPropertyGroup .
 

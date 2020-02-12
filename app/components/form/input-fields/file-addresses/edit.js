@@ -6,7 +6,7 @@ import {inject as service} from '@ember/service';
 import {
   triplesForPath,
   addSimpleFormValue,
-  removeSimpleFormValue
+  removeSimpleFormValue, validationResultsForField
 } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsFileAddressesEditComponent extends Component {
@@ -28,9 +28,13 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
       path: this.args.field.rdflibPath
     };
 
-    // TODO
-    // this.loadValidations();
+
+    this.loadValidations();
     this.loadProvidedValue();
+  }
+
+  loadValidations(){
+    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   async loadProvidedValue() {
