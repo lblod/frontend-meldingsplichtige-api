@@ -1,1 +1,13 @@
-<p>vlabel-opcentiem component</p>
+{{#if this.showDifferentiatie }}
+  <div class="form__row form__row--checkbox">
+    <div class="form__label">
+      <label class="form__label" form="orgaan">Vink aan indien er sprake is van differentiatie</label>
+    </div>
+    <WuCheckbox {{!-- @checked=differentiatie onClick=(action "toggleValue") --}}/>
+  </div>
+{{else}}
+  Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
+  Klik 'verwijder' als u deze wel wenst in te geven.
+{{/if}}
+
+{{yield}}
