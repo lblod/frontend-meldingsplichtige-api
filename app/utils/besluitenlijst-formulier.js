@@ -14,6 +14,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix prov: <http://www.w3.org/ns/prov#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix elod: <http://linkedeconomy.org/ontology#>.
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>.
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -25,11 +26,19 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks, fields:remark .
+    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:remark .
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
     form:hasField fields:meetingDate, fields:reportYear.
+
+fields:files a form:Field ;
+    mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95a" ;
+    sh:name "Bestanden" ;
+    sh:order 3900 ;
+    sh:path nfo:FileDataObject ;
+    form:displayType displayTypes:files;
+    sh:group fields:aDynamicPropertyGroup .
 
 fields:reportYear a form:Field ;
     mu:uuid "41737f90-02d6-4036-8d60-5d5b6ccf939c" ;
