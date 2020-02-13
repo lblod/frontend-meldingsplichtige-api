@@ -1,0 +1,7 @@
+<label {{did-insert this.loadData}}>{{@field.label}}</label>
+<Textarea class="textarea textarea--block component ember-text-area ember-view" {{on "blur" this.updateValue}} @value={{this.value}} />
+{{#if errors}}
+  {{#each errors as |error|}}
+    <span style="color: red"> {{error.resultMessage}} </span>
+  {{/each}}
+{{/if}}

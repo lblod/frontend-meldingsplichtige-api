@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 
-export default class FormInputFieldsDateEditComponent extends Component {
+export default class FormInputFieldsTextAreaEditComponent extends Component {
   @tracked
   value = null;
 
@@ -14,7 +14,7 @@ export default class FormInputFieldsDateEditComponent extends Component {
   storeOptions = {};
 
   @action
-  loadData(){
+  loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -28,22 +28,20 @@ export default class FormInputFieldsDateEditComponent extends Component {
     this.loadProvidedValue();
   }
 
-  loadValidations(){
+  loadValidations() {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  loadProvidedValue(){
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if(matches.values.length > 0)
+    if (matches.values.length > 0)
       this.value = matches.values[0].value;
   }
 
   @action
-  updateValue(){
-    let dateString = null;
-    if(this.value != null) {
-      dateString = this.value.toISOString().split("T")[0];
-    }
-    updateSimpleFormValue(dateString, this.storeOptions);
+  updateValue(e) {
+    e.preventDefault();
+    updateSimpleFormValue(this.value, this.storeOptions);
   }
+
 }

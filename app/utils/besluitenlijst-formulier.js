@@ -12,6 +12,9 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix elod: <http://linkedeconomy.org/ontology#>.
+@prefix nfo: <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#>.
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -23,11 +26,58 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks .
+    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:fileAddresses, fields:files, fields:remark .
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:meetingDate.
+    form:hasField fields:meetingDate, fields:reportYear.
+
+fields:fileAddresses a form:Field ;
+    mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95b" ;
+    sh:name "Links naar documenten" ;
+    sh:order 3900 ;
+    sh:path prov:atLocation ;
+    form:validations
+     [ a form:UriConstraint ;
+        form:grouping form:MatchEvery ;
+        sh:resultMessage "Gelieve een geldige URL op te geven.";
+         sh:path prov:atLocation ];
+    form:displayType displayTypes:fileAddresses;
+    sh:group fields:aDynamicPropertyGroup .
+
+fields:files a form:Field ;
+    mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95a" ;
+    sh:name "Bestanden" ;
+    sh:order 3900 ;
+    sh:path nfo:FileDataObject ;
+    form:displayType displayTypes:files;
+    sh:group fields:aDynamicPropertyGroup .
+
+fields:reportYear a form:Field ;
+    mu:uuid "41737f90-02d6-4036-8d60-5d5b6ccf939c" ;
+    sh:name "Rapportjaar" ;
+    sh:order 1800 ;
+    sh:path elod:financialYear ;
+    form:validations
+      [ a form:RequiredConstraint ;
+        form:grouping form:Bag ;
+        sh:path elod:financialYear ;
+        sh:resultMessage "Dit veld is verplicht."@nl
+      ],
+      [ a form:ValidYear ;
+        form:grouping form:MatchEvery ;
+        sh:path elod:financialYear ;
+        sh:resultMessage "Geef een geldig jaar op."@nl ] ;
+    form:displayType displayTypes:defaultInput;
+    sh:group fields:aDynamicPropertyGroup .
+
+fields:remark a form:Field ;
+    mu:uuid "0cdfe85f-ec65-498f-bd26-0ec611967de0" ;
+    sh:name "Opmerking" ;
+    sh:order 500 ;
+    sh:path rdfs:comment ;
+    form:displayType displayTypes:textArea;
+    sh:group fields:aDynamicPropertyGroup .
 
 fields:submissionType a form:Field ;
     mu:uuid "0827fafe-ad19-49e1-8b2e-105d2c08a54a" ;
@@ -99,12 +149,10 @@ fields:meetingDate a form:Field ;
         form:grouping form:Bag ;
         sh:resultMessage "Dit is een verplicht veld.";
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ],
-      [ a sh:PropertyShape ;
+      [ a form:ValidDateTime ;
         form:grouping form:MatchEvery ;
         sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime ) ;
-        sh:dataType xsd:dateTime ;
-        sh:resultMessage "Geeft een geldige datum en tijd op.";
-        sh:nodeKind sh:Literal ] ;
+        sh:resultMessage "Geeft een geldige datum en tijd op."];
     form:displayType displayTypes:dateTime ;
     sh:group fields:anIntermediatePropertyGroup .
 
@@ -118,12 +166,10 @@ fields:publicationDate a form:Field ;
         form:grouping form:Bag ;
         sh:resultMessage "Dit is een verplicht veld.";
         sh:path eli:date_publication ],
-      [ a sh:PropertyShape ;
+      [ a form:ValidDate ;
         form:grouping form:MatchSome ;
         sh:path eli:date_publication ;
-        sh:resultMessage "Geeft een geldige datum op.";
-        sh:dataType xsd:date ;
-        sh:nodeKind sh:Literal ] ;
+        sh:resultMessage "Geeft een geldige datum op." ] ;
     form:displayType displayTypes:date ;
     form:hasConditionalFieldGroup fields:humanPublicationConditionalGroup ;
     sh:group fields:anIntermediatePropertyGroup .
