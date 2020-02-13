@@ -1,1 +1,8 @@
-<p>This is the show version for input</p>
+<div class="form__row" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <Input class="input-field input-field--block u-spacer--bottom--small"
+         @disabled={{true}}
+         @value={{this.value}}/>
+</div>
