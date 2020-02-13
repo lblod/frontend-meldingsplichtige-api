@@ -2,9 +2,14 @@
 {{#if this.model.disclaimer}}
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
-<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
-<button {{on "click" this.send}}>Verzenden</button>
-
+<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
+            @formStore={{this.formStore}} />
+{{#if this.model.submitted}}
+  {{!-- TODO update this to something more noticable --}}
+  <p>Submitted</p>
+{{else}}
+  <button type="button" {{on "click" this.send}}>Verzenden</button>
+{{/if}}
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>

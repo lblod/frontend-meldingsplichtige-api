@@ -16,6 +16,9 @@ export default class FormsEditRoute extends Route {
 
     const submission = await this.store.find('submission', params.id);
     const submissionDocument = await submission.submittedResource;
+    // TODO ping is this the right way to determine if a submission has been sent.
+    const submissionStatus = await submission.status;
+    // const submitted = (await submission.status.get('label')) === 'Verstuurd';
 
 
     //default form
@@ -46,7 +49,8 @@ export default class FormsEditRoute extends Route {
                formData: formData.source,
                graphs,
                sourceNode: new rdflib.NamedNode(submissionDocument.uri),
-               submissionDocument
+               submissionDocument,
+               submitted: submissionStatus.label === 'Verstuurd'
              };
     }
   }
