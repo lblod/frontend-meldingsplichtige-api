@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
+import {action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
+import {triplesForPath} from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsInputShowComponent extends Component {
   @tracked
@@ -11,7 +11,7 @@ export default class FormInputFieldsInputShowComponent extends Component {
   storeOptions = {};
 
   @action
-  loadData(){
+  loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -23,9 +23,9 @@ export default class FormInputFieldsInputShowComponent extends Component {
     this.loadProvidedValue();
   }
 
-  loadProvidedValue(){
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if(matches.values.length > 0)
+    if (matches.values.length > 0)
       this.value = matches.values[0].value;
   }
 
