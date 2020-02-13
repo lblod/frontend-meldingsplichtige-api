@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { validateForm }  from '../../utils/import-triples-for-form';
 import importTriplesForForm from '../../utils/import-triples-for-form';
 import { delGraphFor, addGraphFor } from '../../utils/forking-store';
+import fetch from 'fetch';
 
 export default class FormsEditController extends Controller {
   @tracked
@@ -42,9 +43,23 @@ export default class FormsEditController extends Controller {
   }
 
   @action
-  send(){
+  async send(){
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
     const isValid = validateForm(this.form, options);
-    alert(isValid);
+    if(!isValid){
+      alert('Gelieve het formulier correct in te vullen');
+    }
+    else{
+      await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/vnd.api+json'},
+        body: JSON.stringify(
+          {
+            subject: this.model.submissionDocument.uri,
+            ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
+          }
+        )
+      });
+    }
   }
 }

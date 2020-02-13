@@ -7,8 +7,9 @@ const BASE_GRAPH_STRING = "http://mu.semte.ch/libraries/rdf-store";
  * Yields the graphs which contains additions.
  */
 function addGraphFor( graph ) {
+  const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
   const base = `${BASE_GRAPH_STRING}/graphs/add`;
-  const graphQueryParam = encodeURIComponent( graph.value );
+  const graphQueryParam = encodeURIComponent( graphValue );
   return namedNode( `${base}?for=${graphQueryParam}` );
 }
 
@@ -16,8 +17,9 @@ function addGraphFor( graph ) {
  * Yields the graph which contains removals.
  */
 function delGraphFor( graph ) {
+  const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
   const base = `${BASE_GRAPH_STRING}/graphs/del`;
-  const graphQueryParam = encodeURIComponent( graph.value );
+  const graphQueryParam = encodeURIComponent( graphValue );
   return namedNode( `${base}?for=${graphQueryParam}` );
 }
 
@@ -56,6 +58,25 @@ export default class ForkingStore {
   async load(source){
     // TODO: should we remove our changes when a graph is being reloaded?
     await this.fetcher.load( source );
+  }
+
+  loadDataWithAddAndDelGraph(content, graph, additions, removals, format){
+    const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
+    rdflib.parse( content, this.graph, graphValue , format );
+    if(additions){
+      rdflib.parse( additions, this.graph, addGraphFor( graph ).value, format );
+    }
+    if(removals){
+      rdflib.parse( removals, this.graph, delGraphFor( graph ).value, format );
+    }
+  }
+
+  serializeDataWithAddAndDelGraph(graph, format = 'text/turtle'){
+    return {
+      graph: rdflib.serialize(graph, this.graph, format),
+      additions: rdflib.serialize(addGraphFor(graph), this.graph, format),
+      removals: rdflib.serialize(delGraphFor(graph), this.graph, format)
+    };
   }
 
   /**

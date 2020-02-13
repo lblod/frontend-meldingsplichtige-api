@@ -40,7 +40,14 @@ export default class FormsEditRoute extends Route {
         return model;
       }
       const formData = await response.json();
-      return { form, formData: formData.source, graphs, sourceNode: new rdflib.NamedNode(submissionDocument.uri) };
+      return { form,
+               additions: formData.additions,
+               removals: formData.removals,
+               formData: formData.source,
+               graphs,
+               sourceNode: new rdflib.NamedNode(submissionDocument.uri),
+               submissionDocument
+             };
     }
   }
 
@@ -52,7 +59,17 @@ export default class FormsEditRoute extends Route {
 
     controller.sourceNode = model.sourceNode;
 
-    controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
+    if(model.removals || model.additions){
+      controller.formStore.loadDataWithAddAndDelGraph(model.formData,
+                                                      model.graphs.sourceGraph,
+                                                      model.additions,
+                                                      model.removals,
+                                                      "text/turtle");
+      controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
+    }
+    else {
+      controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
+    }
     controller.formStore.parse(model.form, model.graphs.formGraph, "text/turtle");
     controller.formStore.parse(documentTypeCodelist, model.graphs.metaGraph, "text/turtle");
 
