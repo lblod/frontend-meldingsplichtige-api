@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { oneWay, reads, empty, not} from '@ember/object/computed';
+import { reads, empty, not} from '@ember/object/computed';
 import {
   triplesForPath,
   validationResultsForField,

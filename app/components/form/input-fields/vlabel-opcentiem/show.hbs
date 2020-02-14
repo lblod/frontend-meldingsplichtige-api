@@ -1,0 +1,50 @@
+<div {{did-insert this.loadData}} class="form__label">
+  <label class="form__label">{{@field.label}}
+  </label>
+</div>
+
+{{#if this.showDifferentiatie }}
+  <div class="form__row form__row--checkbox">
+    <div class="form__label">
+      <label class="form__label" form="orgaan">Vink aan indien er sprake is van differentiatie</label>
+    </div>
+    <WuCheckbox @checked={{this.differentiatie}} @disabled="{{true}}"/>
+  </div>
+{{else}}
+  Geen differentiatie opgegeven. <br/>
+{{/if}}
+
+<table class="data-table data-table--zebra data-table--tight u-spacer--tb--small">
+  <thead>
+  <tr>
+    <th>Bedrag</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
+  <tbody>
+  {{#if showTable}}
+    {{#each this.taxRates as |taxRate|}}
+      <tr>
+        <td>
+          <Input class="input-field input-field--block input-field--small input-field--disabled"
+                 placeholder="Bedrag"
+                 @value={{taxRate}}
+                 @disabled={{true}}/>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    {{/each}}
+  {{else}}
+    <tr>
+      <td colspan="5" class="data-table__add-row u-align-center">
+        Er sprake is van differentiatie, daarom is er geen bedrag zichtbaar.
+      </td>
+    </tr>
+  {{/if}}
+  </tbody>
+</table>
+
+
+{{yield}}

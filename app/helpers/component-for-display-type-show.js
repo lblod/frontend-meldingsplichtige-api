@@ -10,6 +10,7 @@ export default helper(function componentForDisplayTypeShow(displayTypeUri) {
     'http://lblod.data.gift/display-types/dateTime' : `form/input-fields/date-time/show`,
     'http://lblod.data.gift/display-types/files' : `form/input-fields/files/show`,
     'http://lblod.data.gift/display-types/fileAddresses' : `form/input-fields/file-addresses/show`,
+    'http://lblod.data.gift/display-types/vLabelOpcentiem': `form/input-fields/vlabel-opcentiem/show`
   };
 
   //TODO: files and links component
