@@ -9,7 +9,7 @@ import {
 
 export default class FormInputFieldsDateTimeEditComponent extends Component {
   @tracked
-  date = null;
+  value = null;
 
   @tracked
   hour = null;
@@ -46,7 +46,7 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       let datobj = new Date(matches.values[0].value);
-      this.date = datobj;
+      this.value = datobj;
       this.hour = datobj.getHours();
       this.minutes = datobj.getMinutes();
     }
@@ -57,7 +57,7 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
     if (e.preventDefault) {
       e.preventDefault();
     }
-    this.date.setHours(this.hour, this.minutes, null, null);
-    updateSimpleFormValue(this.date, this.storeOptions);
+    this.value.setHours(this.hour, this.minutes, null, null);
+    updateSimpleFormValue(this.value, this.storeOptions);
   }
 }

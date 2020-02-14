@@ -1,12 +1,38 @@
-<label {{did-insert this.loadData}}>{{@field.label}}</label>
-{{!-- <Input  {{on "blur" this.updateValue}} @value={{this.value}} /> --}}
-<div>
-  <WuDatepicker @dateFormat="DD.MM.YYYY" @onChange={{this.updateValue}} @value={{this.date}}/>
-  <Input {{on "blur" this.updateValue}} @value={{this.hour}} @type="number" @min="0" @max="23"/> uur
-  <Input {{on "blur" this.updateValue}} @value={{this.minutes}} @type="number" @min="0" @max="59"/> min.
+<div class="form__label" {{did-insert this.loadData}}>
+  <label class="form__label">{{@field.label}}</label>
 </div>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <span style="color: red"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+<div class="u-spacer--bottom--small">
+
+  <div class="grid">
+    <div class="col--2-12">
+      <WuDatepicker @dateFormat="DD.MM.YYYY"
+                    @onChange={{this.updateValue}}
+                    @value={{this.value}}/>
+    </div>
+    {{#if this.value}}
+    <div class="col--2-12">
+      <Input class="input-field input-field--block"
+             placeholder="12"
+             @value={{this.hour}}
+             @type="number"
+             @min="0"
+             @max="23"
+        {{on "blur" this.updateValue}}/> uur.
+    </div>
+    <div class="col--2-12">
+      <Input class="input-field input-field--block"
+             placeholder="00"
+             @value={{this.minutes}}
+             @type="number"
+             @min="0"
+             @max="59"
+        {{on "blur" this.updateValue}}/> min.
+    </div>
+    {{/if}}
+  </div>
+  {{#if this.errors}}
+    {{#each this.errors as |error|}}
+      <span class="form__error"> {{error.resultMessage}} </span>
+    {{/each}}
+  {{/if}}
+</div>

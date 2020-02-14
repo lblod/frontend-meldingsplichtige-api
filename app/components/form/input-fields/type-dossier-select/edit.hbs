@@ -1,9 +1,15 @@
-<label {{did-insert this.loadData}}>{{@field.label}}</label>
-<PowerSelect  @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
-  {{typeDossier.label}}
-</PowerSelect>
-{{#if errors}}
-  {{#each errors as |error|}}
-     <span style="color: red"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+<div class="form__row" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <div class="u-spacer--bottom--small">
+    <PowerSelect  @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
+      {{typeDossier.label}}
+    </PowerSelect>
+    {{#if this.errors}}
+      {{#each this.errors as |error|}}
+        <span class="form__error"> {{error.resultMessage}} </span>
+      {{/each}}
+    {{/if}}
+  </div>
+</div>

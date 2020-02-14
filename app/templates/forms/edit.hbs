@@ -1,10 +1,22 @@
-<LinkTo @route="index">Back</LinkTo>
+<div class="u-spacer--bottom--small">
+  <LinkTo @route="index">Back</LinkTo>
+</div>
 {{#if this.model.disclaimer}}
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
-<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
-<button {{on "click" this.send}}>Verzenden</button>
-
+{{#if this.model.submitted}}
+  <div class="u-spacer--bottom--small">
+    <div class="alert alert--tiny alert--success">
+      <div class="alert__icon" aria-hidden="true"></div>
+      <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+    </div>
+  </div>
+{{/if}}
+<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
+            @formStore={{this.formStore}} />
+{{#unless this.model.submitted}}
+  <button type="button" {{on "click" this.send}}>Verzenden</button>
+{{/unless}}
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>
