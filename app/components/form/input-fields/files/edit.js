@@ -50,7 +50,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
         try {
           const files = await this.store.query('file', {'filter[:uri:]' : uri.value});
           const uploadedFile = files.get('firstObject');
-          if(uploadedFile !== undefined) {
+          if(uploadedFile) {
             this.files.pushObject(uploadedFile);
           } else {
             this.handleRetrievalError(uri.value);
