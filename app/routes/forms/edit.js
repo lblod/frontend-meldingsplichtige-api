@@ -7,6 +7,8 @@ import { RDF, FORM } from '../../utils/namespaces';
 import documentTypeCodelist from '../../utils/codelist/document-type';
 import fetch from 'fetch';
 
+const VERSTUURD_URI = 'http://lblod.data.gift/concepts/9bd8d86d-bb10-4456-a84e-91e9507c374c';
+
 //TODO: clean up
 export default class FormsEditRoute extends Route {
 
@@ -50,7 +52,7 @@ export default class FormsEditRoute extends Route {
                graphs,
                sourceNode: new rdflib.NamedNode(submissionDocument.uri),
                submissionDocument,
-               submitted: submissionStatus.label === 'Verstuurd'
+               submitted: submissionStatus.uri === VERSTUURD_URI
              };
     }
   }
