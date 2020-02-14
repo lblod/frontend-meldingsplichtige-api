@@ -66,9 +66,14 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     this.errors.pushObject(`failed to retrieve file with uri ${uri}`);
   }
 
+  cachedFileUris = [];
+
   @action
-  addFile(file) {
-    addSimpleFormValue(file.uri, this.storeOptions);
+  addFile(file, filesQueueInfo) {
+    this.cachedFileUris.push(file.uri);
+    if(filesQueueInfo.isQueueEmpty){
+      this.cachedFileUris.forEach( uri => addSimpleFormValue(uri, this.storeOptions) );
+    }
   }
 
   @action
