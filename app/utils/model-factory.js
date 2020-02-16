@@ -6,7 +6,7 @@ function createPropertyTreeFromFields( fields, { store, formGraph } ) {
   let mappedFields =
       fields
       .map( (field) => store.any( field, SHACL("group"), undefined, formGraph ) );
-  
+
   const groups =
       mappedFields
       // .filter( (fieldGroup) => fieldGroup )
@@ -24,9 +24,16 @@ function createPropertyTreeFromFields( fields, { store, formGraph } ) {
   }
 
   const sortedGroups =
-        Object.values(groups).sort( (a,b) => a.order > b.order );
+        Object.values(groups).sort( (a,b) => a.order - b.order );
 
-  return Object.values(groups);
+  let sortedFields=sortedGroups;
+
+  sortedGroups.forEach(function(e, i){
+    sortedFields[i].fields=e.fields.sort( (a,b) => a.order - b.order );
+  });
+
+  //return Object.values(groups);
+  return sortedFields;
 }
 
 export { createPropertyTreeFromFields };

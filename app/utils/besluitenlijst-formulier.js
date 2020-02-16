@@ -13,6 +13,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix prov: <http://www.w3.org/ns/prov#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix lblodBesluit: <http://lblod.data.gift/vocabularies/besluit/> .
 
 :besluitenlijst a form:Form ;
     mu:uuid "a0a120d2-87a8-4f45-a61b-61654997cf1e" ;
@@ -24,7 +25,7 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks, fields:remark .
+    form:hasField fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:filesAndLinks, fields:remark, fields:conceptSchemeSelector .
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
@@ -37,6 +38,51 @@ fields:remark a form:Field ;
     sh:path rdfs:comment ;
     form:displayType displayTypes:textArea;
     sh:group fields:aDynamicPropertyGroup .
+
+##############################
+##CONCEPTSCHEMESELECTOR TEST##
+##############################
+fields:conceptSchemeSelector a form:Field ;
+    mu:uuid "1337" ;
+    sh:name "Concept Scheme Selector" ;
+    sh:order 1 ;
+    sh:path rdf:type ;
+    form:options """{"conceptScheme":"https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType"}""" ;
+    form:validations
+      [ a form:RequiredConstraint ;
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        sh:resultMessage "Dit veld is verplicht."@nl
+      ],
+      [ a form:ConceptSchemeConstraint ;
+        form:grouping form:MatchEvery ;
+        sh:path rdf:type ;
+        form:conceptScheme <https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType> ;
+        sh:resultMessage "Conceptschema is onjuist."@nl
+      ] ;
+    form:displayType displayTypes:conceptSchemeSelector ;
+    sh:group fields:aDynamicPropertyGroup .
+
+################################
+##CONCEPTSCHEMESELECTOR TEST 2##
+################################
+#fields:conceptSchemeSelector2 a form:Field ;
+#    mu:uuid "a8f6a6cb-dbb8-488c-878d-05603791a9eb" ;
+#    sh:name "Gaat het over het origineel document of over een wijziging?" ;
+#    sh:order 700 ;
+#    sh:path lblodBesluit:authenticityType ;
+#    form:validations
+#      [ a form:ConceptSchemeConstraint ; #TODO
+#        form:grouping form:Bag ;
+#        sh:path lblodBesluit:authenticityType ;
+#        form:conceptScheme <http://lblod.data.gift/concept-schemes/ac9bc402-c8e6-41fd-ad57-fad15622e560> ;
+#        sh:resultMessage "De waarde komt niet uit de opgegeven codelijst."@nl
+#      ] ;
+#    form:options """{/"source/":/"/codelists/authenticitytype.ttl/"}""" ;
+#    form:displayType displayTypes:conceptSchemeSelector .
+
+
+
 
 fields:submissionType a form:Field ;
     mu:uuid "0827fafe-ad19-49e1-8b2e-105d2c08a54a" ;
