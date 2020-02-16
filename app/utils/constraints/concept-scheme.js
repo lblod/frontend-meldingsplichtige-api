@@ -4,7 +4,7 @@ import rdflib from 'ember-rdflib';
 
 export default function conceptSchemeValidation(values, options){
 
-  //return true;
+  return true;
 
   const { constraintUri, store, metaGraph } = options;
 
