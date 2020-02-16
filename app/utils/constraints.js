@@ -10,6 +10,7 @@ import validUri from './constraints/valid-uri';
 import validDate from './constraints/valid-date';
 import validDateTime from './constraints/valid-date-time';
 import conceptScheme from './constraints/concept-scheme'
+import validYear from './constraints/valid-year';
 
 export default function constraintForUri(uri) {
   switch (String(uri)) {
@@ -31,6 +32,8 @@ export default function constraintForUri(uri) {
       return validDateTime;
     case "http://lblod.data.gift/vocabularies/forms/ConceptSchemeConstraint":
       return conceptScheme;
+    case "http://lblod.data.gift/vocabularies/forms/ValidYear":
+      return validYear;
     default:
       return false; //TODO: TBD
   }

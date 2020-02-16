@@ -6,8 +6,6 @@ export default function conceptSchemeValidation(values, options){
 
   //return true;
 
-  //TODO: FIX THIS ONCE THE GROWN UPS HAVE SPOKEN
-
   const { constraintUri, store, metaGraph } = options;
 
   const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined, metaGraph );

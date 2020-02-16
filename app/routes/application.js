@@ -17,13 +17,7 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   sessionInvalidated() {
-    const logoutUrl = ENV['torii']['providers']['acmidm-oauth2']['logoutUrl'];
-    if (logoutUrl.startsWith('http')) {
-      window.location.replace(logoutUrl);
-    }
-    else {
-      warn('Incorrect logout URL configured', { id: 'session-invalidation-failure' });
-    }
+    this.transitionTo('mock-login');
   },
 
   _loadCurrentSession() {

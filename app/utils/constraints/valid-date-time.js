@@ -5,7 +5,7 @@ import validDate from './valid-date';
  */
 export default function constraintValidDateTime(value, options) {
   let dateString = value.value.substring(0, value.value.indexOf("T"));
-  let timeString = value.value.substring(value.value.indexOf("T") + 1, value.value.indexOf("Z"));
+  let timeString = value.value.substring((value.value.indexOf("T") + 1), value.value.indexOf("Z"));
   return (validDate({value: dateString}, options) && validTime({value: timeString}, options));
 }
 

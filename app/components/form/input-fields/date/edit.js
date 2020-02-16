@@ -40,7 +40,10 @@ export default class FormInputFieldsDateEditComponent extends Component {
 
   @action
   updateValue(){
-    let dateString = this.value.toISOString().split("T")[0];
+    let dateString = null;
+    if(this.value != null) {
+      dateString = this.value.toISOString().split("T")[0];
+    }
     updateSimpleFormValue(dateString, this.storeOptions);
   }
 }

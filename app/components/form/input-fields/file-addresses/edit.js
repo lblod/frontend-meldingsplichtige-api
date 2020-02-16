@@ -1,27 +1,21 @@
 import Component from '@glimmer/component';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
+import {inject as service} from '@ember/service';
+
 import {
   triplesForPath,
-  validationResultsForField,
-  updateSimpleFormValue
+  addSimpleFormValue,
+  removeSimpleFormValue, validationResultsForField
 } from '../../../../utils/import-triples-for-form';
 
-export default class FormInputFieldsDateTimeEditComponent extends Component {
-  @tracked
-  date = null;
+export default class FormInputFieldsFileAddressesEditComponent extends Component {
+
+  @service
+  store;
 
   @tracked
-  hour = null;
-
-  @tracked
-  minutes = null;
-
-  @tracked
-  errors = [];
-
-  @tracked
-  storeOptions = {};
+  fileAddresses = [];
 
   @action
   loadData() {
@@ -34,30 +28,37 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
       path: this.args.field.rdflibPath
     };
 
+
     this.loadValidations();
     this.loadProvidedValue();
   }
 
-  loadValidations() {
+  loadValidations(){
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  loadProvidedValue() {
+  async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
-      let datobj = new Date(matches.values[0].value);
-      this.date = datobj;
-      this.hour = datobj.getHours();
-      this.minutes = datobj.getMinutes();
+      for (let path of matches.values) {
+        this.fileAddresses.pushObject(path.value.trim());
+      }
     }
   }
 
   @action
-  updateValue(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    this.date.setHours(this.hour, this.minutes, null, null);
-    updateSimpleFormValue(this.date, this.storeOptions);
+  addUrlField() {
+    this.fileAddresses.pushObject("");
+  }
+
+  @action
+  updateFileAddresses(prev, value) {
+    removeSimpleFormValue(prev, this.storeOptions);
+    addSimpleFormValue(value, this.storeOptions);
+  }
+
+  @action
+  delete(value) {
+    removeSimpleFormValue(value, this.storeOptions);
   }
 }
