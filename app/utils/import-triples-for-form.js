@@ -1,5 +1,5 @@
-import {RDF, FORM, SHACL} from './namespaces';
-import {check} from './constraints';
+import { RDF, FORM, SHACL } from './namespaces';
+import { check, checkTriples } from './constraints';
 import rdflib from 'ember-rdflib';
 import uuidv4 from 'uuid/v4';
 
@@ -215,6 +215,19 @@ function validationResultsForField(fieldUri, options) {
   return validationResults;
 }
 
+function validationResultsForFieldPart(triplesData, fieldUri, options){
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+  const validationConstraints = store
+    .match(fieldUri, FORM("validations"), undefined, formGraph)
+    .map(t => t.object);
+
+  const validationResults = [];
+  for (const constraintUri of validationConstraints) {
+    const validationResult = checkTriples(constraintUri, triplesData, options);
+    validationResults.push(validationResult);
+  }
+  return validationResults;
+}
 function updateSimpleFormValue(value, options) {
 
   /* This might be tricky.We need to find a subject and predicate to attach the object to.
@@ -281,7 +294,7 @@ function removeSimpleFormValue(value, options) {
 
 function addSimpleFormValue(value, options) {
   const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
-
+  debugger;
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
 
@@ -308,6 +321,7 @@ export {
   validateForm,
   validateField,
   validationResultsForField,
+  validationResultsForFieldPart,
   updateSimpleFormValue,
   addSimpleFormValue,
   removeSimpleFormValue,
