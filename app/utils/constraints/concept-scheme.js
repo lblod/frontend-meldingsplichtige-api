@@ -4,21 +4,13 @@ import rdflib from 'ember-rdflib';
 
 export default function conceptSchemeValidation(values, options){
 
-  return true;
-
   const { constraintUri, store, metaGraph } = options;
 
-  const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined, metaGraph );
+  const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined)[0].object;
 
-  const matchingValues =
-      values
-      .filter( (value) => {
-        const matchCount =
-              store
-              //this is where we check if a definition is part of a scheme
-              .match( value, SKOS("inScheme"), conceptSchemeUri, codelistGraph )
-              .length;
-        return matchCount >= 1;
-      });
-  return matchingValues.length == 1;
+  debugger;
+
+  const matchingValues = store.match( values, SKOS("inScheme"), conceptSchemeUri, metaGraph).length;
+
+  return matchingValues >= 1;
 }

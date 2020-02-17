@@ -95,17 +95,17 @@ fields:conceptSchemeSelector a form:Field ;
     mu:uuid "1337" ;
     sh:name "Concept Scheme Selector" ;
     sh:order 1 ;
-    sh:path rdf:type ;
+    sh:path ext:test ;
     form:options """{"conceptScheme":"https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType"}""" ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
-        sh:path rdf:type ;
+        sh:path ext:test ;
         sh:resultMessage "Dit veld is verplicht."@nl
-      ],
+      ] ,
       [ a form:ConceptSchemeConstraint ;
         form:grouping form:MatchEvery ;
-        sh:path rdf:type ;
+        sh:path ext:test ;
         form:conceptScheme <https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType> ;
         sh:resultMessage "Conceptschema is onjuist."@nl
       ] ;

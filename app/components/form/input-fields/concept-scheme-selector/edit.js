@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { triplesForPath, validationResultsForField } from '../../../../utils/import-triples-for-form';
+import { triplesForPath,
+         validationResultsForField,
+         addSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { RDF, FORM, SKOS, FOAF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
@@ -17,11 +19,10 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
 
   storeOptions = {};
 
-  @action
-  loadData(){
-    //constructor ...kinda
+  constructor(...args){
+    super(...args)
 
-    //this is passed to validations
+    //this is passed to validations and other util functions
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -30,23 +31,22 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
       store: this.args.formStore,
       path: this.args.field.rdflibPath
     };
-    this.loadOptions();
+
     this.loadValidations();
+    this.loadOptions();
     if(this.errors.length == 0){
-      //do something if validated
-    }
-    else{
-      //do something if validation fails
+      //do something if validated scraped
+      this.selectValidValue();
     }
   }
 
   loadOptions(){
-    //Selects all options that match the concept scheme from the codelist
+    //Selects all options that match the concept scheme from the form turtle
+    const conceptScheme=JSON.parse(this.args.field.options).conceptScheme
     this.options = this.args.formStore
       .match( undefined,
               SKOS('inScheme'),
-              //should there be an attr in the form graph?
-              new rdflib.namedNode('https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType'),
+              new rdflib.namedNode(conceptScheme),
               this.args.graphs.metaGraph)
       .map(s => {
         const label = this.args.formStore.any(s.subject, SKOS('prefLabel'), undefined, this.args.graphs.metaGraph);
@@ -58,10 +58,24 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
+
+
   @action
   updateSelection(option){
     //Do something @onChange
     this.selected=option;
+    this.errors=[];
+  }
+
+  @action
+  selectValidValue(){
+    const match = triplesForPath(this.storeOptions, true).values;
+    if (match.length==1){
+      this.selected=this.options.find((e)=>{
+        return e.subject.value==match[0].value;
+      });
+    }
+
   }
 
 }

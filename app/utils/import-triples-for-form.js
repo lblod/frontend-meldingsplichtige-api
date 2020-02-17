@@ -281,7 +281,7 @@ function removeSimpleFormValue(value, options) {
 
 function addSimpleFormValue(value, options) {
   const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
-
+  debugger;
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
 

@@ -4,8 +4,7 @@ import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
 
-import documentTypeCodelist from '../../utils/codelist/document-type';
-
+import codeLists from '../../utils/codelist/codelists';
 
 import uuidv4 from 'uuid/v4';
 import { inject as service } from '@ember/service';
@@ -26,6 +25,7 @@ export default class FormsNewRoute extends Route {
   }
 
   setupController(controller, model){
+
     super.setupController(controller, model);
 
     controller.formStore = new forkingStore();
@@ -40,7 +40,8 @@ export default class FormsNewRoute extends Route {
     controller.sourceNode = sourceNode;
     controller.formStore.addAll([{ subject: sourceNode, predicate: RDF('type'), object: FORM('ManualFormSolution'), graph: sourceGraph }]);
     controller.formStore.parse(model.form, formGraph, "text/turtle");
-    controller.formStore.parse(documentTypeCodelist, metaGraph, "text/turtle");
+
+    controller.formStore.parse(codeLists, metaGraph, "text/turtle");
 
     controller.form = controller.formStore.any(undefined, RDF("type"), FORM("Form"), formGraph);
 

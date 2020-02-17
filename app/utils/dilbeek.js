@@ -62,7 +62,5 @@ export default `
 
 ###################################test for concept scheme
 
-<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test "HELLO WORLD",
-                                                                                                    "SOMETHING OR OTHER".
-
+#<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/13fefad6-a9d6-4025-83b5-e4cbee3a8965>.
 `;
