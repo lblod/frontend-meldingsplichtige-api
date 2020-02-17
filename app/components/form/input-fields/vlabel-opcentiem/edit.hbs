@@ -24,18 +24,25 @@
   </thead>
   <tbody>
   {{#if this.showTable}}
-    {{#each this.taxRates as |taxRate|}}
+    {{#each this.fields as |field|}}
       <tr>
         <td>
           <Input class="input-field input-field--block input-field--small"
                  placeholder="Bedrag"
-                 @value={{taxRate}}
-                 @focus-out={{fn this.update taxRate}}/>
+                 @value={{field.value.taxRate}}
+                 @focus-out={{fn this.update field}}/>
+          <div>
+            <p class="small u-spacer--tb--tinier form__error">
+              {{#each field.errors as |error|}}
+                <span> {{error.resultMessage}} </span>
+              {{/each}}
+            </p>
+          </div>
         </td>
         <td>
           <button type="button"
                   class="toggle small link--icon u-spacer--bottom--small"
-            {{on "click" (fn this.delete taxRate)}}>
+            {{on "click" (fn this.delete field)}}>
             Verwijder
           </button>
         </td>
@@ -45,8 +52,8 @@
       <td colspan="5" class="data-table__add-row u-align-center">
         <button type="button"
                 class="button button--narrow
-                      {{unless this.taxRates "u-spacer--tb--small" "button--alt u-spacer--tb--tiny" }}"
-          {{on "click"this.create}}>
+                      {{unless this.fields "u-spacer--tb--small" "button--alt u-spacer--tb--tiny" }}"
+          {{on "click" this.create}}>
           <i class="vi vi-plus" aria-hidden="true"></i>Voeg bedrag opcentiem toe
         </button>
       </td>

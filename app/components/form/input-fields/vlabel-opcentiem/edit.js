@@ -1,21 +1,22 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { reads, empty, not} from '@ember/object/computed';
+import {action, set} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
+import {reads, empty, not} from '@ember/object/computed';
 import {
   triplesForPath,
-  validationResultsForField,
+  addSimpleFormValue,
   removeSimpleFormValue,
-  addSimpleFormValue
+  validationResultsForField,
+  validationResultsForFieldPart
 } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
 
   @tracked
-  differentiatie;
+  fields = [];
 
-  @tracked
-  taxRates = [];
+  @empty('fields')
+  differentiatie;
 
   @empty('taxRates')
   taxRatesEmpty;
@@ -33,7 +34,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   storeOptions = {};
 
   @action
-  loadData(){
+  loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -47,19 +48,25 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     this.loadProvidedValue();
   }
 
-  loadValidations(){
+  loadValidations() {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0) {
-      for (let taxRate of matches.values) {
-        this.taxRates.pushObject(taxRate.value.trim());
-      }
+
+    for (let triple of matches.triples) {
+
+      const errors = validationResultsForFieldPart(
+        {values: [triple.object]},
+        this.args.field.uri,
+        this.storeOptions).filter(r => !r.valid);
+
+      this.fields.pushObject({value: {taxRate: triple.object.value}, errors});
     }
   }
 
+  // TODO should be worked out
   @action
   toggleDiff(event) {
     event.preventDefault();
@@ -67,18 +74,19 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   }
 
   @action
-  create(){
-    this.taxRates.pushObject("");
+  create() {
+    this.fields.pushObject({value: {taxRate: ""}, errors: []});
   }
 
   @action
-  update(prev, value) {
-    removeSimpleFormValue(prev, this.storeOptions);
-    addSimpleFormValue(value, this.storeOptions);
+  update(field, newValue) {
+    removeSimpleFormValue(field.value.taxRate, this.storeOptions);
+    set(field, 'value.taxRate', newValue.trim());
+    addSimpleFormValue(newValue.trim(), this.storeOptions);
   }
 
   @action
-  delete(value) {
-    removeSimpleFormValue(value, this.storeOptions);
+  delete(field) {
+    removeSimpleFormValue(field.value.taxRate.trim(), this.storeOptions);
   }
 }
