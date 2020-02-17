@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import {inject as service} from '@ember/service';
-
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { set } from '@ember/object';
 import {
   triplesForPath,
   addSimpleFormValue,
-  removeSimpleFormValue, validationResultsForField
+  removeSimpleFormValue,
+  validationResultsForField,
+  validationResultsForFieldPart
 } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsFileAddressesEditComponent extends Component {
@@ -16,6 +18,9 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
 
   @tracked
   fileAddresses = [];
+
+  @tracked
+  errors = [];
 
   @action
   loadData() {
@@ -39,26 +44,28 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0) {
-      for (let path of matches.values) {
-        this.fileAddresses.pushObject(path.value.trim());
-      }
+    for (let triple of matches.triples) {
+      this.fileAddresses.pushObject({ fileAddress: { address : triple.object.value.trim() },
+                                      errors: validationResultsForFieldPart({values: [ triple.object ]},
+                                                                            this.args.field.uri,
+                                                                            this.storeOptions).filter(r => !r.valid) } );
     }
   }
 
   @action
   addUrlField() {
-    this.fileAddresses.pushObject("");
+    this.fileAddresses.pushObject({ fileAddress: { address : ""}, errors: []});
   }
 
   @action
-  updateFileAddresses(prev, value) {
-    removeSimpleFormValue(prev, this.storeOptions);
-    addSimpleFormValue(value, this.storeOptions);
+  updateFileAddress(currentFileAddress, newValue) {
+    removeSimpleFormValue(currentFileAddress.fileAddress.address, this.storeOptions);
+    set(currentFileAddress, 'fileAddress.address', newValue);
+    addSimpleFormValue(newValue, this.storeOptions);
   }
 
   @action
-  delete(value) {
-    removeSimpleFormValue(value, this.storeOptions);
+  removeFileAddress(value) {
+    removeSimpleFormValue(value.fileAddress.address, this.storeOptions);
   }
 }
