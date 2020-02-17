@@ -37,20 +37,24 @@ export default function constraintForUri(uri) {
 }
 
 function check(constraintUri, options){
-  const { formGraph, sourceNode, sourceGraph, metaGraph, store } = options;
+  const { formGraph, sourceNode, sourceGraph, store } = options;
+  let path = store.any( constraintUri, SHACL("path"), undefined, formGraph);
+  let triplesData  = triplesForPath({
+    store: store, path, formGraph: formGraph, sourceNode: sourceNode, sourceGraph: sourceGraph
+  });
+  return checkTriples(constraintUri, triplesData, options);
+}
 
+function checkTriples(constraintUri, triplesData, options){
+  const { formGraph, metaGraph, store } = options;
+
+  let values = triplesData.values;
   const validationType = store.any(constraintUri, RDF('type'), undefined, formGraph);
   const groupingType = store.any(constraintUri, FORM("grouping"), undefined, formGraph).value;
   const resultMessage = (store.any(constraintUri, SHACL("resultMessage"), undefined, formGraph) || "").value;
 
   let validator = constraintForUri(validationType && validationType.value);
   if( !validator ) return { hasValidation: false, valid: true, resultMessage };
-
-  let path = store.any( constraintUri, SHACL("path"), undefined, formGraph);
-
-  let values = triplesForPath({
-    store: store, path, formGraph: formGraph, sourceNode: sourceNode, sourceGraph: sourceGraph
-  }).values;
 
   const validationOptions = { store, metaGraph, constraintUri };
 
@@ -66,6 +70,7 @@ function check(constraintUri, options){
 
   console.log(`Validation ${validationType} [${groupingType}] with values ${values.join(',')} is ${validationResult}`);
   return { hasValidation: true, valid: validationResult, resultMessage };
+
 }
 
 function missingConstraint(value, options) {
@@ -73,4 +78,4 @@ function missingConstraint(value, options) {
   return false;
 }
 
-export { check };
+export { check, checkTriples };
