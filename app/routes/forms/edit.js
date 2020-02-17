@@ -4,7 +4,9 @@ import form from '../../utils/besluitenlijst-formulier';
 import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
-import documentTypeCodelist from '../../utils/codelist/document-type';
+
+import codeLists from '../../utils/codelist/codelists';
+
 import fetch from 'fetch';
 
 //TODO: clean up
@@ -71,7 +73,7 @@ export default class FormsEditRoute extends Route {
       controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
     }
     controller.formStore.parse(model.form, model.graphs.formGraph, "text/turtle");
-    controller.formStore.parse(documentTypeCodelist, model.graphs.metaGraph, "text/turtle");
+    controller.formStore.parse(codeLists, model.graphs.metaGraph, "text/turtle");
 
     controller.form = controller.formStore.any(undefined, RDF("type"), FORM("Form"), model.graphs.formGraph);
 
