@@ -1,18 +1,23 @@
 <div class="form__row u-padding--tb--tinier" {{did-insert this.loadData}}>
+
+  {{#if this.errors}}
+    <p class="small u-spacer--tb--tinier form__error">Een of meerdere links zijn ongeldig.</p>
+  {{/if}}
   <table class="data-table u-spacer--bottom--tiny">
     <tbody data-test-mn="url-box-list">
     {{#each this.fileAddresses as |fileAddress|}}
       <tr>
         <td>
+
           <Input
                   class="input-field input-field--block input-field--small"
                   placeholder="http://wwww.uw-bestuur.be/specifiek-document"
-                  @value={{fileAddress}}
-                  @focus-out={{fn this.updateFileAddresses fileAddress}}
+                  value={{fileAddress.fileAddress.address}}
+                  @focus-out={{fn this.updateFileAddress fileAddress}}
           />
           <div class="grid">
             <div class="col--7-12">
-              {{#if this.errors}}
+              {{#if fileAddress.errors}}
                 <p class="small u-spacer--tb--tinier form__error">Ongeldige link. Ongeldige links worden niet
                   behandeld.</p>
                 <p class="small u-spacer--bottom--tinier">Zorg dat vooraan in de link altijd http://, https://, ftp://
@@ -21,16 +26,16 @@
             </div>
             <div class="col--5-12">
               <div class="button-group u-spacer--top--tiny u-align-right">
-                <a href={{fileAddress}} target="_blank" rel="noopener"
+                <a href={{fileAddress.fileAddress.address}} target="_blank" rel="noopener"
                    class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk
                   link</a>
-                {{#if fileAddress.replicatedFile.downloadLink}}
-                  <a href={{fileAddress.replicatedFile.downloadLink}} download
+                {{#if fileAddress.fileAddress.replicatedFile.downloadLink}}
+                  <a href={{fileAddress.fileAddress.replicatedFile.downloadLink}} download
                      class="u-spacer--bottom--tiny button button--small button--alt"><i
                           class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
                 {{/if}}
                 <a class="toggle u-spacer--bottom--tiny button button--small button--alt button--alt--warning" {{on
-                        "click" (fn this.delete fileAddress)}} role="button"><i class="vi vi-cross vi-u-xs"></i>Verwijder&nbsp;link</a>
+                        "click" (fn this.removeFileAddress fileAddress)}} role="button"><i class="vi vi-cross vi-u-xs"></i>Verwijder&nbsp;link</a>
               </div>
             </div>
           </div>
