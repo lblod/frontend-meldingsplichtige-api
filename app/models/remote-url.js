@@ -7,6 +7,6 @@ export default Model.extend({
   created: attr('date'),
   modified: attr('date'),
   replicatedFile: belongsTo('file'),
-  downloadStatus: belongsTo('file-download-status'),
-  creator: belongsTo('service-agent')
+  downloadStatus: attr(),
+  creator: attr(),
 });
