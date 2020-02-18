@@ -27,7 +27,7 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:conceptSchemeSelector, fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:fileAddresses, fields:filesAndLinks, fields:remark.
+    form:hasField fields:conceptSchemeSelector, fields:conceptSchemeSelector2, fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:fileAddresses, fields:filesAndLinks, fields:remark.
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
@@ -104,7 +104,7 @@ fields:conceptSchemeSelector a form:Field ;
         sh:resultMessage "Dit veld is verplicht."@nl
       ] ,
       [ a form:ConceptSchemeConstraint ;
-        form:grouping form:MatchEvery ;
+        form:grouping form:Bag ;
         sh:path ext:test ;
         form:conceptScheme <https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType> ;
         sh:resultMessage "Conceptschema is onjuist."@nl
@@ -115,20 +115,26 @@ fields:conceptSchemeSelector a form:Field ;
 ################################
 ##CONCEPTSCHEMESELECTOR TEST 2##
 ################################
-#fields:conceptSchemeSelector2 a form:Field ;
-#    mu:uuid "a8f6a6cb-dbb8-488c-878d-05603791a9eb" ;
-#    sh:name "Gaat het over het origineel document of over een wijziging?" ;
-#    sh:order 700 ;
-#    sh:path lblodBesluit:authenticityType ;
-#    form:validations
-#      [ a form:ConceptSchemeConstraint ; #TODO
-#        form:grouping form:Bag ;
-#        sh:path lblodBesluit:authenticityType ;
-#        form:conceptScheme <http://lblod.data.gift/concept-schemes/ac9bc402-c8e6-41fd-ad57-fad15622e560> ;
-#        sh:resultMessage "De waarde komt niet uit de opgegeven codelijst."@nl
-#      ] ;
-#    form:options """{/"source/":/"/codelists/authenticitytype.ttl/"}""" ;
-#    form:displayType displayTypes:conceptSchemeSelector .
+fields:conceptSchemeSelector2 a form:Field ;
+    mu:uuid "a8f6a6cb-dbb8-488c-878d-05603791a9eb" ;
+    sh:name "Concept Scheme Selector 2" ;
+    sh:order 2 ;
+    sh:path ext:test ;
+    form:options  """{"conceptScheme":"http://lblod.data.gift/concept-schemes/b65b15ba-6755-4cd2-bd07-2c2cf3c0e4d3"}""" ;
+    form:validations
+      [ a form:RequiredConstraint ;
+        form:grouping form:Bag ;
+        sh:path ext:test ;
+        sh:resultMessage "Dit veld is verplicht."@nl
+      ] ,
+      [ a form:ConceptSchemeConstraint ; #TODO
+        form:grouping form:Bag ;
+        sh:path ext:test ;
+        form:conceptScheme  <http://lblod.data.gift/concept-schemes/b65b15ba-6755-4cd2-bd07-2c2cf3c0e4d3> ;
+        sh:resultMessage "De waarde komt niet uit de opgegeven codelijst."@nl
+      ] ;
+    form:displayType displayTypes:conceptSchemeSelector ;
+    sh:group fields:aDynamicPropertyGroup .
 
 
 
