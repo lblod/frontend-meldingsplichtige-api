@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
-import { set } from '@ember/object';
+import {action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
+import {inject as service} from '@ember/service';
+import {set} from '@ember/object';
 import {
   triplesForPath,
   addSimpleFormValue,
@@ -11,19 +11,23 @@ import {
   validationResultsForFieldPart
 } from '../../../../utils/import-triples-for-form';
 
+const READY_TO_BE_CACHED = "bd1017b8-6353-4d52-9e09-37dcc92f05b5";
+const FAILED = "51aaa791-ba19-4ccb-ad2d-9d5b7f65d351";
+const CREATOR = "d298d62c-cb94-4cbd-a88a-ca3f2bec003a";
+
 export default class FormInputFieldsFileAddressesEditComponent extends Component {
 
   @service
   store;
 
   @tracked
-  fileAddresses = [];
+  remoteFiles = [];
 
   @tracked
   errors = [];
 
   @action
-  loadData() {
+  async loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -35,37 +39,64 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
 
 
     this.loadValidations();
-    this.loadProvidedValue();
+    await this.loadProvidedValue();
   }
 
-  loadValidations(){
+  loadValidations() {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     for (let triple of matches.triples) {
-      this.fileAddresses.pushObject({ fileAddress: { address : triple.object.value.trim() },
-                                      errors: validationResultsForFieldPart({values: [ triple.object ]},
-                                                                            this.args.field.uri,
-                                                                            this.storeOptions).filter(r => !r.valid) } );
+      const uri = triple.object.value;
+      const remotes = await this.store.query('remote-url', {'filter[:uri:]' : uri});
+      const remoteUrl = remotes.get('firstObject');
+      this.remoteFiles.pushObject({
+        remoteUrl,
+        errors: validationResultsForFieldPart({values: [{value: remoteUrl.address}]},
+          this.args.field.uri,
+          this.storeOptions).filter(r => !r.valid)
+      });
     }
   }
 
   @action
-  addUrlField() {
-    this.fileAddresses.pushObject({ fileAddress: { address : ""}, errors: []});
+  async addUrlField() {
+    const creator = await this.store.findRecord("service-agent", CREATOR);
+
+    const remoteUrl = await this.store.createRecord('remote-url');
+    remoteUrl.setProperties({
+      creator
+    });
+
+    this.remoteFiles.pushObject({remoteUrl, errors: []});
   }
 
   @action
-  updateFileAddress(currentFileAddress, newValue) {
-    removeSimpleFormValue(currentFileAddress.fileAddress.address, this.storeOptions);
-    set(currentFileAddress, 'fileAddress.address', newValue);
-    addSimpleFormValue(newValue, this.storeOptions);
+  async updateRemoteUrl(current, newValue) {
+    set(current.remoteUrl, "address", newValue.trim());
+
+    if (this.isValid(newValue) && current.remoteUrl.address !== newValue.trim()) {
+      set(current.remoteUrl, "downloadStatus", await this.store.findRecord("file-download-status", READY_TO_BE_CACHED));
+    }
+
+    await current.remoteUrl.save();
+    addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
   }
 
   @action
-  removeFileAddress(value) {
-    removeSimpleFormValue(value.fileAddress.address, this.storeOptions);
+  async removeRemoteUrl(current) {
+    removeSimpleFormValue(current.remoteUrl.uri, this.storeOptions);
+    await current.remoteUrl.destroyRecord();
+  }
+
+  isValid(value) {
+    // TODO Reusable
+    let errors = validationResultsForFieldPart(
+      {values: [{value}]},
+      this.args.field.uri,
+      this.storeOptions).filter(r => !r.valid);
+    return errors ? errors.length === 0 : false;
   }
 }
