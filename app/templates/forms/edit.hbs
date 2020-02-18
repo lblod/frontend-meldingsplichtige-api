@@ -17,6 +17,7 @@
 {{#unless this.model.submitted}}
   <button type="button" {{on "click" this.send}}>Verzenden</button>
 {{/unless}}
+  <button type="button" {{on "click" this.save}}>Opslaan</button>
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>
