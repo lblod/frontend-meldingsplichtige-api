@@ -42,8 +42,7 @@ export default class FormsEditController extends Controller {
     this.removedTriples = this.formStore.match(undefined, undefined, undefined, delGraphFor(this.graphs.sourceGraph));
   }
 
-  @action
-  async save(){
+  async saveSubmission(){
     await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/vnd.api+json'},
@@ -56,6 +55,18 @@ export default class FormsEditController extends Controller {
     });
   }
 
+  async submitSubmission(){
+    await fetch(`/submission-forms/${this.model.submissionDocument.id}/submit`, {
+       method: 'POST',
+      headers: { 'Content-Type': 'application/vnd.api+json'}
+    });
+  }
+
+  @action
+  async save(){
+    await this.saveSubmission();
+  }
+
   @action
   async submit(){
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
@@ -64,16 +75,8 @@ export default class FormsEditController extends Controller {
       alert('Gelieve het formulier correct in te vullen');
     }
     else{
-      await fetch(`/submission-forms/${this.model.submissionDocument.id}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/vnd.api+json'},
-        body: JSON.stringify(
-          {
-            subject: this.model.submissionDocument.uri,
-            form: this.formStore.serializeDataMergedGraph(this.graphs.sourceGraph)
-          }
-        )
-      });
+      await this.saveSubmission();
+      await this.submitSubmission();
     }
   }
 }
