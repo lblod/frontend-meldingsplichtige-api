@@ -119,17 +119,17 @@ fields:conceptSchemeSelector2 a form:Field ;
     mu:uuid "a8f6a6cb-dbb8-488c-878d-05603791a9eb" ;
     sh:name "Concept Scheme Selector 2" ;
     sh:order 2 ;
-    sh:path ext:test ;
+    sh:path ext:test2 ;
     form:options  """{"conceptScheme":"http://lblod.data.gift/concept-schemes/b65b15ba-6755-4cd2-bd07-2c2cf3c0e4d3"}""" ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
-        sh:path ext:test ;
+        sh:path ext:test2 ;
         sh:resultMessage "Dit veld is verplicht."@nl
       ] ,
-      [ a form:ConceptSchemeConstraint ; #TODO
+      [ a form:ConceptSchemeConstraint ;
         form:grouping form:Bag ;
-        sh:path ext:test ;
+        sh:path ext:test2 ;
         form:conceptScheme  <http://lblod.data.gift/concept-schemes/b65b15ba-6755-4cd2-bd07-2c2cf3c0e4d3> ;
         sh:resultMessage "De waarde komt niet uit de opgegeven codelijst."@nl
       ] ;

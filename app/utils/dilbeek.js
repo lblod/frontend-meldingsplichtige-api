@@ -75,5 +75,5 @@ export default `
 #<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/3fa67785-ffdc-4b30-8880-2b99d97b4dee>.
 
 #passes 1 valid
-<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <http://lblod.data.gift/concepts/fa0fb233c350fa5b071d075b10f1032aad70a6f7f89fbe131f2dfa3aa829f075>.
+<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test2 <http://lblod.data.gift/concepts/fa0fb233c350fa5b071d075b10f1032aad70a6f7f89fbe131f2dfa3aa829f075>.
 `;
