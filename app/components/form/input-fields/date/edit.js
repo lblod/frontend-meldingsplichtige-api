@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
-import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsDateEditComponent extends Component {
   @tracked
@@ -40,8 +39,11 @@ export default class FormInputFieldsDateEditComponent extends Component {
   }
 
   @action
-  updateValue(e){
-    e.preventDefault();
-    updateSimpleFormValue(this.value, this.storeOptions);
+  updateValue(){
+    let dateString = null;
+    if(this.value != null) {
+      dateString = this.value.toISOString().split("T")[0];
+    }
+    updateSimpleFormValue(dateString, this.storeOptions);
   }
 }

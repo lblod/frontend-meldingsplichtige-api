@@ -4,8 +4,12 @@ import form from '../../utils/besluitenlijst-formulier';
 import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
-import documentTypeCodelist from '../../utils/codelist/document-type';
+
+import codeLists from '../../utils/codelist/codelists';
+
 import fetch from 'fetch';
+
+const VERSTUURD_URI = 'http://lblod.data.gift/concepts/9bd8d86d-bb10-4456-a84e-91e9507c374c';
 
 //TODO: clean up
 export default class FormsEditRoute extends Route {
@@ -16,6 +20,9 @@ export default class FormsEditRoute extends Route {
 
     const submission = await this.store.find('submission', params.id);
     const submissionDocument = await submission.submittedResource;
+    // TODO ping is this the right way to determine if a submission has been sent.
+    const submissionStatus = await submission.status;
+    // const submitted = (await submission.status.get('label')) === 'Verstuurd';
 
 
     //default form
@@ -46,7 +53,8 @@ export default class FormsEditRoute extends Route {
                formData: formData.source,
                graphs,
                sourceNode: new rdflib.NamedNode(submissionDocument.uri),
-               submissionDocument
+               submissionDocument,
+               submitted: submissionStatus.uri === VERSTUURD_URI
              };
     }
   }
@@ -71,7 +79,7 @@ export default class FormsEditRoute extends Route {
       controller.formStore.parse(model.formData, model.graphs.sourceGraph, "text/turtle");
     }
     controller.formStore.parse(model.form, model.graphs.formGraph, "text/turtle");
-    controller.formStore.parse(documentTypeCodelist, model.graphs.metaGraph, "text/turtle");
+    controller.formStore.parse(codeLists, model.graphs.metaGraph, "text/turtle");
 
     controller.form = controller.formStore.any(undefined, RDF("type"), FORM("Form"), model.graphs.formGraph);
 

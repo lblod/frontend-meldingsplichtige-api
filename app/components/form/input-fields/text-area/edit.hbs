@@ -1,0 +1,15 @@
+<div class="form__row" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <div class="u-spacer--bottom--small">
+    <Textarea class="textarea textarea--block component ember-text-area ember-view"
+              @value={{this.value}}
+              {{on "blur" this.updateValue}}/>
+    {{#if this.errors}}
+      {{#each this.errors as |error|}}
+        <span class="form__error"> {{error.resultMessage}} </span>
+      {{/each}}
+    {{/if}}
+  </div>
+</div>

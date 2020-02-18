@@ -1,10 +1,28 @@
-<LinkTo @route="index">Back</LinkTo>
+<div class="u-spacer--bottom--small">
+  <LinkTo @route="index">Back</LinkTo>
+</div>
 {{#if this.model.disclaimer}}
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
+<<<<<<< HEAD
 <Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
 <button {{on "click" this.save}}>Opslaan</button>
 <button {{on "click" this.submit}}>Verzenden</button>
+=======
+{{#if this.model.submitted}}
+  <div class="u-spacer--bottom--small">
+    <div class="alert alert--tiny alert--success">
+      <div class="alert__icon" aria-hidden="true"></div>
+      <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+    </div>
+  </div>
+{{/if}}
+<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
+            @formStore={{this.formStore}} />
+{{#unless this.model.submitted}}
+  <button type="button" {{on "click" this.send}}>Verzenden</button>
+{{/unless}}
+>>>>>>> new-input-components
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>
@@ -15,8 +33,8 @@
 <h2>Found {{this.datasetTriples.length}} triples</h2>
 <TriplesTable @triples={{this.datasetTriples}} />
 
-<h2>Found {{this.addedTriples.length}} added triples</h2>
+<h2>Found {{this.addedTriples.length}} ADDED triples</h2>
 <TriplesTable @triples={{this.addedTriples}} />
 
-<h2>Found {{this.removedTriples.length}} added triples</h2>
+<h2>Found {{this.removedTriples.length}} REMOVED triples</h2>
 <TriplesTable @triples={{this.removedTriples}} />

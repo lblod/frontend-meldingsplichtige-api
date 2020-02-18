@@ -1,66 +1,67 @@
 import { RDF, FORM, SHACL } from './namespaces';
-import { check } from './constraints';
+import { check, checkTriples } from './constraints';
 import rdflib from 'ember-rdflib';
 import uuidv4 from 'uuid/v4';
+
 const URI_TEMPLATE = 'http://data.lblod.info/form-data/nodes/';
 
-function importTriplesForForm( form, { store, formGraph, sourceGraph, sourceNode, metaGraph } ) {
+function importTriplesForForm(form, {store, formGraph, sourceGraph, sourceNode, metaGraph}) {
   let datasetTriples = [];
 
-  for( let field of fieldsForForm( form, { store, formGraph, sourceGraph, sourceNode, metaGraph } ) ) {
-    let path = store.any( field, SHACL("path"), undefined, formGraph );
-    triplesForPath({ path, store, formGraph, sourceNode, sourceGraph })
+  for (let field of fieldsForForm(form, {store, formGraph, sourceGraph, sourceNode, metaGraph})) {
+    let path = store.any(field, SHACL("path"), undefined, formGraph);
+    triplesForPath({path, store, formGraph, sourceNode, sourceGraph})
       .triples
-      .forEach( (item) => datasetTriples.push(item) );
+      .forEach((item) => datasetTriples.push(item));
   }
 
   return datasetTriples;
 }
 
-function fieldsForForm( form, options ) {
-  let { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+function fieldsForForm(form, options) {
+  let {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
 
   // get field groups
-  let fieldGroups = store.match( form, FORM("hasFieldGroup"), undefined, formGraph );
+  let fieldGroups = store.match(form, FORM("hasFieldGroup"), undefined, formGraph);
   console.log(`Getting fields for ${fieldGroups.length} field groups`);
   fieldGroups = [].concat(...fieldGroups);
-  fieldGroups = fieldGroups.map( ({object}) => object );
+  fieldGroups = fieldGroups.map(({object}) => object);
 
   // get all fields recursively
   let allFields = [];
   let newFields = [];
 
-  while( fieldGroups.length > 0 ) {
+  while (fieldGroups.length > 0) {
     // add fields
     newFields = [];
-    for( const fieldGroup of fieldGroups )
-      newFields.push( ...fieldsForFieldGroup( fieldGroup, options ));
+    for (const fieldGroup of fieldGroups)
+      newFields.push(...fieldsForFieldGroup(fieldGroup, options));
 
-    allFields.push( ...newFields );
+    allFields.push(...newFields);
 
     // calculate conditional groups
     let conditionalFieldGroups =
-        newFields.map( (field) => {
-          return store
-            .match( field, FORM("hasConditionalFieldGroup"), undefined, formGraph )
-            .map( ({ object }) => object );
-        });
-    conditionalFieldGroups = [].concat( ...conditionalFieldGroups );
+      newFields.map((field) => {
+        return store
+          .match(field, FORM("hasConditionalFieldGroup"), undefined, formGraph)
+          .map(({object}) => object);
+      });
+    conditionalFieldGroups = [].concat(...conditionalFieldGroups);
 
     // add matching conditional field groups
     let newFieldGroups =
-        conditionalFieldGroups
-        .filter( (group) => {
+      conditionalFieldGroups
+        .filter((group) => {
           return store
-            .match( group, FORM("conditions"), undefined, formGraph )
-            .every( ({object}) => check( object, { formGraph, sourceNode, sourceGraph, metaGraph, store } ).valid );
-        } )
-        .map( (group) => {
+            .match(group, FORM("conditions"), undefined, formGraph)
+            .every(({object}) => check(object, {formGraph, sourceNode, sourceGraph, metaGraph, store}).valid);
+        })
+        .map((group) => {
           return store
-            .match( group, FORM("hasFieldGroup"), undefined, formGraph )
-            .map( ({object}) => object );
+            .match(group, FORM("hasFieldGroup"), undefined, formGraph)
+            .map(({object}) => object);
         });
-    newFieldGroups = [].concat( ...newFieldGroups );
+    newFieldGroups = [].concat(...newFieldGroups);
     fieldGroups = newFieldGroups;
   }
 
@@ -69,33 +70,33 @@ function fieldsForForm( form, options ) {
   return allFields;
 }
 
-function fieldsForFieldGroup( fieldGroup, options ) {
-  const { store, formGraph } = options;
+function fieldsForFieldGroup(fieldGroup, options) {
+  const {store, formGraph} = options;
 
   return store
-    .match( fieldGroup, FORM("hasField"), undefined, formGraph )
-    .map( ({object}) => object );
+    .match(fieldGroup, FORM("hasField"), undefined, formGraph)
+    .map(({object}) => object);
 }
 
-function triplesForPath( options, createMissingNodes = false ){
-  const { store, path, formGraph, sourceNode, sourceGraph } = options;
+function triplesForPath(options, createMissingNodes = false) {
+  const {store, path, formGraph, sourceNode, sourceGraph} = options;
   let solutions = {};
-  if( path && path.termType === "Collection" ) {
-    return triplesForComplexPath( options, createMissingNodes );
+  if (path && path.termType === "Collection") {
+    return triplesForComplexPath(options, createMissingNodes);
   } else {
-    return triplesForSimplePath( options, createMissingNodes );
+    return triplesForSimplePath(options, createMissingNodes);
   }
 }
 
-function triplesForSimplePath( options, createMissingNodes = false ) {
-  const { store, path, formGraph, sourceNode, sourceGraph } = options;
+function triplesForSimplePath(options, createMissingNodes = false) {
+  const {store, path, formGraph, sourceNode, sourceGraph} = options;
   let datasetTriples = [];
 
-  if( path ) {
+  if (path) {
     const triples = store.match(sourceNode, path, undefined, sourceGraph);
 
-    if(createMissingNodes && triples.length == 0) {
-      triples.push( new rdflib.Statement(
+    if (createMissingNodes && triples.length == 0) {
+      triples.push(new rdflib.Statement(
         sourceNode,
         path,
         new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
@@ -103,44 +104,46 @@ function triplesForSimplePath( options, createMissingNodes = false ) {
       ));
     }
 
-    triples.map( (item) => { datasetTriples.push(item); } );
+    triples.map((item) => {
+      datasetTriples.push(item);
+    });
   }
-  return { triples: datasetTriples, values: datasetTriples.map( ({object}) => object ) };
+  return {triples: datasetTriples, values: datasetTriples.map(({object}) => object)};
 }
 
-function triplesForComplexPath( options, createMissingNodes = false ) {
-  const { store, path, formGraph, sourceNode, sourceGraph } = options;
+function triplesForComplexPath(options, createMissingNodes = false) {
+  const {store, path, formGraph, sourceNode, sourceGraph} = options;
   let datasetTriples = [];
 
   // Convert PATH list to comprehensible objects
   const pathElements =
-        path
-        .elements
-        .map( (element) => {
-          if( element.termType == "NamedNode" ) {
-            return { path: element };
-          } else {
-            const elementInfo = store.any( element, SHACL("inversePath"), undefined, formGraph );
-            return { inversePath: elementInfo };
-          }
-        } );
+    path
+      .elements
+      .map((element) => {
+        if (element.termType == "NamedNode") {
+          return {path: element};
+        } else {
+          const elementInfo = store.any(element, SHACL("inversePath"), undefined, formGraph);
+          return {inversePath: elementInfo};
+        }
+      });
 
   // Walk over each part of the path list
-  let startingPoints = [ sourceNode ];
+  let startingPoints = [sourceNode];
   let nextPathElements = pathElements;
-  while( startingPoints && nextPathElements.length ) {
+  while (startingPoints && nextPathElements.length) {
     // walk one segment of the path list
-    let [ currentPathElement, ...restPathElements ] = nextPathElements;
+    let [currentPathElement, ...restPathElements] = nextPathElements;
     let nextStartingPoints = [];
 
-    for( let startingPoint of startingPoints ) {
-      if( currentPathElement.inversePath ) {
+    for (let startingPoint of startingPoints) {
+      if (currentPathElement.inversePath) {
 
         // inverse path, walk in other direction
-        const triples = store.match( undefined, currentPathElement.inversePath, startingPoint, sourceGraph );
+        const triples = store.match(undefined, currentPathElement.inversePath, startingPoint, sourceGraph);
 
-        if(createMissingNodes && triples.length == 0) {
-          triples.push( new rdflib.Statement(
+        if (createMissingNodes && triples.length == 0) {
+          triples.push(new rdflib.Statement(
             new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
             currentPathElement.inversePath,
             startingPoint,
@@ -148,18 +151,18 @@ function triplesForComplexPath( options, createMissingNodes = false ) {
           ));
         }
 
-        triples.map( (triple) => {
+        triples.map((triple) => {
           datasetTriples.push(triple);
-          nextStartingPoints.push( triple.subject );
+          nextStartingPoints.push(triple.subject);
         });
 
       } else {
 
         // regular path, walk in normal direction
-        const triples = store.match( startingPoint, currentPathElement.path, undefined, sourceGraph );
+        const triples = store.match(startingPoint, currentPathElement.path, undefined, sourceGraph);
 
-        if(createMissingNodes && triples.length == 0) {
-          triples.push( new rdflib.Statement(
+        if (createMissingNodes && triples.length == 0) {
+          triples.push(new rdflib.Statement(
             startingPoint,
             currentPathElement.path,
             new rdflib.NamedNode(URI_TEMPLATE + uuidv4()),
@@ -167,9 +170,9 @@ function triplesForComplexPath( options, createMissingNodes = false ) {
           ));
         }
 
-        triples.map( (triple) => {
-            datasetTriples.push(triple);
-            nextStartingPoints.push( triple.object );
+        triples.map((triple) => {
+          datasetTriples.push(triple);
+          nextStartingPoints.push(triple.object);
         });
       }
     }
@@ -181,14 +184,14 @@ function triplesForComplexPath( options, createMissingNodes = false ) {
 
   // (this is reduntant, if there are no startingPoints values will
   // always be an array, but it's more obvious ;-)
-  if( nextPathElements.length == 0 )
-    return { triples: datasetTriples, values: startingPoints };
+  if (nextPathElements.length == 0)
+    return {triples: datasetTriples, values: startingPoints};
   else
-    return { triples: datasetTriples, values: [] };
+    return {triples: datasetTriples, values: []};
 }
 
 function validateForm(form, options) {
-  const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
   const fields = fieldsForForm(form, options);
   const fieldValidations = fields.map(field => validateField(field, options));
   return fieldValidations.reduce((acc, value) => acc && value, true);
@@ -198,71 +201,129 @@ function validateField(fieldUri, options) {
   return validationResultsForField(fieldUri, options).reduce((acc, value) => acc && value.valid, true);
 }
 
-function validationResultsForField(fieldUri, options){
-  const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+function validationResultsForField(fieldUri, options) {
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
   const validationConstraints = store
-        .match(fieldUri, FORM("validations"), undefined, formGraph)
-        .map(t => t.object);
+    .match(fieldUri, FORM("validations"), undefined, formGraph)
+    .map(t => t.object);
 
   const validationResults = [];
-  for (const constraintUri of validationConstraints){
-    const validationResult = check( constraintUri, options);
+  for (const constraintUri of validationConstraints) {
+    const validationResult = check(constraintUri, options);
     validationResults.push(validationResult);
   }
   return validationResults;
 }
 
-function updateSimpleFormValue(value, options){
-  const { store, formGraph, sourceGraph, sourceNode, metaGraph } = options;
+function validationResultsForFieldPart(triplesData, fieldUri, options){
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+  const validationConstraints = store
+    .match(fieldUri, FORM("validations"), undefined, formGraph)
+    .map(t => t.object);
+
+  const validationResults = [];
+  for (const constraintUri of validationConstraints) {
+    const validationResult = checkTriples(constraintUri, triplesData, options);
+    validationResults.push(validationResult);
+  }
+  return validationResults;
+}
+function updateSimpleFormValue(value, options) {
 
   /* This might be tricky.We need to find a subject and predicate to attach the object to.
-   * The path might contain several hops, and some of them don't necessarly exist. Consider:
-   *
-   *  Suppose our path is
-   *  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
-   *
-   *  and we only have
-   *
-   *  <besluitenlijst> a <Besluitenlijst>
-   *
-   *  A path will then be constructed with
-   *   <customUri> <prov:startedAtTime> "datum".
-   *   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
-   *
-   * TODO: this is for now a best guess. And further tweaking will be needed. If this needs to be our model:
-   *  <zitting> a <Zitting>
-   *  <zitting> <prov:startedAtTime> "datum".
-   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-   *  <besluitenlijst> a <Besluitenlijst>
-   *
-   * And suppose the data store does not have:
-   *  <zitting> <prov:startedAtTime> "datum".
-   *  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
-   *
-   * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
-   */
+* The path might contain several hops, and some of them don't necessarly exist. Consider:
+*
+*  Suppose our path is
+*  sh:path ( [ sh:inversePath besluit:heeftBesluitenlijst ] prov:startedAtTime )
+*
+*  and we only have
+*
+*  <besluitenlijst> a <Besluitenlijst>
+*
+*  A path will then be constructed with
+*   <customUri> <prov:startedAtTime> "datum".
+*   <customUri> <heeftBesluitenlijst> <besluitenlijst>.
+*
+* TODO: this is for now a best guess. And further tweaking will be needed. If this needs to be our model:
+*  <zitting> a <Zitting>
+*  <zitting> <prov:startedAtTime> "datum".
+*  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+*  <besluitenlijst> a <Besluitenlijst>
+*
+* And suppose the data store does not have:
+*  <zitting> <prov:startedAtTime> "datum".
+*  <zitting> <heeftBesluitenlijst> <besluitenlijst>.
+*
+* Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
+*/
+
+  removeDatasetForSimpleFormValue(value, options);
+  addSimpleFormValue(value, options);
+}
+
+function removeDatasetForSimpleFormValue(value, options) {
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
 
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
 
   store.removeStatements(dataset.triples);
+}
+
+function removeSimpleFormValue(value, options) {
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+
+  //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
+  const dataset = triplesForPath(options, true);
+
+  let triplesToRemove = [];
+  // The reason why it is more complicated. If we encounter > 1 values for a path, the I expect this form
+  // to be broken. This is a way for ther user to correct and remove both values.
+  if (dataset.values.length > 0) {
+    triplesToRemove = dataset.triples.filter(t => !dataset.values.find(v => t.object.equals(v)));
+  }
+
+  if (value) {
+    const newTriple = dataset.triples.slice(-1)[0];
+    newTriple.object = value;
+    triplesToRemove.push(newTriple);
+  }
+
+  store.removeStatements(triplesToRemove);
+}
+
+function addSimpleFormValue(value, options) {
+  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+
+  //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
+  const dataset = triplesForPath(options, true);
 
   let triplesToAdd = [];
   // The reason why it is more complicated. If we encounter > 1 values for a path, the I expect this form
   // to be broken. This is a way for ther user to correct and remove both values.
-  if(dataset.values.length > 0){
+  if (dataset.values.length > 0) {
     triplesToAdd = dataset.triples.filter(t => !dataset.values.find(v => t.object.equals(v)));
   }
 
-  if(value){
+  if (value) {
     const newTriple = dataset.triples.slice(-1)[0];
     newTriple.object = value;
     triplesToAdd.push(newTriple);
   }
 
   store.addAll(triplesToAdd);
-
 }
 
 export default importTriplesForForm;
-export { triplesForPath, fieldsForForm, validateForm, validateField, validationResultsForField, updateSimpleFormValue };
+export {
+  triplesForPath,
+  fieldsForForm,
+  validateForm,
+  validateField,
+  validationResultsForField,
+  validationResultsForFieldPart,
+  updateSimpleFormValue,
+  addSimpleFormValue,
+  removeSimpleFormValue,
+  removeDatasetForSimpleFormValue
+};

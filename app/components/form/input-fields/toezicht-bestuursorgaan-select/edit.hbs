@@ -1,24 +1,30 @@
-<label {{did-insert this.loadData}}>{{@field.label}}</label>
-<PowerSelect
-  @loadingMessage="Aan het laden..."
-  @noMatchesMessage="Geen resultaten"
-  @searchMessage="Typ om te zoeken"
-  @allowClear={{this.allowClear}}
-  @selected={{this.selected}}
-  @options={{this.options}}
-  @search={{perform this.searchOptions}}
-  @searchEnabled={{true}}
-  @onChange={{this.updateSelection}} as |bestuursorgaan|>
-  {{bestuursorgaan.isTijdsspecialisatieVan.naam}}
-  (
-  {{moment-format bestuursorgaan.bindingStart 'YYYY'}} -
-  {{#if bestuursorgaan.bindingEinde}}
-    {{moment-format bestuursorgaan.bindingEinde 'YYYY'}}
-  {{/if}}
-  )
-</PowerSelect>
-{{#if errors}}
-  {{#each errors as |error|}}
-    <span style="color: red"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+<div class="form__row" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <div class="u-spacer--bottom--small">
+    <PowerSelect
+            @loadingMessage="Aan het laden..."
+            @noMatchesMessage="Geen resultaten"
+            @searchMessage="Typ om te zoeken"
+            @allowClear={{this.allowClear}}
+            @selected={{this.selected}}
+            @options={{this.options}}
+            @search={{perform this.searchOptions}}
+            @searchEnabled={{true}}
+            @onChange={{this.updateSelection}} as |bestuursorgaan|>
+      {{bestuursorgaan.isTijdsspecialisatieVan.naam}}
+      (
+      {{moment-format bestuursorgaan.bindingStart 'YYYY'}} -
+      {{#if bestuursorgaan.bindingEinde}}
+        {{moment-format bestuursorgaan.bindingEinde 'YYYY'}}
+      {{/if}}
+      )
+    </PowerSelect>
+    {{#if this.errors}}
+      {{#each this.errors as |error|}}
+        <span class="form__error"> {{error.resultMessage}} </span>
+      {{/each}}
+    {{/if}}
+  </div>
+</div>

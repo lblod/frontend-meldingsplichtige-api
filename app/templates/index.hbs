@@ -3,12 +3,12 @@
 <div class="grid">
   <div class="col--9-12">
     {{#link-to 'forms.new'}}Maak nieuw formulier aan{{/link-to}}
+    {{#link-to 'forms.edit-example-form'}}Edit example form{{/link-to}}
   </div>
   <div class="col--3-12 u-align-right">
     <MockLogout @tagName={{'a'}}/>
   </div>
 </div>
-
 {{#data-table
         content=model
         isLoading=isLoadingModel

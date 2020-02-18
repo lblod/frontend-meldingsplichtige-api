@@ -14,7 +14,7 @@ function addGraphFor( graph ) {
 }
 
 /**
- * Yieldsthe graph which contains removals.
+ * Yields the graph which contains removals.
  */
 function delGraphFor( graph ) {
   const graphValue = graph.termType == 'NamedNode' ? graph.value : graph;
@@ -157,6 +157,7 @@ export default class ForkingStore {
     for( const ins of inserts ) {
       this.graph.add( statementInGraph( ins, addGraphFor( ins.graph ) ) );
       try {
+        // NOTE why do we try removing the statement after adding it?
         this.graph.remove( statementInGraph( ins, delGraphFor( ins.graph ) ) );
       } catch (e) {
         // this is okay!  the statement may not exist

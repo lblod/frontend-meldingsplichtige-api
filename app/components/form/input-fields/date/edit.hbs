@@ -1,7 +1,15 @@
-<label {{did-insert this.loadData}}>{{@field.label}}</label>
-<Input  {{on "blur" this.updateValue}} @value={{this.value}} />
-{{#if errors}}
-  {{#each errors as |error|}}
-    <span style="color: red"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+<div class="form__row from__row--date" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <div class="u-spacer--bottom--small">
+    <WuDatepicker @dateFormat="DD.MM.YYYY"
+                  @onChange={{this.updateValue}}
+                  @value={{this.value}}/>
+    {{#if this.errors}}
+      {{#each this.errors as |error|}}
+        <span class="form__error"> {{error.resultMessage}} </span>
+      {{/each}}
+    {{/if}}
+  </div>
+</div>
