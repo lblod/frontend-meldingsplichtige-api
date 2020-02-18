@@ -4,11 +4,6 @@
 {{#if this.model.disclaimer}}
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
-<<<<<<< HEAD
-<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
-<button {{on "click" this.save}}>Opslaan</button>
-<button {{on "click" this.submit}}>Verzenden</button>
-=======
 {{#if this.model.submitted}}
   <div class="u-spacer--bottom--small">
     <div class="alert alert--tiny alert--success">
@@ -22,7 +17,6 @@
 {{#unless this.model.submitted}}
   <button type="button" {{on "click" this.send}}>Verzenden</button>
 {{/unless}}
->>>>>>> new-input-components
 <h1
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}>
