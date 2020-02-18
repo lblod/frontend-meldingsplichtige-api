@@ -19,9 +19,8 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
 
   storeOptions = {};
 
-  constructor(...args){
-    super(...args)
-
+  @action
+  loadData(){
     //this is passed to validations and other util functions
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
@@ -32,8 +31,8 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
       path: this.args.field.rdflibPath
     };
 
-    this.loadValidations();
     this.loadOptions();
+    this.loadValidations();
     if(this.errors.length == 0){
       //do something if validated scraped
       this.selectValidValue();
@@ -65,6 +64,8 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
     //Do something @onChange
     this.selected=option;
     this.errors=[];
+    //debugger;
+    //addSimpleFormValue(option.subject, this.storeOptions);
   }
 
   @action

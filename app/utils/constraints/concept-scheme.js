@@ -8,9 +8,7 @@ export default function conceptSchemeValidation(values, options){
 
   const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined)[0].object;
 
-  debugger;
-
   const matchingValues = store.match( values, SKOS("inScheme"), conceptSchemeUri, metaGraph).length;
 
-  return matchingValues >= 1;
+  return matchingValues == 1;
 }
