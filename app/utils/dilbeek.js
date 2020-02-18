@@ -60,7 +60,17 @@ export default `
     mandaat:isTijdspecialisatieVan <http://data.lblod.info/id/bestuursorganen/ed04026321d1ae83e687f621dd5b055f7eeaccb112a5c37d939c402e8f9ed9cf> .
 
 
-###################################test for concept scheme
+#########################
+#test for concept scheme#
+#########################
+#passes one valid
+<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/13fefad6-a9d6-4025-83b5-e4cbee3a8965>.
 
+#fails 1 invalid
 #<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/13fefad6-a9d6-4025-83b5-e4cbee3a8965>.
+#<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/13fefad6-a9d6-4025-83b5-e4cbeadasdasde3a8965>.
+
+#fails two valid concept schemes
+#<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/13fefad6-a9d6-4025-83b5-e4cbee3a8965>.
+#<http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069> ext:test <https://data.vlaanderen.be/id/concept/BesluitDocumentType/3fa67785-ffdc-4b30-8880-2b99d97b4dee>.
 `;
