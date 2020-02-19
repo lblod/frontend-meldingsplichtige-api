@@ -14,7 +14,6 @@ import {
 const READY_TO_BE_CACHED_URI = "http://lblod.data.gift/file-download-statuses/ready-to-be-cached";
 const CREATOR_URI = "http://lblod.data.gift/fronted-end-componets/remote-url-creator";
 
-// TODO rename
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @service
@@ -25,6 +24,9 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @tracked
   errors = [];
+
+  @tracked
+  remoteErrors = [];
 
   @action
   async loadData() {
@@ -59,10 +61,10 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
             errors: this.validationResultsForAddress(remoteUrl.address)
           });
         } else {
-          this.errors.pushObject("Er ging iets fout bij het ophalen van de addressen.");
+          this.remoteErrors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
         }
       } catch (error) {
-        this.errors.pushObject("Er ging iets fout bij het ophalen van de addressen.");
+        this.remoteErrors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
       }
 
     }
@@ -85,7 +87,7 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
         await current.remoteUrl.save();
         addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
       } catch (error) {
-        this.errors.pushObject("Er ging iets fout bij het opslaan.");
+        this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het opslaan."});
       }
     }
   }

@@ -5,6 +5,11 @@
   {{#if this.errors}}
     <p class="small u-spacer--tb--tinier form__error">Een of meerdere links zijn ongeldig.</p>
   {{/if}}
+  {{#if this.remoteErrors}}
+    {{#each this.remoteErrors as |error|}}
+      <span class="small u-spacer--tb--tinier form__error">{{error.resultMessage}}</span>
+    {{/each}}
+  {{/if}}
   <table class="data-table u-spacer--bottom--tiny">
     <tbody data-test-mn="url-box-list">
     {{#each this.remoteUrls as |file|}}
