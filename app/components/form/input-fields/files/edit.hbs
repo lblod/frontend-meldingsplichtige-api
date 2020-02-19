@@ -1,13 +1,18 @@
-<div class="form__row u-spacer--tb--tiny" {{did-insert this.loadData}}>
-  {{#each this.files as |file|}}
-    <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
-  {{/each}}
-  <VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024"/>
-  {{#if this.errors}}
-    <WuAlert isError={{true}}>
-      {{#each this.errors as |error|}}
-        <li>{{error}}</li>
-      {{/each}}
-    </WuAlert>
-  {{/if}}
+<div class="form__row" {{did-insert this.loadData}}>
+  <div class="form__label">
+    <label class="form__label">{{@field.label}}</label>
+  </div>
+  <div class="form__row u-spacer--tb--tiny" {{did-insert this.loadData}}>
+    {{#each this.files as |file|}}
+      <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
+    {{/each}}
+    <VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024"/>
+    {{#if this.errors}}
+      <WuAlert isError={{true}}>
+        {{#each this.errors as |error|}}
+          <li>{{error}}</li>
+        {{/each}}
+      </WuAlert>
+    {{/if}}
+  </div>
 </div>
