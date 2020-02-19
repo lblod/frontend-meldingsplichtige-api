@@ -12,7 +12,7 @@
     </div>
   </div>
 {{/if}}
-<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
+<Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
             @formStore={{this.formStore}} />
 {{#unless this.model.submitted}}
   <button type="button" {{on "click" this.send}}>Verzenden</button>

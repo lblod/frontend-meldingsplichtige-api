@@ -6,6 +6,7 @@ import importTriplesForForm from '../../utils/import-triples-for-form';
 import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import { inject as service } from '@ember/service';
 import fetch from 'fetch';
+import { reads } from '@ember/object/computed';
 
 const CONCEPT_STATUS = 'http://lblod.data.gift/concepts/79a52da4-f491-4e2f-9374-89a13cde8ecd';
 
@@ -16,16 +17,16 @@ export default class FormsNewController extends Controller {
   @service
   router;
 
-  @tracked
+  @reads('model.formStore')
   formStore;
 
-  @tracked
+  @reads('model.graphs')
   graphs;
 
-  @tracked
+  @reads('model.sourceNode')
   sourceNode;
 
-  @tracked
+  @reads('model.form')
   form;
 
   @tracked

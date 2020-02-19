@@ -5,18 +5,19 @@ import { validateForm }  from '../../utils/import-triples-for-form';
 import importTriplesForForm from '../../utils/import-triples-for-form';
 import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import fetch from 'fetch';
+import { reads } from '@ember/object/computed';
 
 export default class FormsEditExampleFormController extends Controller {
-  @tracked
+  @reads('model.formStore')
   formStore;
 
-  @tracked
+  @reads('model.graphs')
   graphs;
 
-  @tracked
+  @reads('model.sourceNode')
   sourceNode;
 
-  @tracked
+  @reads('model.form')
   form;
 
   @tracked
