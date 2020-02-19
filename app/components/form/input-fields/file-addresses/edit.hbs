@@ -17,7 +17,6 @@
           />
           <div class="grid">
             <div class="col--7-12">
-              <p class="small u-spacer--tb--tinier">{{file.remoteUrl.downloadStatus.label}}</p>
               {{#if file.errors}}
                 <p class="small u-spacer--tb--tinier form__error">Ongeldige link. Ongeldige links worden niet
                   behandeld.</p>
@@ -34,8 +33,6 @@
                   <a href={{file.remoteUrl.replicatedFile.downloadLink}} download
                      class="u-spacer--bottom--tiny button button--small button--alt"><i
                           class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
-                  {{else}}
-                  <p class="small u-spacer--tb--tinier">{{file.remoteUrl.downloadStatus.label}}</p>
                 {{/if}}
                 <a class="toggle u-spacer--bottom--tiny button button--small button--alt button--alt--warning" {{on
                         "click" (fn this.removeRemoteUrl file)}} role="button"><i class="vi vi-cross vi-u-xs"></i>Verwijder&nbsp;link</a>

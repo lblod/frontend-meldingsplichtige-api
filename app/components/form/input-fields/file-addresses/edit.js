@@ -11,10 +11,10 @@ import {
   validationResultsForFieldPart
 } from '../../../../utils/import-triples-for-form';
 
-const READY_TO_BE_CACHED = "bd1017b8-6353-4d52-9e09-37dcc92f05b5";
-const FAILED = "51aaa791-ba19-4ccb-ad2d-9d5b7f65d351";
-const CREATOR = "d298d62c-cb94-4cbd-a88a-ca3f2bec003a";
+const READY_TO_BE_CACHED_URI = "http://lblod.data.gift/file-download-statuses/ready-to-be-cached";
+const CREATOR_URI = "http://lblod.data.gift/fronted-end-componets/remote-url-creator";
 
+// TODO rename
 export default class FormInputFieldsFileAddressesEditComponent extends Component {
 
   @service
@@ -46,43 +46,46 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
+  // TODO error handling
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     for (let triple of matches.triples) {
       const uri = triple.object.value;
-      const remotes = await this.store.query('remote-url', {'filter[:uri:]' : uri});
-      const remoteUrl = remotes.get('firstObject');
+      const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri});
+      const remoteUrl = await remotes.get('firstObject');
       this.remoteFiles.pushObject({
         remoteUrl,
-        errors: validationResultsForFieldPart({values: [{value: remoteUrl.address}]},
-          this.args.field.uri,
-          this.storeOptions).filter(r => !r.valid)
+        errors: this.validationResultsForAddress(remoteUrl.address)
       });
     }
   }
 
   @action
-  async addUrlField() {
-    const creator = await this.store.findRecord("service-agent", CREATOR);
-
-    const remoteUrl = await this.store.createRecord('remote-url');
-    remoteUrl.setProperties({
-      creator
-    });
-
+  addUrlField() {
+    const remoteUrl = this.getNewRemoteUrl();
     this.remoteFiles.pushObject({remoteUrl, errors: []});
   }
 
   @action
   async updateRemoteUrl(current, newValue) {
-    set(current.remoteUrl, "address", newValue.trim());
+    if (current.remoteUrl.address != newValue.trim()) {
+      // Delete prev
+      await this.removeRemoteUrl(current);
 
-    if (this.isValid(newValue) && current.remoteUrl.address !== newValue.trim()) {
-      set(current.remoteUrl, "downloadStatus", await this.store.findRecord("file-download-status", READY_TO_BE_CACHED));
+      // Create new
+      let newRemoteUrl = this.getNewRemoteUrl();
+      set(current, "remoteUrl", newRemoteUrl);
+
+      // If valid, change state
+      if (this.isValidAddress(newValue.trim())) {
+        set(current.remoteUrl, "downloadStatus", READY_TO_BE_CACHED_URI);
+      }
+
+      // Update address and save it
+      set(current.remoteUrl, "address", newValue.trim());
+      await current.remoteUrl.save();
+      addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
     }
-
-    await current.remoteUrl.save();
-    addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
   }
 
   @action
@@ -91,12 +94,21 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
     await current.remoteUrl.destroyRecord();
   }
 
-  isValid(value) {
-    // TODO Reusable
-    let errors = validationResultsForFieldPart(
+  getNewRemoteUrl() {
+    return this.store.createRecord('remote-url', {
+      creator: CREATOR_URI
+    });
+  }
+
+  isValidAddress(value) {
+    let errors = this.validationResultsForAddress(value);
+    return errors ? errors.length === 0 : false;
+  }
+
+  validationResultsForAddress(value){
+    return validationResultsForFieldPart(
       {values: [{value}]},
       this.args.field.uri,
       this.storeOptions).filter(r => !r.valid);
-    return errors ? errors.length === 0 : false;
   }
 }
