@@ -1,5 +1,7 @@
-<div class="form__row u-padding--tb--tinier" {{did-insert this.loadData}}>
-
+<div class="form__label" {{did-insert this.loadData}}>
+  <label class="form__label">{{@field.label}}</label>
+</div>
+<div class="form__row u-padding--tb--tinier">
   {{#if this.errors}}
     <p class="small u-spacer--tb--tinier form__error">Een of meerdere links zijn ongeldig.</p>
   {{/if}}
