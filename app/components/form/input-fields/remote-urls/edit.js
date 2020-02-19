@@ -15,13 +15,13 @@ const READY_TO_BE_CACHED_URI = "http://lblod.data.gift/file-download-statuses/re
 const CREATOR_URI = "http://lblod.data.gift/fronted-end-componets/remote-url-creator";
 
 // TODO rename
-export default class FormInputFieldsFileAddressesEditComponent extends Component {
+export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @service
   store;
 
   @tracked
-  remoteFiles = [];
+  remoteUrls = [];
 
   @tracked
   errors = [];
@@ -54,7 +54,7 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
         const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri});
         const remoteUrl = await remotes.get('firstObject');
         if (remoteUrl) {
-          this.remoteFiles.pushObject({
+          this.remoteUrls.pushObject({
             remoteUrl,
             errors: this.validationResultsForAddress(remoteUrl.address)
           });
@@ -71,7 +71,7 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
   @action
   addUrlField() {
     const remoteUrl = this.getNewRemoteUrl();
-    this.remoteFiles.pushObject({remoteUrl, errors: []});
+    this.remoteUrls.pushObject({remoteUrl, errors: []});
   }
 
   @action

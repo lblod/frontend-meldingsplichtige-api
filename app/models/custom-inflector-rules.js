@@ -51,7 +51,6 @@ inflector.irregular('form-solution', 'form-solutions');
 inflector.irregular('dynamic-subform', 'dynamic-subforms');
 inflector.irregular('form-input', 'form-inputs');
 inflector.irregular('inzending-voor-toezicht-form-version', 'inzending-voor-toezicht-form-versions');
-inflector.irregular('file-address', 'file-addresses');
 inflector.irregular('submission', 'submissions');
 inflector.irregular('remote-url', 'remote-urls'); // TODO check if this could be done better or generalised
 // Meet Ember Inspector's expectation of an export
