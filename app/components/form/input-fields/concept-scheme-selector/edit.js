@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath,
          validationResultsForField,
-         addSimpleFormValue} from '../../../../utils/import-triples-for-form';
+         updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { RDF, FORM, SKOS, FOAF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
@@ -19,9 +19,8 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
 
   storeOptions = {};
 
-  constructor(...args){
-    super(...args)
-
+  @action
+  loadData(){
     //this is passed to validations and other util functions
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
@@ -32,8 +31,8 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
       path: this.args.field.rdflibPath
     };
 
-    this.loadValidations();
     this.loadOptions();
+    this.loadValidations();
     if(this.errors.length == 0){
       //do something if validated scraped
       this.selectValidValue();
@@ -65,17 +64,18 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
     //Do something @onChange
     this.selected=option;
     this.errors=[];
+    updateSimpleFormValue(option.subject, this.storeOptions);
   }
 
   @action
   selectValidValue(){
+    //assumes valid input
     const match = triplesForPath(this.storeOptions, true).values;
     if (match.length==1){
       this.selected=this.options.find((e)=>{
         return e.subject.value==match[0].value;
       });
     }
-
   }
 
 }

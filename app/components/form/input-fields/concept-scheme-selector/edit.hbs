@@ -1,4 +1,4 @@
-<label>{{@field.label}}</label>
+<label {{did-insert this.loadData}}>{{@field.label}}</label>
 <PowerSelect  @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
   {{typeDossier.label}}
 </PowerSelect>
