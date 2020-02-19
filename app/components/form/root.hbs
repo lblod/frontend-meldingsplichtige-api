@@ -4,18 +4,18 @@
     <ul>
       {{#each propertyGroup.sortedFields as |field|}}
         <li>
-          {{#if @data.submitted}}
+          {{#if @show}}
             {{component (component-for-display-type-show field.displayType)
                         field=field
-                        formStore=this.args.formStore
-                        graphs=this.args.graphs
-                        sourceNode=this.args.sourceNode         }}
+                        formStore=@formStore
+                        graphs=@graphs
+                        sourceNode=@sourceNode         }}
           {{else}}
             {{component (component-for-display-type-edit field.displayType)
                         field=field
-                        formStore=this.args.formStore
-                        graphs=this.args.graphs
-                        sourceNode=this.args.sourceNode         }}
+                        formStore=@formStore
+                        graphs=@graphs
+                        sourceNode=@sourceNode         }}
           {{/if}}
 
         </li>
