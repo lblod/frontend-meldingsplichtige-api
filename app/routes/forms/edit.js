@@ -20,43 +20,23 @@ export default class FormsEditRoute extends Route {
 
     const submission = await this.store.find('submission', params.id);
     const submissionDocument = await submission.submittedResource;
-    // TODO ping is this the right way to determine if a submission has been sent.
     const submissionStatus = await submission.status;
-    // const submitted = (await submission.status.get('label')) === 'Verstuurd';
 
+    let graphs = { formGraph, metaGraph };
+    let sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
+    graphs = { formGraph, sourceGraph, metaGraph };
+    const response = await fetch(`/submission-forms/${submissionDocument.id}`);
 
-    //default form
-    let sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
-    let graphs = { formGraph, sourceGraph, metaGraph };
-    let model = { form,
-                  formData: dilbeek,
-                  graphs: graphs,
-                  sourceNode: new rdflib.NamedNode("http://mu.semte.ch/vocabularies/ext/besluitenlijsten/208ee6e0-28b1-11ea-972c-8915ff690069"),
-                  disclaimer: 'Geen form gevonden, een voorbeeld wordt getoond!'
-                  };
-
-    if(!submissionDocument){
-      return model;
-    }
-
-    else{
-      sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/submission-document/data/${submissionDocument.id}`);
-      graphs = { formGraph, sourceGraph, metaGraph };
-      const response = await fetch(`/submission-forms/${submissionDocument.id}`);
-      if(response.status !== 200){
-        return model;
-      }
-      const formData = await response.json();
-      return { form,
-               additions: formData.additions,
-               removals: formData.removals,
-               formData: formData.source,
-               graphs,
-               sourceNode: new rdflib.NamedNode(submissionDocument.uri),
-               submissionDocument,
-               submitted: submissionStatus.uri === VERSTUURD_URI
-             };
-    }
+    const formData = await response.json();
+    return { form,
+             additions: formData.additions,
+             removals: formData.removals,
+             formData: formData.source,
+             graphs,
+             sourceNode: new rdflib.NamedNode(submissionDocument.uri),
+             submissionDocument,
+             submitted: submissionStatus.uri === VERSTUURD_URI
+           };
   }
 
   setupController(controller, model){
