@@ -1,18 +1,15 @@
 import Route from '@ember/routing/route';
 import dilbeek from '../../utils/dilbeek';
-import form from '../../utils/besluitenlijst-formulier';
 import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
 import codeLists from '../../utils/codelist/codelists';
-import fetch from 'fetch';
 
 //TODO: clean up
 export default class FormsEditExampleFormRoute extends Route {
 
   async model(){
-    const formGraph = new rdflib.NamedNode("http://data.lblod.info/form");
-    const metaGraph = new rdflib.NamedNode("http://data.lblod.info/metagraph");
+    const { formGraph, metaGraph, form } = this.modelFor('forms');
 
     let sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/dilbeek`);
     let graphs = { formGraph, sourceGraph, metaGraph };

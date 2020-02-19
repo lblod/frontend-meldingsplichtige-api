@@ -1,11 +1,8 @@
 import Route from '@ember/routing/route';
-import form from '../../utils/besluitenlijst-formulier';
 import forkingStore from '../../utils/forking-store';
 import rdflib from 'ember-rdflib';
 import { RDF, FORM } from '../../utils/namespaces';
-
 import codeLists from '../../utils/codelist/codelists';
-
 import uuidv4 from 'uuid/v4';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -13,15 +10,8 @@ import { tracked } from '@glimmer/tracking';
 export default class FormsNewRoute extends Route {
   @service currentSession;
 
-  @tracked
-  bestuurseenheid;
-
-  async beforeModel(){
-    this.bestuurseenheid = await this.currentSession.group;
-  }
-
-  model(){
-    return { form };
+  async model(){
+    return { ...this.modelFor('forms'), bestuurseenheid: await this.currentSession.group };
   }
 
   setupController(controller, model){
@@ -30,10 +20,9 @@ export default class FormsNewRoute extends Route {
 
     controller.formStore = new forkingStore();
 
-    const formGraph = new rdflib.NamedNode("http://data.lblod.info/form");
-    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/meldingsplicht/bestuurseenheid/${this.bestuurseenheid.id}/id/${uuidv4()}`);
-    const metaGraph = new rdflib.NamedNode("http://data.lblod.info/metagraph");
-    controller.graphs = { formGraph, sourceGraph, metaGraph  };
+    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/meldingsplicht/bestuurseenheid/${model.bestuurseenheid.id}/id/${uuidv4()}`);
+    const { formGraph, metaGraph } = model;
+    controller.graphs = { formGraph, sourceGraph, metaGraph };
 
     //TODO: how do i get this
     const sourceNode = new rdflib.NamedNode(`http://data.lblod.info/forms/meldingsplicht/${uuidv4()}`);
