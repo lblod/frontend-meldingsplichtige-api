@@ -27,13 +27,13 @@ fieldGroups:allForms a form:FieldGroup;
 
 fieldGroups:besluitenlijstMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
-    form:hasField fields:conceptSchemeSelector, fields:conceptSchemeSelector2, fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:fileAddresses, fields:filesAndLinks, fields:remark.
+    form:hasField fields:conceptSchemeSelector, fields:conceptSchemeSelector2, fields:administrativeBody, fields:meetingDate, fields:publicationDate, fields:files, fields:remoteUrls, fields:filesAndLinks, fields:remark.
 
 fieldGroups:notulenMain a form:FieldGroup ;
     mu:uuid "6e8bb26a-0f95-4c0e-b1a9-188430c4b7af" ;
     form:hasField fields:meetingDate, fields:reportYear.
 
-fields:fileAddresses a form:Field ;
+fields:remoteUrls a form:Field ;
     mu:uuid "c955d641-b9b3-4ec7-9838-c2a477c7e95b" ;
     sh:name "Links naar documenten" ;
     sh:order 3900 ;
@@ -43,7 +43,7 @@ fields:fileAddresses a form:Field ;
         form:grouping form:MatchEvery ;
         sh:resultMessage "Gelieve een geldige URL op te geven.";
          sh:path prov:atLocation ];
-    form:displayType displayTypes:fileAddresses;
+    form:displayType displayTypes:remoteUrls;
     sh:group fields:aDynamicPropertyGroup .
 
 fields:files a form:Field ;
