@@ -2,7 +2,7 @@
   <div class="form__label">
     <label class="form__label">{{@field.label}}</label>
   </div>
-  <div class="form__row u-spacer--tb--tiny" {{did-insert this.loadData}}>
+  <div class="form__row u-spacer--tb--tiny">
     {{#each this.files as |file|}}
       <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
     {{/each}}
