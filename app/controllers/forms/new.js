@@ -53,13 +53,14 @@ export default class FormsNewController extends Controller {
     return submission;
   }
 
-  async createSubmissionForm(submission){
+  async createSubmissionForm(submission, subject){
     await fetch(`/submission-forms`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/vnd.api+json'},
       body: JSON.stringify(
         {
           submission: submission.uri,
+          subject: subject,
           ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
         }
       )
@@ -83,7 +84,7 @@ export default class FormsNewController extends Controller {
   @action
   async save(){
     const submission = await this.createSubmission();
-    await this.createSubmissionForm(submission);
+    await this.createSubmissionForm(submission, this.sourceNode.value);
     this.router.transitionTo('forms.edit', submission.get('id'));
   }
 
