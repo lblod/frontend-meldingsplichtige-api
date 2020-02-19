@@ -94,7 +94,6 @@ function triplesForSimplePath(options, createMissingNodes = false) {
 
   if (path) {
     const triples = store.match(sourceNode, path, undefined, sourceGraph);
-
     if (createMissingNodes && triples.length == 0) {
       triples.push(new rdflib.Statement(
         sourceNode,
