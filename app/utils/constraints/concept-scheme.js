@@ -4,15 +4,26 @@ import rdflib from 'ember-rdflib';
 
 export default function conceptSchemeValidation(values, options){
   //TODO: ASSUMES BAG MATCHING, FIX PLEASE
-  if (values.length > 1){
-    return false;
-  }
-
   const { constraintUri, store, metaGraph } = options;
 
-  const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined)[0].object;
+  const matchingType=store.match( constraintUri, FORM("grouping"), undefined)[0].object.value;
 
-  const matchingValues = store.match( values[0], SKOS("inScheme"), conceptSchemeUri, metaGraph).length;
+  if(matchingType=='http://lblod.data.gift/vocabularies/forms/Bag'){
 
-  return matchingValues == 1;
+    console.log('matching type is bag');
+
+    if (values.length > 1){
+      return false;
+    }
+
+    const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined)[0].object;
+
+    const matchingValues = store.match( values[0], SKOS("inScheme"), conceptSchemeUri, metaGraph).length;
+
+    return matchingValues == 1;
+  }
+  else{
+    console.log('matching type for concept scheme selector is not form:Bag, please change that');
+    return false
+  }
 }
