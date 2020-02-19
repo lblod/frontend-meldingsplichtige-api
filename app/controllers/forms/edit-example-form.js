@@ -50,17 +50,8 @@ export default class FormsEditExampleFormController extends Controller {
     if(!isValid){
       alert('Gelieve het formulier correct in te vullen');
     }
-    else{
-      await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/vnd.api+json'},
-        body: JSON.stringify(
-          {
-            subject: this.model.submissionDocument.uri,
-            ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
-          }
-        )
-      });
+    else {
+      alert('Dummy submitted!');
     }
   }
 }
