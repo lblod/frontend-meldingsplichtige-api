@@ -46,17 +46,25 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  // TODO error handling
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     for (let triple of matches.triples) {
       const uri = triple.object.value;
-      const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri});
-      const remoteUrl = await remotes.get('firstObject');
-      this.remoteFiles.pushObject({
-        remoteUrl,
-        errors: this.validationResultsForAddress(remoteUrl.address)
-      });
+      try {
+        const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri});
+        const remoteUrl = await remotes.get('firstObject');
+        if (remoteUrl) {
+          this.remoteFiles.pushObject({
+            remoteUrl,
+            errors: this.validationResultsForAddress(remoteUrl.address)
+          });
+        } else {
+          this.errors.pushObject("Er ging iets fout bij het ophalen van de addressen.");
+        }
+      } catch (error) {
+        this.errors.pushObject("Er ging iets fout bij het ophalen van de addressen.");
+      }
+
     }
   }
 
@@ -69,22 +77,16 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
   @action
   async updateRemoteUrl(current, newValue) {
     if (current.remoteUrl.address != newValue.trim()) {
-      // Delete prev
-      await this.removeRemoteUrl(current);
-
-      // Create new
-      let newRemoteUrl = this.getNewRemoteUrl();
-      set(current, "remoteUrl", newRemoteUrl);
-
-      // If valid, change state
       if (this.isValidAddress(newValue.trim())) {
         set(current.remoteUrl, "downloadStatus", READY_TO_BE_CACHED_URI);
       }
-
-      // Update address and save it
       set(current.remoteUrl, "address", newValue.trim());
-      await current.remoteUrl.save();
-      addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
+      try {
+        await current.remoteUrl.save();
+        addSimpleFormValue(current.remoteUrl.get("uri"), this.storeOptions);
+      } catch (error) {
+        this.errors.pushObject("Er ging iets fout bij het opslaan.");
+      }
     }
   }
 
@@ -105,7 +107,7 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
     return errors ? errors.length === 0 : false;
   }
 
-  validationResultsForAddress(value){
+  validationResultsForAddress(value) {
     return validationResultsForFieldPart(
       {values: [{value}]},
       this.args.field.uri,
