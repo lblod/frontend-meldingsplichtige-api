@@ -7,7 +7,7 @@ export default Model.extend({
   format: attr(),
   size: attr(),
   extension: attr(),
-  created: attr('datetime'),
+  created: attr('date'),
   uri: attr(),
 
   humanReadableSize: computed('size', function () {
