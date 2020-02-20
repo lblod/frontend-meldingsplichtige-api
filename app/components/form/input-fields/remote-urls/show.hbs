@@ -6,18 +6,18 @@
   <div class="form__row u-padding--tb--tinier">
     <table class="data-table u-spacer--bottom--tiny">
       <tbody data-test-mn="url-box-list">
-      {{#each this.fileAddresses as |fileAddress|}}
+      {{#each this.remoteUrls as |file|}}
         <tr>
           <td>
             <Input
                     class="input-field input-field--block input-field--small"
-                    @value={{fileAddress}}
+                    @value={{file.remoteUrl.address}}
                     @disabled={{true}}
             />
             <div class="button-group u-spacer--top--tiny">
-              <a href={{fileAddress}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
-              {{#if fileAddress.replicatedFile.downloadLink}}
-                <a href={{fileAddress.replicatedFile.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
+              <a href={{file.remoteUrl.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
+              {{#if file.remoteUrl.replicatedFile.downloadLink}}
+                <a href={{file.remoteUrl.replicatedFile.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
               {{/if}}
             </div>
           </td>
@@ -25,7 +25,7 @@
       {{/each}}
       </tbody>
     </table>
-    {{#if this.fileAddresses.length}}
+    {{#if this.remoteUrls.length}}
       <p class="smallest u-spacer--bottom--tiny"><sup>*</sup>Op het moment van versturen, wordt er een versie gedownload van de pagina die op de link te vinden is.</p>
     {{else}}
       <p class="small u-spacer--bottom--tiny text-fade">Er werden geen links toegevoegd.</p>

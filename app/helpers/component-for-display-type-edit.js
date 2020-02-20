@@ -10,7 +10,7 @@ export default helper(function componentForDisplayTypeEdit(displayTypeUri) {
     'http://lblod.data.gift/display-types/textArea': `form/input-fields/text-area/edit`,
     'http://lblod.data.gift/display-types/conceptSchemeSelector': `form/input-fields/concept-scheme-selector/edit`,
     'http://lblod.data.gift/display-types/files': `form/input-fields/files/edit`,
-    'http://lblod.data.gift/display-types/fileAddresses': `form/input-fields/file-addresses/edit`,
+    'http://lblod.data.gift/display-types/remoteUrls': `form/input-fields/remote-urls/edit`,
     'http://lblod.data.gift/display-types/vLabelOpcentiem': `form/input-fields/vlabel-opcentiem/edit`
   };
 
