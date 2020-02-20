@@ -53,11 +53,10 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   }
 
   @action
-  updateValue(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
+  updateValue() {
+    if (this.value) {
+      this.value.setHours(this.hour, this.minutes, null, null);
     }
-    this.value.setHours(this.hour, this.minutes, null, null);
     updateSimpleFormValue(this.value, this.storeOptions);
   }
 }
