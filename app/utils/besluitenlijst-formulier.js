@@ -144,20 +144,20 @@ fields:submissionType a form:Field ;
     sh:name "Type dossier" ;
     sh:order 1 ;
     sh:path rdf:type ;
+    form:options  """{"conceptScheme":"https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType"}""" ;
     form:validations
       [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
         sh:resultMessage "Dit veld is verplicht."@nl
       ],
-      [ a form:BesluittypeConstraint ;
+      [ a form:ConceptSchemeConstraint ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
         form:conceptScheme <https://data.vlaanderen.be/id/conceptscheme/BesluitDocumentType> ;
         sh:resultMessage "Er dient exact 1 waarde voor type besluit te worden ingevuld."@nl
       ] ;
-    form:displayType displayTypes:typeDossierSelect;
-    form:options """{ value: \"http://data.lblod.info/DecisionType/46b254008bbca1354e632dc40cf550c6b313e523799cafd7200a48a19e09249f\" }""" ;
+    form:displayType displayTypes:conceptSchemeSelector ;
     form:hasConditionalFieldGroup fields:hasBesluitenLijstConditionalFieldGroup;
     form:hasConditionalFieldGroup fields:hasNotulenConditionalFieldGroup;
     sh:group fields:propertyGroupSubmissionType.
