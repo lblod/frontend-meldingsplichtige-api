@@ -41,7 +41,7 @@ export default class FormInputFieldsTextAreaEditComponent extends Component {
   @action
   updateValue(e) {
     e.preventDefault();
-    updateSimpleFormValue(this.value, this.storeOptions);
+    updateSimpleFormValue(this.value.trim(), this.storeOptions);
   }
 
 }
