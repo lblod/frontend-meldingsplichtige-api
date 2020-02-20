@@ -53,7 +53,7 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   }
 
   @action
-  updateValue() {
+  updateValue(event) {
     if (this.value) {
       this.value.setHours(this.hour, this.minutes, null, null);
     }
