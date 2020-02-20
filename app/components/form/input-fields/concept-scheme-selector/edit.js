@@ -51,6 +51,12 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
         const label = this.args.formStore.any(s.subject, SKOS('prefLabel'), undefined, this.args.graphs.metaGraph);
         return { subject: s.subject, label: label && label.value };
       });
+
+    this.options.sort(function(a, b) {
+      var textA = a.label.toUpperCase();
+      var textB = b.label.toUpperCase();
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    });
   }
 
   loadValidations(){
