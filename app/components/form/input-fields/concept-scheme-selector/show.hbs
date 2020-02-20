@@ -1,5 +1,5 @@
 <label {{did-insert this.loadData}}>{{@field.label}}</label>
-<PowerSelect  @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
+<PowerSelect  @disabled={{true}} @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
   {{typeDossier.label}}
 </PowerSelect>
 {{#if errors}}
@@ -7,5 +7,3 @@
      <span style="color: red"> {{error.resultMessage}} </span>
   {{/each}}
 {{/if}}
-
-

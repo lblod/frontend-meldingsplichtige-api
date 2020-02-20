@@ -7,7 +7,7 @@ import { triplesForPath,
 import { RDF, FORM, SKOS, FOAF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
-export default class FormInputFieldsConceptSchemeSelectorEditComponent extends Component {
+export default class FormInputFieldsConceptSchemeSelectorShowComponent extends Component {
   @tracked
   selected = null;
 

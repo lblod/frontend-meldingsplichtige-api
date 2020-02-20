@@ -2,7 +2,7 @@
 {{#if this.model.disclaimer}}
   <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
 {{/if}}
-<Form::Root @form={{this.form}} @data={{this.model}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
+<Form::Root @form={{this.form}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
 <button {{on "click" this.send}}>Verzenden</button>
 
 <h1
