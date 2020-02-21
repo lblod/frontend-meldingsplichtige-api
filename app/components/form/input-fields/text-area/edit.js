@@ -11,6 +11,9 @@ export default class FormInputFieldsTextAreaEditComponent extends Component {
   errors = [];
 
   @tracked
+  nodeValue = null;
+
+  @tracked
   storeOptions = {};
 
   @action
@@ -34,14 +37,16 @@ export default class FormInputFieldsTextAreaEditComponent extends Component {
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0)
+    if (matches.values.length > 0){
+      this.nodeValue = matches.values[0];
       this.value = matches.values[0].value;
+    }
   }
 
   @action
   updateValue(e) {
     e.preventDefault();
-    updateSimpleFormValue(this.value.trim(), this.storeOptions);
+    updateSimpleFormValue( this.storeOptions, this.value && this.value.trim(), this.nodeValue);
   }
 
 }
