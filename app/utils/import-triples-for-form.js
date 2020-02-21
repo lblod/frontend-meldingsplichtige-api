@@ -272,7 +272,7 @@ function removeDatasetForSimpleFormValue(value, options) {
 }
 
 function removeSimpleFormValue(value, options) {
-  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+  const { store } = options;
 
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
