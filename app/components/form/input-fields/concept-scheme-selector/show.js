@@ -57,26 +57,26 @@ export default class FormInputFieldsConceptSchemeSelectorShowComponent extends C
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-
-
   @action
   updateSelection(option){
     //Do something @onChange
-    this.selected=option;
-    this.errors=[];
-    updateSimpleFormValue(option.subject, this.storeOptions);
+    let toRemove;
+    if(this.selected)
+      toRemove = this.selected.subject;
+    this.errors = [];
+    this.selected = option;
+    updateSimpleFormValue(this.storeOptions, option.subject, toRemove);
   }
 
   @action
   selectValidValue(){
     //assumes valid input
-    const match = triplesForPath(this.storeOptions, true).values;
-    if (match.length==1){
-      this.selected=this.options.find((e)=>{
-        return e.subject.value==match[0].value;
-      });
-    }
+    // This means even though we can have multiple values for one path (e.g. rdf:type)
+    // this selector will only accept one value, and we take the first value from the matches.
+    // that is also in the the options list. Our validation makes sure the matching value is the sole one.
+    const matches = triplesForPath(this.storeOptions, true).values;
+    this.selected = this.options.find((e)=>{
+      return matches.find(m => m.equals(e.subject));
+    });
   }
-
 }
-

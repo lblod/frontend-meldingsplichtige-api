@@ -13,6 +13,9 @@ export default class FormInputFieldsInputEditComponent extends Component {
   @tracked
   storeOptions = {};
 
+  @tracked
+  nodeValue = null
+
   @action
   loadData(){
     this.storeOptions = {
@@ -34,14 +37,16 @@ export default class FormInputFieldsInputEditComponent extends Component {
 
   loadProvidedValue(){
     const matches = triplesForPath(this.storeOptions);
-    if(matches.values.length > 0)
+    if(matches.values.length > 0){
+      this.nodeValue = matches.values[0];
       this.value = matches.values[0].value;
+    }
   }
 
   @action
   updateValue(e){
     e.preventDefault();
-    updateSimpleFormValue(this.value, this.storeOptions);
+    updateSimpleFormValue(this.storeOptions, this.value && this.value.trim(), this.nodeValue);
   }
 
 }

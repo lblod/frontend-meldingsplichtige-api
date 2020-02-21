@@ -72,7 +72,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   addFile(file, filesQueueInfo) {
     this.cachedFileUris.push(file.uri);
     if(filesQueueInfo.isQueueEmpty){
-      this.cachedFileUris.forEach( uri => addSimpleFormValue(uri, this.storeOptions) );
+      this.cachedFileUris.forEach( uri => addSimpleFormValue(uri, this.storeOptions) ); //TODO: this is still brittle. It relies implicitly in run-loop
     }
   }
 

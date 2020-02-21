@@ -18,6 +18,9 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   minutes = null;
 
   @tracked
+  nodeValue = null;
+
+  @tracked
   errors = [];
 
   @tracked
@@ -45,7 +48,8 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
-      let datobj = new Date(matches.values[0].value);
+      this.nodeValue = matches.values[0];
+      let datobj = new Date(this.nodeValue.value);
       this.value = datobj;
       this.hour = datobj.getHours();
       this.minutes = datobj.getMinutes();
@@ -53,11 +57,10 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   }
 
   @action
-  updateValue(e) {
-    if (e.preventDefault) {
-      e.preventDefault();
+  updateValue(event) {
+    if (this.value) {
+      this.value.setHours(this.hour, this.minutes, null, null);
     }
-    this.value.setHours(this.hour, this.minutes, null, null);
-    updateSimpleFormValue(this.value, this.storeOptions);
+    updateSimpleFormValue(this.storeOptions, this.value, this.nodeValue);
   }
 }
