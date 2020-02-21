@@ -227,7 +227,7 @@ function validationResultsForFieldPart(triplesData, fieldUri, options){
   }
   return validationResults;
 }
-function updateSimpleFormValue(value, options) {
+function updateSimpleFormValue(options, newValue = null, oldValue = null) {
 
   /* This might be tricky.We need to find a subject and predicate to attach the object to.
 * The path might contain several hops, and some of them don't necessarly exist. Consider:
@@ -256,17 +256,19 @@ function updateSimpleFormValue(value, options) {
 * Then the above described solution will not work. Because our <customUri> is not linked to a <Zitting>.
 */
 
-  removeDatasetForSimpleFormValue(value, options);
-  addSimpleFormValue(value, options);
+  if(oldValue)
+    removeDatasetForSimpleFormValue(oldValue, options);
+  if(newValue)
+    addSimpleFormValue(newValue, options);
 }
 
 function removeDatasetForSimpleFormValue(value, options) {
-  const {store, formGraph, sourceGraph, sourceNode, metaGraph} = options;
+  const { store } = options;
 
   //This returns the complete chain of triples for the path, if there something missing, new nodes are added.
   const dataset = triplesForPath(options, true);
-
-  store.removeStatements(dataset.triples);
+  const triplesToRemove = dataset.triples.filter(t => t.object.equals(value));
+  store.removeStatements(triplesToRemove);
 }
 
 function removeSimpleFormValue(value, options) {
