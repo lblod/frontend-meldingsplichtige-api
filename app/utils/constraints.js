@@ -9,7 +9,7 @@ import besluittype from './constraints/besluittype';
 import validUri from './constraints/valid-uri';
 import validDate from './constraints/valid-date';
 import validDateTime from './constraints/valid-date-time';
-import conceptScheme from './constraints/concept-scheme'
+import conceptScheme from './constraints/concept-scheme';
 import validYear from './constraints/valid-year';
 
 export default function constraintForUri(uri) {
