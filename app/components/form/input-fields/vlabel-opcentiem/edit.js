@@ -69,7 +69,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   @action
   toggleDiff(event) {
     event.preventDefault();
-    if(this.fields.length > 0) {
+    if (this.fields.length > 0) {
       removeTriples(this.storeOptions);
     } else {
       // in the future maybe revert old saves.
