@@ -271,6 +271,17 @@ function removeDatasetForSimpleFormValue(value, options) {
   store.removeStatements(triplesToRemove);
 }
 
+/**
+ * Removes all triples for the given options
+ * HARD RESET
+ */
+function removeTriples(options) {
+  const { store } = options;
+
+  const dataset = triplesForPath(options, true);
+  store.removeStatements(dataset.triples);
+}
+
 function removeSimpleFormValue(value, options) {
   const { store } = options;
 
@@ -326,5 +337,6 @@ export {
   updateSimpleFormValue,
   addSimpleFormValue,
   removeSimpleFormValue,
-  removeDatasetForSimpleFormValue
+  removeDatasetForSimpleFormValue,
+  removeTriples
 };
