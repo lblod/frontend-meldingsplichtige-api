@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-import formTtl from '../utils/besluitenlijst-formulier';
+import formTtl from '../utils/form';
 import codeLists from '../utils/codelist/codelists';
 import { RDF, FORM } from '../utils/namespaces';
 import forkingStore from '../utils/forking-store';
