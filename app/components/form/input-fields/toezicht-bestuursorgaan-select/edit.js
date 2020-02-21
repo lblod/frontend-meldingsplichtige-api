@@ -86,6 +86,6 @@ export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent ex
 
   @action
   async updateSelection(bestuursorgaan){
-    updateSimpleFormValue(bestuursorgaan && new rdflib.NamedNode(bestuursorgaan.uri), this.storeOptions);
+    updateSimpleFormValue( this.storeOptions, bestuursorgaan && new rdflib.NamedNode(bestuursorgaan.uri), this.selected);
   }
 }
