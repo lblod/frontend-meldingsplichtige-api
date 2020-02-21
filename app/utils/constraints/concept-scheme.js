@@ -1,6 +1,4 @@
 import { FORM, SKOS } from '../namespaces';
-import forkingStore from '../../utils/forking-store';
-import rdflib from 'ember-rdflib';
 
 export default function conceptSchemeValidation(values, options){
   //TODO: ASSUMES BAG MATCHING, FIX PLEASE
