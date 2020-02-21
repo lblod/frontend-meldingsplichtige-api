@@ -141,15 +141,19 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @action
   async removeRemoteUrl(current) {
-    await current.remoteUrl.destroyRecord();
-    const tripleRemoteUrl = {
-      subject: this.storeOptions.sourceNode,
-      predicate: new rdflib.NamedNode("http://purl.org/dc/terms/hasPart"),
-      object: new rdflib.NamedNode(current.remoteUrl.uri),
-      graph: this.storeOptions.sourceGraph
-    };
-    this.storeOptions.store.removeStatements([ tripleRemoteUrl ]);
-    updateSimpleFormValue(this.storeOptions, null, current.triplesData.addressData.object); //we can rely on some boilerplate abstraction
+    if(current.remoteUrl) {
+      await current.remoteUrl.destroyRecord();
+      const tripleRemoteUrl = {
+        subject: this.storeOptions.sourceNode,
+        predicate: new rdflib.NamedNode("http://purl.org/dc/terms/hasPart"),
+        object: new rdflib.NamedNode(current.remoteUrl.uri),
+        graph: this.storeOptions.sourceGraph
+      };
+      this.storeOptions.store.removeStatements([tripleRemoteUrl]);
+      updateSimpleFormValue(this.storeOptions, null, current.triplesData.addressData.object); //we can rely on some boilerplate abstraction
+    } else {
+      this.remoteUrls = [];
+    }
   }
 
   createNewRemoteUrl(address, downloadStatus) {
