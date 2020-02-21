@@ -7,7 +7,7 @@ import {
   addSimpleFormValue,
   removeSimpleFormValue,
   validationResultsForField,
-  validationResultsForFieldPart
+  validationResultsForFieldPart, removeTriples
 } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
@@ -18,7 +18,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   @empty('fields')
   differentiatie;
 
-  @empty('taxRates')
+  @empty('field')
   taxRatesEmpty;
 
   @not('differentiatie')
@@ -66,11 +66,15 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     }
   }
 
-  // TODO should be worked out
   @action
   toggleDiff(event) {
     event.preventDefault();
-    this.differentiatie = !this.differentiatie;
+    if(this.fields.length > 0) {
+      removeTriples(this.storeOptions);
+    } else {
+      // in the future maybe revert old saves.
+      this.create();
+    }
   }
 
   @action
