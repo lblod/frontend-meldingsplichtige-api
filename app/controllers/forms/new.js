@@ -97,7 +97,7 @@ export default class FormsNewController extends Controller {
     }
     else{
       const submission = await this.createSubmission();
-      await this.createSubmissionForm(submission);
+      await this.createSubmissionForm(submission, this.sourceNode.value);
       const submissionDocument = await submission.submittedResource;
       await this.submitSubmissionForm(submissionDocument);
       this.router.transitionTo('forms.edit', submission.get('id'));
