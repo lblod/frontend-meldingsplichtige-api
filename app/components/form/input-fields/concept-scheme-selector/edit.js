@@ -63,15 +63,26 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
+  findOption(namedNode){
+    return this.options.find((e)=>{
+      return namedNode.equals(e.subject);
+    });
+  }
+
+  cleanStore(){
+    const toRemove = triplesForPath(this.storeOptions, true).values.filter(this.findOption.bind(this));
+    toRemove.forEach( r => {
+      updateSimpleFormValue(this.storeOptions, undefined, r);
+    });
+  }
+
   @action
   updateSelection(option){
     //Do something @onChange
-    let toRemove;
-    if(this.selected)
-      toRemove = this.selected.subject;
+    this.cleanStore();
     this.errors = [];
     this.selected = option;
-    updateSimpleFormValue(this.storeOptions, option.subject, toRemove);
+    updateSimpleFormValue(this.storeOptions, option.subject);
   }
 
   @action
