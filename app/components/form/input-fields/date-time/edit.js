@@ -6,6 +6,8 @@ import {
   validationResultsForField,
   updateSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
+import { XSD } from '../../../../utils/namespaces';
+import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsDateTimeEditComponent extends Component {
   @tracked
@@ -57,10 +59,11 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
   }
 
   @action
-  updateValue(event) {
+  updateValue() {
     if (this.value) {
       this.value.setHours(this.hour, this.minutes, null, null);
     }
-    updateSimpleFormValue(this.storeOptions, this.value, this.nodeValue);
+    const newValue = rdflib.literal(this.value.toISOString(), XSD('dateTime'));
+    updateSimpleFormValue(this.storeOptions, newValue, this.nodeValue);
   }
 }

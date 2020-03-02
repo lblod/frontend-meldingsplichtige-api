@@ -3,6 +3,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 import { reads } from '@ember/object/computed';
+import rdflib from 'ember-rdflib';
+import { XSD } from '../../../../utils/namespaces';
 
 export default class FormInputFieldsDateEditComponent extends Component {
   @tracked
@@ -50,6 +52,7 @@ export default class FormInputFieldsDateEditComponent extends Component {
     if(newValue != null) {
       dateString = newValue.toISOString().split("T")[0];
     }
-    updateSimpleFormValue(this.storeOptions, dateString, this.nodeValue);
+    const newDate = rdflib.literal(dateString, XSD('date'));
+    updateSimpleFormValue(this.storeOptions, newDate, this.nodeValue);
   }
 }
