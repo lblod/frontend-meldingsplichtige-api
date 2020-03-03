@@ -1,14 +1,12 @@
 <div {{did-insert this.loadData}} class="form__label u-padding--tb--tinier">
-  <label class="form__label">{{@field.label}}
-  </label>
+  <label class="form__label">{{@field.label}}</label>
 </div>
-
 {{#if this.showDifferentiatie }}
   <div class="form__row form__row--checkbox">
     <div class="form__label">
       <label class="form__label">Vink aan indien er sprake is van differentiatie</label>
     </div>
-    <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDiff}}/>
+    <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDifferentiatie}}/>
   </div>
 {{else}}
   Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
@@ -29,8 +27,8 @@
         <td>
           <Input class="input-field input-field--block input-field--small"
                  placeholder="Bedrag"
-                 @value={{field.value.taxRate}}
-                 @focus-out={{fn this.update field}}/>
+                 value={{field.value.taxRate}}
+                 @focus-out={{fn this.addPrice field}}/>
           <div>
             <p class="small u-spacer--tb--tinier form__error">
               {{#each field.errors as |error|}}
@@ -42,7 +40,7 @@
         <td>
           <button type="button"
                   class="toggle small link--icon u-spacer--bottom--small"
-            {{on "click" (fn this.delete field)}}>
+            {{on "click" (fn this.removePrice field)}}>
             Verwijder
           </button>
         </td>
@@ -53,7 +51,7 @@
         <button type="button"
                 class="button button--narrow
                       {{unless this.fields "u-spacer--tb--small" "button--alt u-spacer--tb--tiny" }}"
-          {{on "click" this.create}}>
+          {{on "click" this.addPricePlaceholder}}>
           <i class="vi vi-plus" aria-hidden="true"></i>Voeg bedrag opcentiem toe
         </button>
       </td>

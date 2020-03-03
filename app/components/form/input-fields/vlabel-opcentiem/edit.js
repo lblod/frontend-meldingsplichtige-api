@@ -9,6 +9,15 @@ import {
   validationResultsForField,
   validationResultsForFieldPart, removeTriples
 } from '../../../../utils/import-triples-for-form';
+import rdflib from 'ember-rdflib';
+import uuidv4 from 'uuid/v4';
+import { RDF } from '../../../../utils/namespaces';
+
+const uriTemplate = 'http://data.lblod.info/tax-rates';
+const lblodBesluit = `http://lblod.data.gift/vocabularies/besluit`;
+
+const TaxRateType = new rdflib.NamedNode(`${lblodBesluit}/TaxRate`);
+const schemaPrice = new rdflib.NamedNode(`http://schema.org/amount`);;
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
 
@@ -33,6 +42,12 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   @tracked
   storeOptions = {};
 
+
+  constructor() {
+    super(...arguments);
+    this.differentiatie = false;
+  }
+
   @action
   loadData() {
     this.storeOptions = {
@@ -54,43 +69,98 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
+    const triples =  matches.triples;
+    if(triples.length == 0) return;
 
-    for (let triple of matches.triples) {
+    this.taxRateSubject = triples[0].object; //assuming only one per form
 
-      const errors = validationResultsForFieldPart(
-        {values: [triple.object]},
-        this.args.field.uri,
-        this.storeOptions).filter(r => !r.valid);
+    const prices = this.storeOptions.store.match(this.taxRateSubject, schemaPrice, undefined, this.storeOptions.sourceGraph);
+
+    for (let triple of prices) {
+      //TODO: validation -> can be defined in form
+      // const errors = validationResultsForFieldPart(
+      //   {values: [triple.object]},
+      //   this.args.field.uri,
+      //   this.storeOptions).filter(r => !r.valid);
+      const errors = [];
 
       this.fields.pushObject({value: {taxRate: triple.object.value}, errors});
     }
   }
 
   @action
-  toggleDiff(event) {
+  toggleDifferentiatie(event) {
+    //TODO
     event.preventDefault();
-    if (this.fields.length > 0) {
-      removeTriples(this.storeOptions);
+    if (this.hasTaxRate()) {
+      this.removeTaxRate();
     } else {
-      // in the future maybe revert old saves.
-      this.create();
+      this.addPricePlaceholder();
     }
   }
 
+  createTaxRate(){
+    this.taxRateSubject = new rdflib.NamedNode(`${uriTemplate}/${uuidv4()}`);
+    const triples = [ { subject: this.taxRateSubject, predicate: RDF('type'), object: TaxRateType, graph: this.storeOptions.sourceGraph },
+                      { subject: this.storeOptions.sourceNode,
+                        predicate: this.storeOptions.path,
+                        object: this.taxRateSubject,
+                        graph: this.storeOptions.sourceGraph }];
+    this.storeOptions.store.addAll( triples );
+  }
+
+  removeTaxRate(){
+    const statements = [
+      ...this.storeOptions.store.match(this.taxRateSubject, undefined, undefined, this.storeOptions.sourceGraph),
+      { subject: this.storeOptions.sourceNode, predicate: this.storeOptions.path, object: this.taxRateSubject, graph: this.storeOptions.sourceGraph }
+    ];
+    this.storeOptions.store.removeStatements(statements);
+  }
+
+  updatePrice(oldValue, newValue){
+    this.storeOptions.store.removeStatements([
+       { subject: this.taxRateSubject, predicate: schemaPrice, object: oldValue, graph: this.storeOptions.sourceGraph },
+    ]);
+    this.storeOptions.store.addAll( [ { subject: this.taxRateSubject,
+                                        predicate: schemaPrice,
+                                        object: newValue,
+                                        graph: this.storeOptions.sourceGraph}
+                                    ]);
+  }
+
+  hasTaxRate(){
+    if(!this.taxRateSubject) return false;
+    //TODO: the semantics from any in forking-store and rdflibstore are different, thats why we use match. (to easy potential migration)_
+    return this.storeOptions.store.match(this.sourceNode, this.storeOptions.path, this.taxRateSubject, this.storeOptions.sourceGraph).length > 0;
+  }
+
+  hasPrices(){
+    return this.storeOptions.store.match(this.taxRateSubject, schemaPrice, undefined, this.storeOptions.sourceGraph).length > 0;
+  }
+
   @action
-  create() {
+
+  addPricePlaceholder() {
     this.fields.pushObject({value: {taxRate: ""}, errors: []});
   }
 
   @action
-  update(field, newValue) {
-    removeSimpleFormValue(field.value.taxRate, this.storeOptions);
+  addPrice(field, newValue) {
+    if(!this.hasTaxRate()){
+      this.createTaxRate();
+    }
+    this.updatePrice(field.value.taxRate, newValue);
     set(field, 'value.taxRate', newValue.trim());
-    addSimpleFormValue(newValue.trim(), this.storeOptions);
   }
 
   @action
-  delete(field) {
-    removeSimpleFormValue(field.value.taxRate.trim(), this.storeOptions);
+  removePrice(field) {
+    this.storeOptions.store.removeStatements([
+       { subject: this.taxRateSubject, predicate: schemaPrice, object: field.value.taxRate, graph: this.storeOptions.sourceGraph },
+    ]);
+    //this.storeOptions.store.removeMatches(this.taxRateSubject, schemaPrice, new rdflib.NamedNode(field.value.taxRate), this.storeOptions.sourceGraph);
+    if(!this.hasPrices()){
+      this.removeTaxRate();
+    }
   }
 }
