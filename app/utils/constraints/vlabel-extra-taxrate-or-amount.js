@@ -18,8 +18,8 @@ export default function validateExtraTaxRateOrAmount(value, options) {
   if(!taxRateTriples.length) return true;
 
 
-  const taxRateSubject = taxRateTriples[0].subject; //We assume only one TaxRate instance has been inserted. Another validator should take care of this.
-  const amountTriples = store.match(taxRateSubject, schemaPrice, undefined);
+  const taxRateSubject = taxRateTriples[0].object; //We assume only one TaxRate instance has been inserted. Another validator should take care of this.
+  const amountTriples = store.match(taxRateSubject, schemaPrice, undefined, sourceGraph);
 
   if(!amountTriples.length) return true; //If no amount has been inserted, we consider this to be ok here
 
