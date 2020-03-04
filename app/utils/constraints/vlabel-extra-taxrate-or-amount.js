@@ -1,6 +1,6 @@
 import rdflib from 'ember-rdflib';
 
-const { namedNode  } = rdflib;
+const { namedNode } = rdflib;
 
 export default function validateExtraTaxRateOrAmount(value, options) {
   const { store, sourceNode, sourceGraph } = options;
