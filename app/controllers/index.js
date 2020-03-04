@@ -1,6 +1,9 @@
 import Controller from '@ember/controller';
 
 export default Controller.extend({
+  page: 0,
+  size: 10,
+
   actions: {
     async showTriples(row) {
       const submittedResource = await row.submittedResource;

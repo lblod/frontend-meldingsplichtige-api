@@ -1,25 +1,36 @@
 import Route from '@ember/routing/route';
-import rdflib from 'ember-rdflib';
-import { RDF, FORM } from '../../utils/namespaces';
-import uuidv4 from 'uuid/v4';
 import { inject as service } from '@ember/service';
+import { CONCEPT_STATUS } from '../../models/submission-document-status';
 
 export default class FormsNewRoute extends Route {
-  @service currentSession;
+  @service currentSession
 
-  async model(){
+  async beforeModel() {
+    const conceptStatuses = await this.store.query('submission-document-status', {
+      page: { size: 1 },
+      'filter[:uri:]': CONCEPT_STATUS
+    });
+
+    if (conceptStatuses.length)
+      this.conceptStatus = conceptStatuses.firstObject;
+  }
+
+  async model() {
     const bestuurseenheid = await this.currentSession.group;
-    const { formGraph, metaGraph, form, formStore } = this.modelFor('forms');
-    const sourceGraph = new rdflib.NamedNode(`http://data.lblod.info/meldingsplicht/bestuurseenheid/${bestuurseenheid.id}/id/${uuidv4()}`);
-    const sourceNode = new rdflib.NamedNode(`http://data.lblod.info/forms/meldingsplicht/${uuidv4()}`);
-    const graphs = { formGraph, metaGraph, sourceGraph };
 
-    formStore.addAll([{ subject: sourceNode, predicate: RDF('type'), object: FORM('ManualFormSolution'), graph: sourceGraph }]);
+    const submissionDocument = this.store.createRecord('submissionDocument', {});
+    await submissionDocument.save();
+    const submission = this.store.createRecord('submission', {
+      organization: bestuurseenheid,
+      status: this.conceptStatus,
+      submissionDocument
+    });
+    await submission.save();
 
-    return { form,
-             formStore,
-             graphs,
-             sourceNode
-           };
+    return submission;
+  }
+
+  afterModel(model) {
+    this.transitionTo('forms.edit', model.id);
   }
 }

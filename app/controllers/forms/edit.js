@@ -49,7 +49,6 @@ export default class FormsEditController extends Controller {
       headers: { 'Content-Type': 'application/vnd.api+json'},
       body: JSON.stringify(
         {
-          subject: this.model.submissionDocument.uri,
           ...this.formStore.serializeDataWithAddAndDelGraph(this.graphs.sourceGraph)
         }
       )
