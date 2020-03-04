@@ -107,17 +107,17 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     this.updateAdditionalTaxRate(oldValue, this.differentiatie);
   }
 
-  updateAdditionalTaxRate(oldValue, newValue){
+  updateAdditionalTaxRate(newValue){
     const statements = this.storeOptions.store.match(this.storeOptions.sourceNode,
                                                      hasAdditionalTaxRate,
-                                                     rdflib.literal(oldValue, XSD('boolean')),
+                                                     undefined,
                                                      this.storeOptions.sourceGraph);
     this.storeOptions.store.removeStatements(statements);
 
     this.storeOptions.store.addAll([ {
       subject: this.storeOptions.sourceNode,
       predicate: hasAdditionalTaxRate,
-      object: rdflib.literal(newValue, XSD('boolean')),
+      object: newValue,
       graph: this.storeOptions.sourceGraph
     }]);
   }
