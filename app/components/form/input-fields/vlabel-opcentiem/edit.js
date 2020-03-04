@@ -16,7 +16,8 @@ const lblodBesluit = `http://lblod.data.gift/vocabularies/besluit`;
 
 const TaxRateType = new rdflib.NamedNode(`${lblodBesluit}/TaxRate`);
 const hasAdditionalTaxRate = new rdflib.NamedNode(`${lblodBesluit}/hasAdditionalTaxRate`);
-const schemaPrice = new rdflib.NamedNode(`http://schema.org/amount`);
+const schemaPrice = new rdflib.NamedNode(`http://schema.org/price`);
+const taxRate = new rdflib.NamedNode(`${lblodBesluit}/taxRate`);
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
 
@@ -76,12 +77,12 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     if(triples.length){
       this.taxRateSubject = triples[0].object; //assuming only one per form
 
-      const prices = this.storeOptions.store.match(this.taxRateSubject, schemaPrice, undefined, this.storeOptions.sourceGraph);
+      const prices = matches.values;
 
-      for (let triple of prices) {
+      for (let price of prices) {
         const errors = [];
 
-        this.fields.pushObject({value: {taxRate: triple.object.value}, errors});
+        this.fields.pushObject({value: {taxRate: price.value}, errors});
       }
     }
 
@@ -90,21 +91,20 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
                                                      undefined,
                                                      this.storeOptions.sourceGraph);
     if(statements.length > 0){
-      this.differentiatie = statements[0].object.value == "true";
+      this.differentiatie = statements[0].object.value;
     }
   }
 
   @action
   toggleDifferentiatie(event) {
     event.preventDefault();
-    const oldValue = this.differentiatie ;
     this.differentiatie = !this.differentiatie;
 
     if(this.differentiatie && this.hasTaxRate()){
        this.removeTaxRate();
     }
 
-    this.updateAdditionalTaxRate(oldValue, this.differentiatie);
+    this.updateAdditionalTaxRate(this.differentiatie);
   }
 
   updateAdditionalTaxRate(newValue){
@@ -126,7 +126,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     this.taxRateSubject = new rdflib.NamedNode(`${uriTemplate}/${uuidv4()}`);
     const triples = [ { subject: this.taxRateSubject, predicate: RDF('type'), object: TaxRateType, graph: this.storeOptions.sourceGraph },
                       { subject: this.storeOptions.sourceNode,
-                        predicate: this.storeOptions.path,
+                        predicate: taxRate,
                         object: this.taxRateSubject,
                         graph: this.storeOptions.sourceGraph }];
     this.storeOptions.store.addAll( triples );
@@ -135,7 +135,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   removeTaxRate(){
     const statements = [
       ...this.storeOptions.store.match(this.taxRateSubject, undefined, undefined, this.storeOptions.sourceGraph),
-      { subject: this.storeOptions.sourceNode, predicate: this.storeOptions.path, object: this.taxRateSubject, graph: this.storeOptions.sourceGraph }
+      { subject: this.storeOptions.sourceNode, predicate: taxRate, object: this.taxRateSubject, graph: this.storeOptions.sourceGraph }
     ];
     this.storeOptions.store.removeStatements(statements);
   }
@@ -154,7 +154,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   hasTaxRate(){
     if(!this.taxRateSubject) return false;
     //TODO: the semantics from any in forking-store and rdflibstore are different, thats why we use match. (to easy potential migration)_
-    return this.storeOptions.store.match(this.sourceNode, this.storeOptions.path, this.taxRateSubject, this.storeOptions.sourceGraph).length > 0;
+    return this.storeOptions.store.match(this.sourceNode, taxRate, this.taxRateSubject, this.storeOptions.sourceGraph).length > 0;
   }
 
   hasPrices(){
