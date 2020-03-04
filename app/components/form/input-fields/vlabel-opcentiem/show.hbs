@@ -22,13 +22,13 @@
   </tr>
   </thead>
   <tbody>
-  {{#if showTable}}
-    {{#each this.taxRates as |taxRate|}}
+  {{#if this.showTable}}
+    {{#each this.fields as |field|}}
       <tr>
         <td>
           <Input class="input-field input-field--block input-field--small input-field--disabled"
                  placeholder="Bedrag"
-                 @value={{taxRate}}
+                 @value={{field.value.taxRate}}
                  @disabled={{true}}/>
         </td>
         <td>
