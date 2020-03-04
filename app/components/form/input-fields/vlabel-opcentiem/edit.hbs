@@ -1,6 +1,7 @@
 <div {{did-insert this.loadData}} class="form__label u-padding--tb--tinier">
   <label class="form__label">{{@field.label}}</label>
 </div>
+<br />
 {{#if this.showDifferentiatie }}
   <div class="form__row form__row--checkbox">
     <div class="form__label">
@@ -65,5 +66,9 @@
   {{/if}}
   </tbody>
 </table>
-
+{{#if this.errors}}
+  {{#each this.errors as |error|}}
+    <span class="form__error"> {{error.resultMessage}} </span>
+  {{/each}}
+{{/if}}
 {{yield}}

@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
 import {action, set} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
-import {reads, empty, not} from '@ember/object/computed';
+import { computed } from '@ember/object';
+import { empty } from '@ember/object/computed';
 import {
   triplesForPath,
   validationResultsForField
@@ -28,11 +29,15 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   @empty('fields')
   taxRatesEmpty;
 
-  @not('differentiatie')
-  showTable;
+  @computed('differentiatie', 'errors')
+  get showTable(){
+    return !this.differentiatie || this.errors.length > 0;
+  }
 
-  @reads('taxRatesEmpty')
-  showDifferentiatie;
+  @computed('taxRatesEmpty', 'errors')
+  get showDifferentiatie(){
+    return this.taxRatesEmpty || this.errors.length > 0;
+  }
 
   @tracked
   errors = [];
