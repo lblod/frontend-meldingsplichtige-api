@@ -4,30 +4,28 @@ import {tracked} from '@glimmer/tracking';
 import {reads, empty, not} from '@ember/object/computed';
 import {
   triplesForPath,
-  addSimpleFormValue,
-  removeSimpleFormValue,
-  validationResultsForField,
-  validationResultsForFieldPart, removeTriples
+  validationResultsForField
 } from '../../../../utils/import-triples-for-form';
 import rdflib from 'ember-rdflib';
 import uuidv4 from 'uuid/v4';
-import { RDF } from '../../../../utils/namespaces';
+import { RDF, XSD } from '../../../../utils/namespaces';
 
 const uriTemplate = 'http://data.lblod.info/tax-rates';
 const lblodBesluit = `http://lblod.data.gift/vocabularies/besluit`;
 
 const TaxRateType = new rdflib.NamedNode(`${lblodBesluit}/TaxRate`);
-const schemaPrice = new rdflib.NamedNode(`http://schema.org/amount`);;
+const hasAdditionalTaxRate = new rdflib.NamedNode(`${lblodBesluit}/hasAdditionalTaxRate`);
+const schemaPrice = new rdflib.NamedNode(`http://schema.org/amount`);
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
 
   @tracked
   fields = [];
 
-  @empty('fields')
+  @tracked
   differentiatie;
 
-  @empty('field')
+  @empty('fields')
   taxRatesEmpty;
 
   @not('differentiatie')
@@ -41,7 +39,6 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
 
   @tracked
   storeOptions = {};
-
 
   constructor() {
     super(...arguments);
@@ -70,33 +67,54 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     const triples =  matches.triples;
-    if(triples.length == 0) return;
 
-    this.taxRateSubject = triples[0].object; //assuming only one per form
+    if(triples.length){
+      this.taxRateSubject = triples[0].object; //assuming only one per form
 
-    const prices = this.storeOptions.store.match(this.taxRateSubject, schemaPrice, undefined, this.storeOptions.sourceGraph);
+      const prices = this.storeOptions.store.match(this.taxRateSubject, schemaPrice, undefined, this.storeOptions.sourceGraph);
 
-    for (let triple of prices) {
-      //TODO: validation -> can be defined in form
-      // const errors = validationResultsForFieldPart(
-      //   {values: [triple.object]},
-      //   this.args.field.uri,
-      //   this.storeOptions).filter(r => !r.valid);
-      const errors = [];
+      for (let triple of prices) {
+        const errors = [];
 
-      this.fields.pushObject({value: {taxRate: triple.object.value}, errors});
+        this.fields.pushObject({value: {taxRate: triple.object.value}, errors});
+      }
+    }
+
+    const statements = this.storeOptions.store.match(this.storeOptions.sourceNode,
+                                                     hasAdditionalTaxRate,
+                                                     undefined,
+                                                     this.storeOptions.sourceGraph);
+    if(statements.length > 0){
+      this.differentiatie = statements[0].object.value == "true";
     }
   }
 
   @action
   toggleDifferentiatie(event) {
-    //TODO
     event.preventDefault();
-    if (this.hasTaxRate()) {
-      this.removeTaxRate();
-    } else {
-      this.addPricePlaceholder();
+    const oldValue = this.differentiatie ;
+    this.differentiatie = !this.differentiatie;
+
+    if(this.differentiatie && this.hasTaxRate()){
+       this.removeTaxRate();
     }
+
+    this.updateAdditionalTaxRate(oldValue, this.differentiatie);
+  }
+
+  updateAdditionalTaxRate(oldValue, newValue){
+    const statements = this.storeOptions.store.match(this.storeOptions.sourceNode,
+                                                     hasAdditionalTaxRate,
+                                                     rdflib.literal(oldValue, XSD('boolean')),
+                                                     this.storeOptions.sourceGraph);
+    this.storeOptions.store.removeStatements(statements);
+
+    this.storeOptions.store.addAll([ {
+      subject: this.storeOptions.sourceNode,
+      predicate: hasAdditionalTaxRate,
+      object: rdflib.literal(newValue, XSD('boolean')),
+      graph: this.storeOptions.sourceGraph
+    }]);
   }
 
   createTaxRate(){
@@ -139,7 +157,6 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
   }
 
   @action
-
   addPricePlaceholder() {
     this.fields.pushObject({value: {taxRate: ""}, errors: []});
   }
@@ -158,9 +175,9 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     this.storeOptions.store.removeStatements([
        { subject: this.taxRateSubject, predicate: schemaPrice, object: field.value.taxRate, graph: this.storeOptions.sourceGraph },
     ]);
-    //this.storeOptions.store.removeMatches(this.taxRateSubject, schemaPrice, new rdflib.NamedNode(field.value.taxRate), this.storeOptions.sourceGraph);
     if(!this.hasPrices()){
       this.removeTaxRate();
     }
+    this.fields.removeObject(field);
   }
 }
