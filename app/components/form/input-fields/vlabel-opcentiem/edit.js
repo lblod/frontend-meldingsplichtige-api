@@ -91,7 +91,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
                                                      undefined,
                                                      this.storeOptions.sourceGraph);
     if(statements.length > 0){
-      this.differentiatie = statements[0].object.value;
+      this.differentiatie = statements[0].object.value == "1"; //There is a bug in conversion from rdflib
     }
   }
 
