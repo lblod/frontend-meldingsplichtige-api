@@ -77,13 +77,13 @@ export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent ex
                                                this.storeOptions.metaGraph);
     let organenInTijdUri = organenInTijd.map(t => t.subject.value);
 
-    const organen = [];
+    let organen = [];
 
-   const queryParams = {
+    const queryParams = {
       sort: 'classificatie.label',
       page: { size: 200 },
       include: 'is-tijdsspecialisatie-van.classificatie'
-    };
+      };
 
     for(const uri of organenInTijdUri){
       queryParams['filter[:uri:]'] = uri;
@@ -93,7 +93,9 @@ export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent ex
       if(result.firstObject)
         organen.push(result.firstObject);
     }
-    
+
+    organen = organen.sortBy('isTijdsspecialisatieVan.naam');
+
     return organen;
 
   }).keepLatest())
