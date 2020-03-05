@@ -5,13 +5,15 @@ import {inject as service} from '@ember/service';
 import {set} from '@ember/object';
 import {
   triplesForPath,
-  updateSimpleFormValue,
   validationResultsForField,
-  validationResultsForFieldPart
+  validationResultsForFieldPart,
+  addSimpleFormValue,
+  removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
+
+import { RDF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
-const READY_TO_BE_CACHED_URI = "http://lblod.data.gift/file-download-statuses/ready-to-be-cached";
 const CREATOR_URI = "http://lblod.data.gift/fronted-end-componets/remote-url-creator";
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
@@ -51,30 +53,16 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
 
-    // This will return two triples per url:
-    // <form> <http://purl.org/dc/terms/hasPart> <remoteUrl> .
-    // <remoteUrl> <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#url> <theUrl> .
-
-    const groupedByRemoteUrl = matches.triples.reduce((acc, t) => {
-      if(t.predicate.value == 'http://purl.org/dc/terms/hasPart'){
-        acc[t.object.value] = { remoteUrlData: t };
-      }
-      else {
-        acc[t.subject.value].addressData = t;
-      }
-      return acc;
-    }, {});
-
-    for (let data of Object.values(groupedByRemoteUrl)) {
-      const uri = (data.remoteUrlData.object.value || '').trim(); //they might come from places not created from this component
+    for (let uri of matches.values) {
       try {
-        const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri});
+        if(!this.isRemoteDataObject(uri)) continue;
+        const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri.value});
         const remoteUrl = remotes.get('firstObject');
         if (remoteUrl) {
           this.remoteUrls.pushObject({
             remoteUrl,
             errors: this.validationResultsForAddress(remoteUrl.address),
-            triplesData: data
+            uri
           });
         } else {
           this.remoteErrors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
@@ -86,9 +74,36 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     }
   }
 
+  isRemoteDataObject(subject){
+    return this.storeOptions.store.match(subject,
+                                         RDF('type'),
+                                         new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+                                         this.storeOptions.sourceGraph).length > 0;
+  }
+
+  insertRemoteDataObject(remoteObjUri){
+    const typeT = { subject: new rdflib.NamedNode(remoteObjUri),
+                    predicate: RDF('type'),
+                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+                    graph: this.storeOptions.sourceGraph
+                  };
+    this.storeOptions.store.addAll([ typeT ]);
+    addSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions);
+  }
+
+  removeRemoteDataObject(remoteObjUri){
+    const typeT = { subject: new rdflib.NamedNode(remoteObjUri),
+                    predicate: RDF('type'),
+                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+                    graph: this.storeOptions.sourceGraph
+                  };
+    this.storeOptions.store.removeStatements([ typeT ]);
+    removeSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions);
+  }
+
   @action
   addUrlField() {
-    this.remoteUrls.pushObject({remoteUrl: null, errors: [], triplesData: null});
+    this.remoteUrls.pushObject({remoteUrl: null, errors: [], uri: null});
   }
 
   @action
@@ -97,10 +112,8 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     if (current.remoteUrl && current.remoteUrl.address == newValue.trim()) return; //do nothing if no change
 
     //for every url update we should make a new remote-url. This is how the model is
-    //TODO: Now every time a url is added, it is immediatly cached. This should occur on save
     const address = newValue.trim();
-    const status = this.isValidAddress(address) ? READY_TO_BE_CACHED_URI : null;
-    const newRemoteUrl = this.createNewRemoteUrl(address, status);
+    const newRemoteUrl = this.createNewRemoteUrl(address);
 
     try {
         await newRemoteUrl.save();
@@ -110,56 +123,28 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     }
 
     //If there was a previous, remove this from the store
-    if(current.triplesData){
+    if(current.uri){
       await current.remoteUrl.destroyRecord();
-      const tripleRemoteUrl = {
-        subject: this.storeOptions.sourceNode,
-        predicate: new rdflib.NamedNode("http://purl.org/dc/terms/hasPart"),
-        object: new rdflib.NamedNode(current.remoteUrl.uri),
-        graph: this.storeOptions.sourceGraph
-      };
-      this.storeOptions.store.removeStatements([ tripleRemoteUrl ]);
-      updateSimpleFormValue(this.storeOptions, null, current.triplesData.addressData.object); //we can rely on some boilerplate abstraction
+      this.removeRemoteDataObject(current.uri.value);
     }
 
-    // Boilerplate to create one
-    const tripleRemoteUrl = {
-      subject: this.storeOptions.sourceNode,
-      predicate: new rdflib.NamedNode("http://purl.org/dc/terms/hasPart"),
-      object: new rdflib.NamedNode(newRemoteUrl.uri),
-      graph: this.storeOptions.sourceGraph
-    };
-    const tripleAddress = {
-      subject: tripleRemoteUrl.object,
-      predicate: new rdflib.NamedNode("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#url"),
-      object: newRemoteUrl.address,
-      graph: this.storeOptions.sourceGraph
-    };
-    this.storeOptions.store.addAll([tripleRemoteUrl, tripleAddress]);
-
+    this.insertRemoteDataObject(newRemoteUrl.uri);
   }
 
   @action
   async removeRemoteUrl(current) {
     if(current.remoteUrl) {
       await current.remoteUrl.destroyRecord();
-      const tripleRemoteUrl = {
-        subject: this.storeOptions.sourceNode,
-        predicate: new rdflib.NamedNode("http://purl.org/dc/terms/hasPart"),
-        object: new rdflib.NamedNode(current.remoteUrl.uri),
-        graph: this.storeOptions.sourceGraph
-      };
-      this.storeOptions.store.removeStatements([tripleRemoteUrl]);
-      updateSimpleFormValue(this.storeOptions, null, current.triplesData.addressData.object); //we can rely on some boilerplate abstraction
+       this.removeRemoteDataObject(current.uri.value);
     } else {
       this.remoteUrls = [];
     }
   }
 
-  createNewRemoteUrl(address, downloadStatus) {
+  createNewRemoteUrl(address) {
     return this.store.createRecord('remote-url', {
       creator: CREATOR_URI,
-      downloadStatus, address
+      address
     });
   }
 

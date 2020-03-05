@@ -5,7 +5,9 @@
 
 <div class="form__row u-padding--tb--tinier">
   {{#if this.errors}}
-    <p class="small u-spacer--tb--tinier form__error">Een of meerdere links zijn ongeldig.</p>
+    {{#each this.errors as |error|}}
+      <p class="small u-spacer--tb--tinier form__error">{{error.resultMessage}}</p>
+    {{/each}}
   {{/if}}
   {{#if this.remoteErrors}}
     {{#each this.remoteErrors as |error|}}
