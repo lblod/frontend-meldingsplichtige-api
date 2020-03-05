@@ -7,7 +7,6 @@ const URI_TEMPLATE = 'http://data.lblod.info/form-data/nodes/';
 
 function importTriplesForForm(form, {store, formGraph, sourceGraph, sourceNode, metaGraph}) {
   let datasetTriples = [];
-
   for (let field of fieldsForForm(form, {store, formGraph, sourceGraph, sourceNode, metaGraph})) {
     let path = store.any(field, SHACL("path"), undefined, formGraph);
     triplesForPath({path, store, formGraph, sourceNode, sourceGraph})

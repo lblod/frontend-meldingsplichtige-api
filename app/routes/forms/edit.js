@@ -17,7 +17,6 @@ export default class FormsEditRoute extends Route {
     const response = await fetch(`/submission-forms/${submissionDocument.id}`);
     const { source, additions, removals, meta, form } = await response.json();
 
-
     // Prepare data in forking store
 
     const formStore = new forkingStore();
