@@ -17,6 +17,5 @@ Router.map(function() {
   this.route('forms', function() {
     this.route('edit', { path: '/:id' });
     this.route('new');
-    this.route('edit-example-form');
   });
 });
