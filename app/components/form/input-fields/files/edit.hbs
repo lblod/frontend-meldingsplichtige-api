@@ -10,7 +10,7 @@
     {{#if this.errors}}
       <WuAlert isError={{true}}>
         {{#each this.errors as |error|}}
-          <li>{{error}}</li>
+          <li>{{error.resultMessage}}</li>
         {{/each}}
       </WuAlert>
     {{/if}}

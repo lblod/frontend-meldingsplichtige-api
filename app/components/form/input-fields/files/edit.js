@@ -2,6 +2,8 @@ import Component from '@glimmer/component';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
+import { RDF } from '../../../../utils/namespaces';
+import rdflib from 'ember-rdflib';
 
 import {
   triplesForPath,
@@ -48,6 +50,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     if (matches.values.length > 0) {
       for (let uri of matches.values) {
         try {
+          if(!this.isFileDataObject(uri)) continue;
           const files = await this.store.query('file', {'filter[:uri:]' : uri.value});
           const uploadedFile = files.get('firstObject');
           if(uploadedFile) {
@@ -63,22 +66,49 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   }
 
   handleRetrievalError(uri) {
-    this.errors.pushObject(`failed to retrieve file with uri ${uri}`);
+    this.errors.pushObject({resultMessage: `failed to retrieve file with uri ${uri}` });
   }
 
   cachedFileUris = [];
+
+  isFileDataObject(subject){
+    return this.storeOptions.store.match(subject,
+                                         RDF('type'),
+                                         new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                                         this.storeOptions.sourceGraph).length > 0;
+  }
+
+  insertFileDataObject(fileUri){
+    const typeT = { subject: new rdflib.NamedNode(fileUri),
+                    predicate: RDF('type'),
+                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                    graph: this.storeOptions.sourceGraph
+                  };
+    this.storeOptions.store.addAll([ typeT ]);
+    addSimpleFormValue(new rdflib.NamedNode(fileUri), this.storeOptions);
+  }
+
+  removeFileDataObject(fileUri){
+    const typeT = { subject: new rdflib.NamedNode(fileUri),
+                    predicate: RDF('type'),
+                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                    graph: this.storeOptions.sourceGraph
+                  };
+    this.storeOptions.store.removeStatements([ typeT ]);
+    removeSimpleFormValue(new rdflib.NamedNode(fileUri), this.storeOptions);
+  }
 
   @action
   addFile(file, filesQueueInfo) {
     this.cachedFileUris.push(file.uri);
     if(filesQueueInfo.isQueueEmpty){
-      this.cachedFileUris.forEach( uri => addSimpleFormValue(uri, this.storeOptions) ); //TODO: this is still brittle. It relies implicitly in run-loop
+      this.cachedFileUris.forEach( this.insertFileDataObject.bind(this) ); //TODO: this is still brittle. It relies implicitly in run-loop
     }
   }
 
   @action
   async removeFile(file) {
-    removeSimpleFormValue(file.uri, this.storeOptions);
+    this.removeFileDataObject(file.uri);
     // we need to remove the uploaded file ourselves, as this is not done by the `VoMuFileCard` component.
     try {
       await (this.store.peekRecord('file', file.id)).destroyRecord();
