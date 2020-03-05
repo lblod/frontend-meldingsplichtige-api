@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 import rdflib from 'ember-rdflib';
+import { reads } from '@ember/object/computed';
+import { SKOS } from '../../../../utils/namespaces';
 
 export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent extends Component {
   @service currentSession;
@@ -21,6 +23,9 @@ export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent ex
 
   @tracked
   allowClear = true;
+
+  @reads('args.formStore')
+  formStore = null;
 
   @action
   async loadData(){
@@ -66,20 +71,30 @@ export default class FormInputFieldsToezichtBestuursorgaanSelectEditComponent ex
     if (searchData)
       yield timeout(300);
 
-    const bestuurseenheid = yield this.currentSession.group;
-    const queryParams = {
+    let organenInTijd = this.formStore.match( undefined,
+                                              SKOS('inScheme'),
+                                              new rdflib.namedNode("http://data.lblod.info/concept-schemes/481c03f0-d07f-424e-9c2b-8d4cfb141c72"),
+                                               this.storeOptions.metaGraph);
+    let organenInTijdUri = organenInTijd.map(t => t.subject.value);
+
+    const organen = [];
+
+   const queryParams = {
       sort: 'classificatie.label',
       page: { size: 200 },
-      include: 'is-tijdsspecialisatie-van.classificatie',
-      'filter[is-tijdsspecialisatie-van][bestuurseenheid][id]': bestuurseenheid.get('id')
-      //'filter[heeft-tijdsspecialisaties][:has-no:bevat-bestuursfunctie]': true -> TODO this is not in the API
+      include: 'is-tijdsspecialisatie-van.classificatie'
     };
 
-    if (searchData)
-      queryParams['filter[is-tijdsspecialisatie-van][classificatie]'] = searchData;
-
-    const resources = yield this.store.query('bestuursorgaan', queryParams);
-    return resources;
+    for(const uri of organenInTijdUri){
+      queryParams['filter[:uri:]'] = uri;
+      if (searchData)
+        queryParams['filter[is-tijdsspecialisatie-van][classificatie]'] = searchData;
+      const result = yield this.store.query('bestuursorgaan', queryParams);
+      if(result.firstObject)
+        organen.push(result.firstObject);
+    }
+    
+    return organen;
 
   }).keepLatest())
   searchOptions;

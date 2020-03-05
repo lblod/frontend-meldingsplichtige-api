@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { triplesForPath,
          validationResultsForField,
          updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
-import { RDF, FORM, SKOS, FOAF } from '../../../../utils/namespaces';
+import { SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsConceptSchemeSelectorEditComponent extends Component {
