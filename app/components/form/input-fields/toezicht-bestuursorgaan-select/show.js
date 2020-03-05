@@ -1,5 +1,0 @@
-import FormInputFieldsToezichtBestuursorgaanSelectEditComponent from "./edit";
-
-export default class FormInputFieldsToezichtBestuursorgaanSelectShowComponent extends FormInputFieldsToezichtBestuursorgaanSelectEditComponent {
-
-}
