@@ -53,7 +53,7 @@ export default class FormsEditController extends Controller {
         }
       )
     });
-    await fetch(`/submission-documents/${this.model.submissionDocument.id}/flatten`, {
+    await fetch(`/submission-forms/${this.model.submissionDocument.id}/flatten`, {
       method: 'PUT'
     });
   }
