@@ -7,12 +7,16 @@ import { RDF, FORM } from '../../utils/namespaces';
 
 export default class FormsEditRoute extends Route {
   async model(params) {
-
     // Fetch data from backend
 
     const submission = await this.store.find('submission', params.id);
     const submissionDocument = await submission.submissionDocument;
     const submissionStatus = await submission.status;
+
+    if (!submissionDocument) {
+      console.warn('No submission document, transitionning to index.');
+      this.transitionTo('index');
+    }
 
     const response = await fetch(`/submission-forms/${submissionDocument.id}`);
     const { source, additions, removals, meta, form } = await response.json();

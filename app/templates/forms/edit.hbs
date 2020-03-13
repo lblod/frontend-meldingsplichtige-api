@@ -16,6 +16,7 @@
             @formStore={{this.formStore}} />
 {{#unless this.model.submitted}}
   <button type="button" {{on "click" this.submit}}>Verzenden</button>
+  <button type="button" {{on "click" this.delete}}>Verwijder</button>
 {{/unless}}
   <button type="button" {{on "click" this.save}}>Opslaan</button>
 <h1
