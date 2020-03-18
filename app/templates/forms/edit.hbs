@@ -1,35 +1,44 @@
-<div class="u-spacer--bottom--small">
-  <LinkTo @route="index">Back</LinkTo>
-</div>
-{{#if this.model.disclaimer}}
-  <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
-{{/if}}
-{{#if this.model.submitted}}
-  <div class="u-spacer--bottom--small">
-    <div class="alert alert--tiny alert--success">
-      <div class="alert__icon" aria-hidden="true"></div>
-      <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
+  <div class="grid">
+    <div class="col--6-12">
+      <h1 class="h2 au-u-margin-bottom">Editeer Dossier</h1>
     </div>
   </div>
-{{/if}}
-<Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
-            @formStore={{this.formStore}} />
-{{#unless this.model.submitted}}
-  <button type="button" {{on "click" this.submit}}>Verzenden</button>
-{{/unless}}
-  <button type="button" {{on "click" this.save}}>Opslaan</button>
-<h1
-  {{did-insert this.registerObserver}}
-  {{did-insert this.setTriplesForTables}}>
+</div>
 
-  Triples in Form
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  {{#if this.model.disclaimer}}
+    <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
+  {{/if}}
+  {{#if this.model.submitted}}
+    <div class="u-spacer--bottom--small">
+      <div class="alert alert--tiny alert--success">
+        <div class="alert__icon" aria-hidden="true"></div>
+        <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+      </div>
+    </div>
+  {{/if}}
+  <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
+              @formStore={{this.formStore}} />
+  {{#unless this.model.submitted}}
+    <button class="au-c-button" type="button" {{on "click" this.submit}}>Verzenden</button>
+    <button class="au-c-button" type="button" {{on "click" this.delete}}>Verwijder</button>
+  {{/unless}}
+    <button class="au-c-button" type="button" {{on "click" this.save}}>Opslaan</button>
+  <h1
+    {{did-insert this.registerObserver}}
+    {{did-insert this.setTriplesForTables}}>
 
-</h1>
-<h2>Found {{this.datasetTriples.length}} triples</h2>
-<TriplesTable @triples={{this.datasetTriples}} />
+    Triples in Form
 
-<h2>Found {{this.addedTriples.length}} ADDED triples</h2>
-<TriplesTable @triples={{this.addedTriples}} />
+  </h1>
+  <h2>Found {{this.datasetTriples.length}} triples</h2>
+  <TriplesTable @triples={{this.datasetTriples}} />
 
-<h2>Found {{this.removedTriples.length}} REMOVED triples</h2>
-<TriplesTable @triples={{this.removedTriples}} />
+  <h2>Found {{this.addedTriples.length}} ADDED triples</h2>
+  <TriplesTable @triples={{this.addedTriples}} />
+
+  <h2>Found {{this.removedTriples.length}} REMOVED triples</h2>
+  <TriplesTable @triples={{this.removedTriples}} />
+</div>
