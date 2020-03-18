@@ -1,0 +1,26 @@
+/* ==========================================================================
+   #SHAME
+   Dirty temporary css for demo purposes.
+   Some parts will be reused, but most of them will not.
+   ========================================================================== */
+
+th {
+  background-color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.triple th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.triple table {
+  border-collapse: collapse;
+}
+
+.triple table, .triple th, .triple td {
+  border: 1px solid black;
+}
