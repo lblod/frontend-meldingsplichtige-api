@@ -78,7 +78,7 @@ export default class FormsEditController extends Controller {
 
     await submission.save();
   
-    await fetch(`/delete-submission-forms/${this.model.submissionDocument.id}`, {
+    await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'DELETE',
     });
 
