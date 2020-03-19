@@ -1,39 +1,34 @@
-<div class="form__label" {{did-insert this.loadData}}>
-  <label class="form__label">{{@field.label}}</label>
-</div>
-<div class="u-spacer--bottom--small">
-
-  <div class="grid">
-    <div class="col--2-12">
-      <WuDatepicker @tagName="div"
-                    @dateFormat="DD.MM.YYYY"
-                    @onChange={{this.updateValue}}
-                    @value={{this.value}}/>
-    </div>
-    {{#if this.value}}
-    <div class="col--2-12">
-      <Input class="input-field input-field--block"
-             placeholder="12"
-             @value={{this.hour}}
-             @type="number"
-             @min="0"
-             @max="23"
-        {{on "blur" this.updateValue}}/> uur.
-    </div>
-    <div class="col--2-12">
-      <Input class="input-field input-field--block"
-             placeholder="00"
-             @value={{this.minutes}}
-             @type="number"
-             @min="0"
-             @max="59"
-        {{on "blur" this.updateValue}}/> min.
-    </div>
-    {{/if}}
+<AuLabel {{did-insert this.loadData}} class="au-c-label">{{@field.label}}</AuLabel>
+<div class="au-o-grid">
+  <div class="au-o-grid__item au-u-1-3">
+    <WuDatepicker @tagName="div"
+                  @dateFormat="DD.MM.YYYY"
+                  @onChange={{this.updateValue}}
+                  @value={{this.value}}/>
   </div>
-  {{#if this.errors}}
-    {{#each this.errors as |error|}}
-      <span class="form__error"> {{error.resultMessage}} </span>
-    {{/each}}
+  {{#if this.value}}
+  <div class="au-o-grid__item au-u-1-3">
+    <Input class="input-field input-field--block"
+           placeholder="12"
+           @value={{this.hour}}
+           @type="number"
+           @min="0"
+           @max="23"
+      {{on "blur" this.updateValue}}/> uur.
+  </div>
+  <div class="au-o-grid__item au-u-1-3">
+    <Input class="input-field input-field--block"
+           placeholder="00"
+           @value={{this.minutes}}
+           @type="number"
+           @min="0"
+           @max="59"
+      {{on "blur" this.updateValue}}/> min.
+  </div>
   {{/if}}
 </div>
+{{#if this.errors}}
+  {{#each this.errors as |error|}}
+    <span class="form__error"> {{error.resultMessage}} </span>
+  {{/each}}
+{{/if}}

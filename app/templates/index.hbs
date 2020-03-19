@@ -1,38 +1,41 @@
 {{outlet}}
-<h1 class="h1">Test Loket voor meldingen</h1>
-<div class="grid">
-  <div class="col--9-12">
-    {{#link-to 'forms.new'}}Maak nieuw formulier aan{{/link-to}}
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  <MockLogout @tagName={{'button'}} class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow; Meld u af</MockLogout>
+  <div class="au-o-grid">
+    <div class="au-o-grid__item au-u-1-2@medium">
+      <h1 class="au-u-h1 au-u-margin-bottom">Test Loket voor meldingen</h1>
+    </div>
+    <div class="au-o-grid__item au-u-1-2@medium au-u-text-right">
+      <LinkTo @route="forms.new" class="au-c-button" type="button">Maak nieuw formulier aan</LinkTo>
+    </div>
   </div>
-  <div class="col--3-12 u-align-right">
-    <MockLogout @tagName={{'a'}}/>
-  </div>
+
+  {{#data-table
+      content=model
+      isLoading=isLoadingModel
+      filter=filter
+      sort=sort
+      page=page
+      size=size
+      as |t|
+    }}
+    {{#t.content as |c|}}
+      {{#c.header}}
+        {{th-sortable field='href' currentSorting=sort label='Link'}}
+        {{th-sortable field='task.created' currentSorting=sort label='Datum'}}
+        {{th-sortable field='organization.naam' currentSorting=sort label='Bestuurseenheid'}}
+        {{th-sortable field='publisher.name' currentSorting=sort label='Vendor'}}
+        {{th-sortable field='status.label' currentSorting=sort label='Status'}}
+        <th>Actie</th>
+      {{/c.header}}
+      {{#c.body as |row|}}
+        <td>{{row.href}}</td>
+        <td>{{row.task.created}}</td>
+        <td>{{row.organization.naam}}</td>
+        <td>{{row.publisher.name}}</td>
+        <td>{{row.status.label}}</td>
+        <td>{{#link-to 'forms.edit' row.id}}details{{/link-to}}</td>
+      {{/c.body}}
+    {{/t.content}}
+  {{/data-table}}
 </div>
-{{#data-table
-        content=model
-        isLoading=isLoadingModel
-        filter=filter
-        sort=sort
-        page=page
-        size=size
-as |t|
-}}
-  {{#t.content as |c|}}
-    {{#c.header}}
-      {{th-sortable field='href' currentSorting=sort label='Link'}}
-      {{th-sortable field='task.created' currentSorting=sort label='Datum'}}
-      {{th-sortable field='organization.naam' currentSorting=sort label='Bestuurseenheid'}}
-      {{th-sortable field='publisher.name' currentSorting=sort label='Vendor'}}
-      {{th-sortable field='status.label' currentSorting=sort label='Status'}}
-      <th>Actie</th>
-    {{/c.header}}
-    {{#c.body as |row|}}
-      <td>{{row.href}}</td>
-      <td>{{row.task.created}}</td>
-      <td>{{row.organization.naam}}</td>
-      <td>{{row.publisher.name}}</td>
-      <td>{{row.status.label}}</td>
-      <td>{{#link-to 'forms.edit' row.id}}details{{/link-to}}</td>
-    {{/c.body}}
-  {{/t.content}}
-{{/data-table}}

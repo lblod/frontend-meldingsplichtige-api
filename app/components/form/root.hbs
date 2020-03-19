@@ -1,9 +1,9 @@
 <div {{did-insert this.loadData}}>
 
   {{#each this.propertyGroups as |propertyGroup|}}
-    <ul>
+    <ul class="au-o-grid au-o-grid--small">
       {{#each propertyGroup.sortedFields as |field|}}
-        <li>
+        <li class="au-o-grid__item au-u-1-1">
           {{#if @show}}
             {{component (component-for-display-type-show field.displayType)
                         field=field
