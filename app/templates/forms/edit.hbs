@@ -35,25 +35,25 @@
     </div>
 
     {{!-- {{#if this.datasetTriples.length}} --}}
-    <div class="au-o-grid__item au-u-1-2@medium au-c-form--non-editable" 
+    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable" 
         {{did-insert this.registerObserver}}
         {{did-insert this.setTriplesForTables}}>  
       {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
 
       <h2 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h2>
-      <p>Aantal items gevonden in besluit: {{this.datasetTriples.length}}</p>
+      <p class="au-u-margin-bottom-tiny">Aantal items gevonden in besluit: {{this.datasetTriples.length}}</p>
       <div class="au-u-margin-bottom">
         <TriplesTable @triples={{this.datasetTriples}} />
       </div>
 
-      <h2 class="au-u-h4">Manueel toegevoegde informatie {{!-- ADDED triples --}}</h2>
-      <p>Aantal toegevoegde items in formulier: {{this.addedTriples.length}}</p>
+      <h2 class="au-u-h4">Manueel toegevoegde informatie aan dossier {{!-- ADDED triples --}}</h2>
+      <p class="au-u-margin-bottom-tiny">Aantal toegevoegde items aan dossier: {{this.addedTriples.length}}</p>
       <div class="au-u-margin-bottom">
         <TriplesTable @triples={{this.addedTriples}} />
       </div>
 
       <h2 class="au-u-h4">Overschreven of verwijderde informatie van automatisch vergaarde informatie {{!-- REMOVED triples --}}</h2>
-      <p>Aantal overschreven of verwijderde items in formulier: {{this.removedTriples.length}}</p>
+      <p class="au-u-margin-bottom-tiny">Aantal overschreven of verwijderde items in dossier: {{this.removedTriples.length}}</p>
       <div class="au-u-margin-bottom">
         <TriplesTable @triples={{this.removedTriples}} />
       </div>

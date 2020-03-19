@@ -6,15 +6,11 @@
 
 th {
   background-color: white;
+  font-weight: bold;
 }
 
 tr:nth-child(odd) {
   background-color: #f2f2f2;
-}
-
-.triple th {
-  background-color: #4CAF50;
-  color: white;
 }
 
 .triple table {
@@ -23,4 +19,27 @@ tr:nth-child(odd) {
 
 .triple table, .triple th, .triple td {
   border: 1px solid black;
+}
+
+/* ==================================
+   #NON-EDITABLE
+   ================================== */
+
+/* Variables
+   ========================================================================== */
+
+$au-non-editable-background    : $au-neutral-lightest !default;
+
+.au-c-form--non-editable {
+  background-color:  $au-non-editable-background;
+  overflow-x: hidden;
+
+  table {
+    max-width: 100%;
+    width: 100%;
+
+    td {
+      
+    }
+  }
 }
