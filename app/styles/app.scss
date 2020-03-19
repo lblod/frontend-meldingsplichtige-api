@@ -59,15 +59,12 @@
 @import 'deprecated/generated-forms';
 
 // COMPONENTS
-.au-c-button {
-  background: red;
-}
-
 @import "ember-appuniversum/c-container";
 @import "ember-appuniversum/c-brand";
 @import "ember-appuniversum/c-header";
 @import "ember-appuniversum/c-button-link";
 @import "ember-appuniversum/c-button";
+@import "ember-appuniversum/c-label";
 @import "ember-appuniversum/c-link";
 @import "ember-appuniversum/c-icon";
 @import "ember-appuniversum/c-list-horizontal";
@@ -77,6 +74,7 @@
 
 
 // // UTILITIES
+@import "appuniversum/u-align-text";
 @import "appuniversum/u-headings";
 @import "appuniversum/u-font-weights";
 @import "appuniversum/u-font-family";
