@@ -1,15 +1,9 @@
-<div class="form__row" {{did-insert this.loadData}}>
-  <div class="form__label">
-    <label class="form__label">{{@field.label}}</label>
-  </div>
-  <div class="u-spacer--bottom--small">
-  <Input class="input-field input-field--block"
-         @value={{this.value}}
-         {{on "blur" this.updateValue}}/>
-  {{#if this.errors}}
-    {{#each this.errors as |error|}}
-      <span class="form__error"> {{error.resultMessage}} </span>
-    {{/each}}
-  {{/if}}
-  </div>
-</div>
+<AuLabel {{did-insert this.loadData}} class="{{if this.errors "au-c-label--error" ""}}">{{@field.label}}</AuLabel> {{!-- form__label --}}
+<Input class="au-c-input au-c-input--block input-field input-field--block {{if this.errors "au-c-input--error" ""}}"
+       @value={{this.value}}
+       {{on "blur" this.updateValue}}/>
+{{#if this.errors}}
+  {{#each this.errors as |error|}}
+    <span class=""> {{error.resultMessage}} </span> {{!-- form__error --}}
+  {{/each}}
+{{/if}}
