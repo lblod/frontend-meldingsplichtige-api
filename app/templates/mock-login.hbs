@@ -12,8 +12,8 @@
     </header>
 
     <div class="au-o-layout">
-      <h2 class="h4 u-spacer">Kies een bestuurseenheid om mee in te loggen.</h2>
-      <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound" placeholder="Aalst, Berchem,..." value={{gemeente}} autofocus oninput={{perform updateSearch value='target.value'}}>
+      <h2 class="au-u-h4 au-u-margin-bottom">Kies een bestuurseenheid om mee in te loggen.</h2>
+      <input class="input-field input-field--block au-u-margin-bottom" placeholder="Aalst, Berchem,..." value={{gemeente}} autofocus oninput={{perform updateSearch value='target.value'}}>
       {{#mock-login as |login|}}
         {{#if queryStore.isRunning}}
           <div class="loader-wrapper">

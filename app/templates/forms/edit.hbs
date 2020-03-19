@@ -1,10 +1,10 @@
 <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
-  <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
-  <div class="grid">
-    <div class="col--6-12">
-      <h1 class="h2 au-u-margin-bottom">Editeer Dossier</h1>
+  <div class="au-o-grid">
+    <div class="au-o-grid__item">
+      <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
+      <h1 class="au-u-h2 au-u-margin-bottom">Editeer Dossier</h1>
       {{#if this.model.disclaimer}}
-        <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
+        <h1 style="au-u-h3 color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
       {{/if}}
       {{#if this.model.submitted}}
         <div class="u-spacer--bottom--small">
@@ -16,27 +16,48 @@
       {{/if}}
     </div>
   </div>
+  <hr>
+</div>
 
-  <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  <div class="au-o-grid">
+    <div class="au-o-grid__item au-u-1-2@medium">  
 
-  {{#unless this.model.submitted}}
-    <button class="au-c-button" type="button" {{on "click" this.submit}}>Verzenden</button>
-    <button class="au-c-button" type="button" {{on "click" this.delete}}>Verwijder</button>
-  {{/unless}}
+      <div class="au-u-margin-bottom">
+        <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
+      </div>
 
-  <button class="au-c-button" type="button" {{on "click" this.save}}>Opslaan</button>
+      <AuButton {{on "click" this.save}}>Bewaar</AuButton>
+      {{#unless this.model.submitted}}
+        <AuButton class="au-c-button--ghost" {{on "click" this.submit}}>Verzenden</AuButton>
+        <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" this.delete}}>Verwijder</AuButton>
+      {{/unless}}
+    </div>
 
-  <h1
-    {{did-insert this.registerObserver}}
-    {{did-insert this.setTriplesForTables}}>Triples in Form</h1>
+    {{!-- {{#if this.datasetTriples.length}} --}}
+    <div class="au-o-grid__item au-u-1-2@medium au-c-form--non-editable" 
+        {{did-insert this.registerObserver}}
+        {{did-insert this.setTriplesForTables}}>  
+      {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
 
-  <h2>Found {{this.datasetTriples.length}}Triples</h2>
-  <TriplesTable @triples={{this.datasetTriples}} />
+      <h2 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h2>
+      <p>Aantal items gevonden in besluit: {{this.datasetTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.datasetTriples}} />
+      </div>
 
-  <h2>Found {{this.addedTriples.length}} ADDED triples</h2>
-  <TriplesTable @triples={{this.addedTriples}} />
+      <h2 class="au-u-h4">Manueel toegevoegde informatie {{!-- ADDED triples --}}</h2>
+      <p>Aantal toegevoegde items in formulier: {{this.addedTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.addedTriples}} />
+      </div>
 
-  <h2>Found {{this.removedTriples.length}} REMOVED triples</h2>
-  <TriplesTable @triples={{this.removedTriples}} />
-  
+      <h2 class="au-u-h4">Overschreven of verwijderde informatie van automatisch vergaarde informatie {{!-- REMOVED triples --}}</h2>
+      <p>Aantal overschreven of verwijderde items in formulier: {{this.removedTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.removedTriples}} />
+      </div>
+    </div>
+    {{!-- {{/if}} --}}
+  </div>
 </div>
