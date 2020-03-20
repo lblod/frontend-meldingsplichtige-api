@@ -2,6 +2,21 @@ import DS from 'ember-data';
 const { Model, attr, belongsTo, hasMany } = DS;
 
 export default Model.extend({
+  created: attr('datetime',  {
+    defaultValue(){
+      return new Date();
+    }
+  }),
+  modified: attr('datetime',  {
+    defaultValue(){
+      return new Date();
+    }
+  }),
+  sentDate: attr('datetime'),
+  recievedDate: attr('datetime'),
+  lastModifier: belongsTo('gebruiker'),
+  formData: belongsTo('form-data'),
+
   uri: attr(),
   href: attr(),
   organization: belongsTo('bestuurseenheid'),
@@ -9,5 +24,6 @@ export default Model.extend({
   submissionDocument: belongsTo('submission-document'),
   status: belongsTo('submission-document-status'),
   files: hasMany('file'),
-  task: belongsTo('automatic-submission-task')
+  task: belongsTo('automatic-submission-task'),
+  type: hasMany('concept-scheme')
 });

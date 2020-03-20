@@ -19,20 +19,29 @@ as |t|
 }}
   {{#t.content as |c|}}
     {{#c.header}}
-      {{th-sortable field='href' currentSorting=sort label='Link'}}
-      {{th-sortable field='task.created' currentSorting=sort label='Datum'}}
-      {{th-sortable field='organization.naam' currentSorting=sort label='Bestuurseenheid'}}
-      {{th-sortable field='publisher.name' currentSorting=sort label='Vendor'}}
+      {{th-sortable field='formData.passedBy.isTijdsspecialisatieVan.naam' currentSorting=sort label='Orgaan'}}
+      {{th-sortable field='created' currentSorting=sort label='Datum zitting/besluit'}}
+      {{th-sortable field='sentDate' currentSorting=sort label='Datum verstuurd'}}
       {{th-sortable field='status.label' currentSorting=sort label='Status'}}
-      <th>Actie</th>
+      {{th-sortable field='' currentSorting=sort label=''}}
     {{/c.header}}
     {{#c.body as |row|}}
-      <td>{{row.href}}</td>
-      <td>{{row.task.created}}</td>
-      <td>{{row.organization.naam}}</td>
-      <td>{{row.publisher.name}}</td>
+      <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
+      {{#if row.created}}
+        <td>{{moment-format row.created 'DD/MM/YYYY'}}</td>
+      {{else}}
+        <td></td>
+      {{/if}}
+
+      {{#if row.sentDate}}
+        <td>{{moment-format row.sentDate 'DD/MM/YYYY'}}</td>
+      {{else}}
+        <td></td>
+      {{/if}}
+
       <td>{{row.status.label}}</td>
       <td>{{#link-to 'forms.edit' row.id}}details{{/link-to}}</td>
+
     {{/c.body}}
   {{/t.content}}
 {{/data-table}}
