@@ -7,6 +7,7 @@ import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import fetch from 'fetch';
 import { reads } from '@ember/object/computed';
 import { DELETED_STATUS } from '../../models/submission-document-status';
+import { task } from 'ember-concurrency-decorators'
 
 export default class FormsEditController extends Controller {
   @reads('model.formStore')
@@ -44,8 +45,9 @@ export default class FormsEditController extends Controller {
     this.removedTriples = this.formStore.match(undefined, undefined, undefined, delGraphFor(this.graphs.sourceGraph));
   }
 
-  async saveSubmissionForm() {
-    await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+  @task
+  *saveSubmissionForm() {
+    yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/vnd.api+json'},
       body: JSON.stringify(
@@ -54,52 +56,57 @@ export default class FormsEditController extends Controller {
         }
       )
     });
-    await fetch(`/submission-forms/${this.model.submissionDocument.id}/flatten`, {
+    yield fetch(`/submission-forms/${this.model.submissionDocument.id}/flatten`, {
       method: 'PUT'
     });
   }
 
-  async submitSubmissionForm() {
-    await fetch(`/submission-forms/${this.model.submissionDocument.id}/submit`, {
+  @task
+  *submitSubmissionForm() {
+    yield fetch(`/submission-forms/${this.model.submissionDocument.id}/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/vnd.api+json'}
     });
   }
 
-  @action 
-  async delete() {
+  @task
+  *deleteSubmissionForm() {
     const submission = this.model.submission;
-    const deletedStatus = (await this.store.query('submission-document-status', {
+    const deletedStatus = (yield this.store.query('submission-document-status', {
       page: { size: 1 },
       'filter[:uri:]': DELETED_STATUS
     })).firstObject;
 
     submission.status = deletedStatus;
 
-    await submission.save();
+    yield submission.save();
   
-    await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+    yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'DELETE',
     });
+  }
 
+  @task 
+  *delete() {
+    yield this.deleteSubmissionForm.perform();
     this.transitionToRoute('index');
   }
 
-  @action
-  async save() {
-    await this.saveSubmissionForm();
+  @task
+  *save() {
+    yield this.saveSubmissionForm.perform();
   }
 
-  @action
-  async submit() {
+  @task
+  *submit() {
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
     const isValid = validateForm(this.form, options);
     if (!isValid) {
       alert('Gelieve het formulier correct in te vullen');
     }
     else {
-      await this.saveSubmissionForm();
-      await this.submitSubmissionForm();
+      yield this.saveSubmissionForm.perform();
+      yield this.submitSubmissionForm.perform();
     }
   }
 }
