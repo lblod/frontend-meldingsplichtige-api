@@ -1,36 +1,63 @@
-<div class="u-spacer--bottom--small">
-  <LinkTo @route="index">Back</LinkTo>
-</div>
-{{#if this.model.disclaimer}}
-  <h1 style="color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
-{{/if}}
-{{#if this.model.submitted}}
-  <div class="u-spacer--bottom--small">
-    <div class="alert alert--tiny alert--success">
-      <div class="alert__icon" aria-hidden="true"></div>
-      <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  <div class="au-o-grid">
+    <div class="au-o-grid__item">
+      <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
+      <h1 class="au-u-h2 au-u-margin-bottom">Editeer Dossier</h1>
+      {{#if this.model.disclaimer}}
+        <h1 style="au-u-h3 color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
+      {{/if}}
+      {{#if this.model.submitted}}
+        <div class="u-spacer--bottom--small">
+          <div class="alert alert--tiny alert--success">
+            <div class="alert__icon" aria-hidden="true"></div>
+            <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+          </div>
+        </div>
+      {{/if}}
     </div>
   </div>
-{{/if}}
-<Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}}
-            @formStore={{this.formStore}} />
-{{#unless this.model.submitted}}
-  <button type="button" {{on "click" this.submit}}>Verzenden</button>
-  <button type="button" {{on "click" this.delete}}>Verwijder</button>
-{{/unless}}
-  <button type="button" {{on "click" this.save}}>Opslaan</button>
-<h1
-  {{did-insert this.registerObserver}}
-  {{did-insert this.setTriplesForTables}}>
+  <hr>
+</div>
 
-  Triples in Form
+<div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
+  <div class="au-o-grid">
+    <div class="au-o-grid__item au-u-1-2@medium">  
 
-</h1>
-<h2>Found {{this.datasetTriples.length}} triples</h2>
-<TriplesTable @triples={{this.datasetTriples}} />
+      <div class="au-u-margin-bottom">
+        <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
+      </div>
 
-<h2>Found {{this.addedTriples.length}} ADDED triples</h2>
-<TriplesTable @triples={{this.addedTriples}} />
+      <AuButton {{on "click" this.save}}>Bewaar</AuButton>
+      {{#unless this.model.submitted}}
+        <AuButton class="au-c-button--ghost" {{on "click" this.submit}}>Verzenden</AuButton>
+        <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" this.delete}}>Verwijder</AuButton>
+      {{/unless}}
+    </div>
 
-<h2>Found {{this.removedTriples.length}} REMOVED triples</h2>
-<TriplesTable @triples={{this.removedTriples}} />
+    {{!-- {{#if this.datasetTriples.length}} --}}
+    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable" 
+        {{did-insert this.registerObserver}}
+        {{did-insert this.setTriplesForTables}}>  
+      {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
+
+      <h2 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h2>
+      <p class="au-u-margin-bottom-tiny">Aantal items gevonden in besluit: {{this.datasetTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.datasetTriples}} />
+      </div>
+
+      <h2 class="au-u-h4">Manueel toegevoegde informatie aan dossier {{!-- ADDED triples --}}</h2>
+      <p class="au-u-margin-bottom-tiny">Aantal toegevoegde items aan dossier: {{this.addedTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.addedTriples}} />
+      </div>
+
+      <h2 class="au-u-h4">Overschreven of verwijderde informatie van automatisch vergaarde informatie {{!-- REMOVED triples --}}</h2>
+      <p class="au-u-margin-bottom-tiny">Aantal overschreven of verwijderde items in dossier: {{this.removedTriples.length}}</p>
+      <div class="au-u-margin-bottom">
+        <TriplesTable @triples={{this.removedTriples}} />
+      </div>
+    </div>
+    {{!-- {{/if}} --}}
+  </div>
+</div>

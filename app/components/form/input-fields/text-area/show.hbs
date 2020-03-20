@@ -1,8 +1,4 @@
-<div class="form__row" {{did-insert this.loadData}}>
-  <div class="form__label">
-    <label class="form__label">{{@field.label}}</label>
-  </div>
-  <Textarea class="textarea textarea--block textarea--disabled"
-            @disabled={{true}}
-            @value={{this.value}}/>
-</div>
+<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+<Textarea class="textarea textarea--block textarea--disabled"
+          @disabled={{true}}
+          @value={{this.value}}/>

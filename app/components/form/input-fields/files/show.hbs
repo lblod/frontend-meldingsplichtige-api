@@ -1,15 +1,7 @@
-<div class="form__row" {{did-insert this.loadData}}>
-  <div class="form__label">
-    <label class="form__label">{{@field.label}}</label>
-  </div>
-  <div class="u-padding--tb--small">
-    <div class="form__row u-spacer--bottom--small">
-      {{#each this.files as |file|}}
-        <VoMuFileCard @file={{file}} @active={{false}}/>
-      {{/each}}
-      {{#unless this.files}}
-        <p class="small u-spacer--bottom--tiny text-fade">Er werden geen bestanden toegevoegd.</p>
-      {{/unless}}
-    </div>
-  </div>
-</div>
+<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+{{#each this.files as |file|}}
+  <VoMuFileCard @file={{file}} @active={{false}}/>
+{{/each}}
+{{#unless this.files}}
+  <p class="small u-spacer--bottom--tiny text-fade">Er werden geen bestanden toegevoegd.</p>
+{{/unless}}

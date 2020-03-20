@@ -1,4 +1,4 @@
-<label {{did-insert this.loadData}}>{{@field.label}}</label>
+<AuLabel {{did-insert this.loadData}} class="au-c-label">{{@field.label}}</AuLabel>
 <PowerSelect  @searchField={{"label"}} @searchEnabled={{true}} @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
   {{typeDossier.label}}
 </PowerSelect>
@@ -7,5 +7,3 @@
      <span style="color: red"> {{error.resultMessage}} </span>
   {{/each}}
 {{/if}}
-
-

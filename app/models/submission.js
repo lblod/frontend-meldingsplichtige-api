@@ -24,6 +24,5 @@ export default Model.extend({
   submissionDocument: belongsTo('submission-document'),
   status: belongsTo('submission-document-status'),
   files: hasMany('file'),
-  task: belongsTo('automatic-submission-task'),
-  type: hasMany('concept-scheme')
+  task: belongsTo('automatic-submission-task')
 });
