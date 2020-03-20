@@ -27,10 +27,10 @@
         <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
       </div>
 
-      <AuButton {{on "click" this.save}}>Bewaar</AuButton>
+      <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
       {{#unless this.model.submitted}}
-        <AuButton class="au-c-button--ghost" {{on "click" this.submit}}>Verzenden</AuButton>
-        <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" this.delete}}>Verwijder</AuButton>
+        <AuButton class="au-c-button--ghost" {{on "click" (perform this.submit)}}>Verzenden</AuButton>
+        <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" (perform this.delete)}}>Verwijder</AuButton>
       {{/unless}}
     </div>
 

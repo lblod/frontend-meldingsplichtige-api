@@ -86,27 +86,27 @@ export default class FormsEditController extends Controller {
     });
   }
 
-  @action 
-  async delete() {
-    await this.deleteSubmissionForm.perform();
+  @task 
+  *delete() {
+    yield this.deleteSubmissionForm.perform();
     this.transitionToRoute('index');
   }
 
-  @action
-  async save() {
-    await this.saveSubmissionForm.perform();
+  @task
+  *save() {
+    yield this.saveSubmissionForm.perform();
   }
 
-  @action
-  async submit() {
+  @task
+  *submit() {
     const options = { ...this.graphs, sourceNode: this.sourceNode, store: this.formStore};
     const isValid = validateForm(this.form, options);
     if (!isValid) {
       alert('Gelieve het formulier correct in te vullen');
     }
     else {
-      await this.saveSubmissionForm.perform();
-      await this.submitSubmissionForm.perform();
+      yield this.saveSubmissionForm.perform();
+      yield this.submitSubmissionForm.perform();
     }
   }
 }
