@@ -22,15 +22,17 @@
   {{#t.content as |c|}}
     {{#c.header}}
       {{th-sortable field='formData.passedBy.isTijdsspecialisatieVan.naam' currentSorting=sort label='Orgaan'}}
-      {{th-sortable field='created' currentSorting=sort label='Datum zitting/besluit'}}
+      {{th-sortable field='formData.sessionStartedTime' currentSorting=sort label='Datum zitting/besluit'}}
       {{th-sortable field='sentDate' currentSorting=sort label='Datum verstuurd'}}
       {{th-sortable field='status.label' currentSorting=sort label='Status'}}
       {{th-sortable field='' currentSorting=sort label=''}}
     {{/c.header}}
     {{#c.body as |row|}}
       <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
-      {{#if row.created}}
-        <td>{{moment-format row.created 'DD/MM/YYYY'}}</td>
+      {{#if row.formData.sessionStartedAtTime}}
+        <td>
+          {{moment-format row.formData.sessionStartedAtTime 'DD/MM/YYYY'}}
+        </td>
       {{else}}
         <td></td>
       {{/if}}
@@ -48,4 +50,3 @@
   {{/t.content}}
   {{/data-table}}
 </div>
-
