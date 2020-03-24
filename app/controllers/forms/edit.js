@@ -74,16 +74,6 @@ export default class FormsEditController extends Controller {
 
   @task
   *deleteSubmissionForm() {
-    const submission = this.model.submission;
-    const deletedStatus = (yield this.store.query('submission-document-status', {
-      page: { size: 1 },
-      'filter[:uri:]': DELETED_STATUS
-    })).firstObject;
-
-    submission.status = deletedStatus;
-
-    yield submission.save();
-
     yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'DELETE',
     });
@@ -91,6 +81,18 @@ export default class FormsEditController extends Controller {
 
   @task
   *delete() {
+    const deletedStatus = (yield this.store.query('submission-document-status', {
+      page: { size: 1 },
+      'filter[:uri:]': DELETED_STATUS
+    })).firstObject;
+    const user = yield this.currentSession.user;
+
+    this.model.submission.status = deletedStatus;
+    this.model.submission.modified = new Date();
+    this.model.submission.lastModifier = user;
+
+    yield this.model.submission.save();
+
     yield this.deleteSubmissionForm.perform();
     this.transitionToRoute('index');
   }
@@ -121,7 +123,7 @@ export default class FormsEditController extends Controller {
     else {
       yield this.saveSubmissionForm.perform();
       yield this.submitSubmissionForm.perform();
+      this.transitionToRoute('index');
     }
-    this.transitionToRoute('index');
   }
 }
