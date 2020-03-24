@@ -21,23 +21,22 @@
 
 <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
   <div class="au-o-grid">
-    <div class="au-o-grid__item au-u-1-2@medium">  
+    <div class="au-o-grid__item au-u-1-2@medium">
 
       <div class="au-u-margin-bottom">
         <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
       </div>
-
-      <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
       {{#unless this.model.submitted}}
+        <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
         <AuButton class="au-c-button--ghost" {{on "click" (perform this.submit)}}>Verzenden</AuButton>
         <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" (perform this.delete)}}>Verwijder</AuButton>
       {{/unless}}
     </div>
 
     {{!-- {{#if this.datasetTriples.length}} --}}
-    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable" 
+    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable"
         {{did-insert this.registerObserver}}
-        {{did-insert this.setTriplesForTables}}>  
+        {{did-insert this.setTriplesForTables}}>
       {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
 
       <h2 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h2>

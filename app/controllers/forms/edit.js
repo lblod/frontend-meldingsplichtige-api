@@ -7,7 +7,7 @@ import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import fetch from 'fetch';
 import { reads } from '@ember/object/computed';
 import { DELETED_STATUS } from '../../models/submission-document-status';
-import { task } from 'ember-concurrency-decorators'
+import { task } from 'ember-concurrency-decorators';
 
 export default class FormsEditController extends Controller {
   @reads('model.formStore')
@@ -80,13 +80,13 @@ export default class FormsEditController extends Controller {
     submission.status = deletedStatus;
 
     yield submission.save();
-  
+
     yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'DELETE',
     });
   }
 
-  @task 
+  @task
   *delete() {
     yield this.deleteSubmissionForm.perform();
     this.transitionToRoute('index');
@@ -108,5 +108,6 @@ export default class FormsEditController extends Controller {
       yield this.saveSubmissionForm.perform();
       yield this.submitSubmissionForm.perform();
     }
+    this.transitionToRoute('index');
   }
 }
