@@ -8,8 +8,11 @@ import fetch from 'fetch';
 import { reads } from '@ember/object/computed';
 import { DELETED_STATUS } from '../../models/submission-document-status';
 import { task } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
 
 export default class FormsEditController extends Controller {
+  @service currentSession
+
   @reads('model.formStore')
   formStore;
 
@@ -94,6 +97,17 @@ export default class FormsEditController extends Controller {
 
   @task
   *save() {
+
+    this.currentSession.user.then((user)=>{
+
+      this.model.submission.modified=new Date();
+
+      this.model.submission.lastModifier=user;
+
+      this.model.submission.save();
+
+    });
+
     yield this.saveSubmissionForm.perform();
   }
 
