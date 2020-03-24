@@ -51,38 +51,40 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
+    const uris = matches.triples.filter(t => t.predicate.value === DCT("hasPart").value).map(t => t.object);
 
-    for (let uri of matches.values) {
+    for (let uri of uris) {
       try {
-        if (!this.isRemoteDataObject(uri)) continue;
-        let remotes = await this.store.query('remote-url', {'filter[:uri:]': uri.value});
-        // TODO somehow this objects gets a rdflib syntax??
-        let remoteUrl = remotes.get('firstObject');
-        if (remoteUrl) {
-          this.remoteUrls.pushObject({
-            remoteUrl,
-            errors: this.validationResultsForAddress(remoteUrl.address),
-            uri
-          });
-        } else {
-          // TODO try to retrieve it from local + simplify
-          remotes = await this.store.peekAll('remote-url').filter(remote => remote.uri === uri.value);
-          remoteUrl = remotes.get('firstObject');
-          if(remoteUrl){
-            this.remoteUrls.pushObject({
-              remoteUrl,
-              errors: this.validationResultsForAddress(remoteUrl.address),
-              uri
-            });
-          } else {
-            this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
-          }
-        }
+        let remoteUrl = await this.retrieveRemoteDataObject(uri, matches.triples)
+        this.remoteUrls.pushObject({
+          remoteUrl,
+          errors: this.validationResultsForAddress(remoteUrl.address),
+          uri
+        });
       } catch (error) {
         this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
       }
-
     }
+  }
+
+  async retrieveRemoteDataObject(uri, triples) {
+    // first we try to get it from the triple-store (exciting file)
+    let remotes = await this.store.query('remote-url', {'filter[:uri:]': uri.value});
+    if (remotes.length !== 0) {
+      return remotes.get('firstObject');
+    }
+    // if nothing was found we try to retrieve it from local (being made in this instance)
+    remotes = await this.store.peekAll('remote-url').filter(remote => remote.uri === uri.value);
+    if (remotes.length !== 0) {
+      return remotes.get('firstObject');
+    }
+    // if nothing was found in the triple-store or locally, we create our own record based
+    // on the values.
+    return this.store.createRecord('remote-url', {
+      uri,
+      creator: CREATOR_URI,
+      address: triples.filter(t => t.subject.value === uri.value).map(t => t.object.value).get('firstObject')
+    });
   }
 
   isRemoteDataObject(subject) {
@@ -95,12 +97,6 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
   // TODO change this to save the correct data in the rdflib form
   insertRemoteDataObject(remoteObj) {
     const triples = [
-      {
-        subject: new rdflib.NamedNode(remoteObj.uri),
-        predicate: RDF('type'),
-        object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
-        graph: this.storeOptions.sourceGraph
-      },
       {
         subject: this.storeOptions.sourceNode,
         predicate: DCT('hasPart'),
@@ -121,7 +117,12 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     const uri = new rdflib.NamedNode(remoteObjUri);
     const statements = [
       ...this.storeOptions.store.match(uri, undefined, undefined, this.storeOptions.sourceGraph),
-      { subject: this.storeOptions.sourceNode, predicate: DCT('hasPart'), object: uri, graph: this.storeOptions.sourceGraph }
+      {
+        subject: this.storeOptions.sourceNode,
+        predicate: DCT('hasPart'),
+        object: uri,
+        graph: this.storeOptions.sourceGraph
+      }
     ];
     this.storeOptions.store.removeStatements(statements);
   }

@@ -11,8 +11,8 @@
         />
         <div class="button-group u-spacer--top--tiny">
           <a href={{file.remoteUrl.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
-          {{#if file.remoteUrl.replicatedFile.downloadLink}}
-            <a href={{file.remoteUrl.replicatedFile.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
+          {{#if file.remoteUrl.downloadLink}}
+            <a href={{file.remoteUrl.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
           {{/if}}
         </div>
       </td>
