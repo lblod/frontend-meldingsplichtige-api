@@ -7,7 +7,7 @@ export default Model.extend({
   address: attr(),
   created: attr('date'),
   modified: attr('date'),
-  replicatedFile: belongsTo('file', { inverse: null }),
+  download: belongsTo('file', { inverse: null }),
   downloadStatus: attr(),
   creator: attr(),
 
