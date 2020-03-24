@@ -13,7 +13,7 @@ export default Model.extend({
     }
   }),
   sentDate: attr('datetime'),
-  recievedDate: attr('datetime'),
+  receivedDate: attr('datetime'),
   lastModifier: belongsTo('gebruiker'),
   formData: belongsTo('form-data'),
 
