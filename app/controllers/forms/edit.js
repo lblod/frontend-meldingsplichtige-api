@@ -99,18 +99,12 @@ export default class FormsEditController extends Controller {
 
   @task
   *save() {
-
-    this.currentSession.user.then((user)=>{
-
-      this.model.submission.modified=new Date();
-
-      this.model.submission.lastModifier=user;
-
-      this.model.submission.save();
-
-    });
-
     yield this.saveSubmissionForm.perform();
+
+    const user = yield this.currentSession.user;
+    this.model.submission.modified = new Date();
+    this.model.submission.lastModifier = user;
+    this.model.submission.save();
   }
 
   @task
