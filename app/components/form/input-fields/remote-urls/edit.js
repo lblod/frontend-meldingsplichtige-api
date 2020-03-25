@@ -15,21 +15,16 @@ import { v4 as uuidv4 } from 'uuid';
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
+  @service store
 
-  @service
-  store;
+  @tracked remoteUrls = []
 
-  @tracked
-  remoteUrls = [];
+  @tracked errors = []
 
-  @tracked
-  errors = [];
-
-  @tracked
-  validation = [];
+  @tracked validation = []
 
   @action
-  async loadData() {
+  loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -38,7 +33,6 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       store: this.args.formStore,
       path: this.args.field.rdflibPath
     };
-
 
     this.loadValidations();
     this.loadProvidedValue();
@@ -54,11 +48,9 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
     for (let uri of uris) {
       try {
-        let remoteUrl = this.retrieveRemoteDataObject(uri, matches.triples)
-        this.remoteUrls.pushObject({
-          ...this.retrieveRemoteDataObject(uri),
-          validation: this.validationResultsForAddress(remoteUrl.address),
-        });
+        let remoteUrl = this.retrieveRemoteDataObject(uri);
+        remoteUrl.validation = this.validationResultsForAddress(remoteUrl.address);
+        this.remoteUrls.pushObject(remoteUrl);
       } catch (error) {
         this.errors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
       }
@@ -73,8 +65,8 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     if (addresses.length !== 0) {
       return {
         uri,
-        address: addresses.get('firstObject')
-      }
+        address: addresses[0]
+      };
     } else {
       throw `No remote-url could be found for ${uri}`;
     }
@@ -141,6 +133,6 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @action
   async removeRemoteUrl(current) {
-    this.removeRemoteDataObject(current)
+    this.removeRemoteDataObject(current);
   }
 }

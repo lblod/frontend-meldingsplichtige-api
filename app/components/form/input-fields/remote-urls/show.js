@@ -7,15 +7,11 @@ import {triplesForPath} from "../../../../utils/import-triples-for-form";
 import {DCT} from "../../../../utils/namespaces";
 
 export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
+  @service store
 
-  @service
-  store;
+  @tracked remoteUrls = []
 
-  @tracked
-  remoteUrls = [];
-
-  @tracked
-  errors = [];
+  @tracked errors = []
 
   @action
   async loadData() {
@@ -47,8 +43,11 @@ export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
   }
 
   async retrieveRemoteDataObject(uri) {
-    let remotes = await this.store.query('remote-url', {'filter[:uri:]': uri.value});
-    if (remotes.length !== 0) {
+    let remotes = await this.store.query('remote-url', {
+      'filter[:uri:]': uri.value,
+      page: { size: 1 }
+    });
+    if (remotes.length) {
       return remotes.get('firstObject');
     } else {
       throw `No remote-url could be found for ${uri}`;
