@@ -26,7 +26,7 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
   errors = [];
 
   @tracked
-  remoteErrors = [];
+  validation = [];
 
   @action
   async loadData() {
@@ -41,26 +41,26 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
 
     this.loadValidations();
-    await this.loadProvidedValue();
+    this.loadProvidedValue();
   }
 
   loadValidations() {
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
+    this.validation = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  async loadProvidedValue() {
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     const uris = matches.triples.filter(t => t.predicate.value === DCT("hasPart").value).map(t => t.object);
 
     for (let uri of uris) {
       try {
-        let remoteUrl = await this.retrieveRemoteDataObject(uri, matches.triples)
+        let remoteUrl = this.retrieveRemoteDataObject(uri, matches.triples)
         this.remoteUrls.pushObject({
           ...this.retrieveRemoteDataObject(uri),
-          errors: this.validationResultsForAddress(remoteUrl.address),
+          validation: this.validationResultsForAddress(remoteUrl.address),
         });
       } catch (error) {
-        this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
+        this.errors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
       }
     }
   }
@@ -112,13 +112,14 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     this.storeOptions.store.removeStatements(statements);
   }
 
-  // TODO update to the new syntax I'll be introducing
   @action
   addUrlField() {
-    this.remoteUrls.pushObject({uri: null, address: null, errors: []});
+    this.remoteUrls.pushObject({
+      uri: null,
+      address: null,
+    });
   }
 
-  // TODO remove all ember-data stuff
   @action
   async updateRemoteUrl(current, newValue) {
     if (current.remoteUrl && current.remoteUrl.address === newValue.trim()) return; //do nothing if no change
@@ -129,7 +130,6 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     this.insertRemoteDataObject(newValue.trim());
   }
 
-  // TODO remove ember-data stuff
   @action
   async removeRemoteUrl(current) {
     this.removeRemoteDataObject(current)
