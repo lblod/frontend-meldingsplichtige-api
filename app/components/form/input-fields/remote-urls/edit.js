@@ -80,6 +80,15 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     }
   }
 
+  validationResultsForAddress(value) {
+    return validationResultsForFieldPart(
+      {
+        values: [{value}]
+      },
+      this.args.field.uri,
+      this.storeOptions).filter(r => !r.valid);
+  }
+
   insertRemoteDataObject(address) {
     const uri = new rdflib.NamedNode(`${REMOTE_URI_TEMPLATE}${uuidv4()}`);
     const triples = [
@@ -133,14 +142,5 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
   @action
   async removeRemoteUrl(current) {
     this.removeRemoteDataObject(current)
-  }
-
-  validationResultsForAddress(value) {
-    return validationResultsForFieldPart(
-      {
-        values: [{value}]
-      },
-      this.args.field.uri,
-      this.storeOptions).filter(r => !r.valid);
   }
 }
