@@ -18,7 +18,7 @@
         <Input
                 class="input-field input-field--block input-field--small"
                 placeholder="http://wwww.uw-bestuur.be/specifiek-document"
-                value={{file.remoteUrl.address}}
+                value={{file.address}}
                 @focus-out={{fn this.updateRemoteUrl file}}
         />
         <div class="au-o-grid">
@@ -32,7 +32,7 @@
           </div>
           <div class="au-o-grid__item au-u-1-3">
             <div class="button-group u-spacer--top--tiny u-align-right">
-              <a href={{file.remoteUrl.address}} target="_blank" rel="noopener"
+              <a href={{file.address}} target="_blank" rel="noopener"
                  class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk
                 link</a>
               <a class="toggle u-spacer--bottom--tiny button button--small button--alt button--alt--warning" {{on
