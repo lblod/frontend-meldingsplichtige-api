@@ -14,6 +14,9 @@ export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
   @tracked
   remoteUrls = [];
 
+  @tracked
+  errors = [];
+
   @action
   async loadData() {
     this.storeOptions = {
@@ -38,7 +41,7 @@ export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
           await this.retrieveRemoteDataObject(uri, matches.triples)
         );
       } catch (error) {
-        this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
+        this.error.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
       }
     }
   }

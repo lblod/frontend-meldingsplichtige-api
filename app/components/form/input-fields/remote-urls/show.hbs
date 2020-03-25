@@ -25,3 +25,13 @@
 {{else}}
   <p class="small u-spacer--bottom--tiny text-fade">Er werden geen links toegevoegd.</p>
 {{/if}}
+
+{{#if this.errors}}
+  <WuAlert title={{'Something went wrong'}}>
+    <ul>
+      {{#each this.errors as |error|}}
+        <li>{{error.resultMessage}}</li>
+      {{/each}}
+    </ul>
+  </WuAlert>
+{{/if}}
