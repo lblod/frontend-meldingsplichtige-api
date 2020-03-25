@@ -10,7 +10,7 @@ import {
 
 import {DCT, NIE} from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
-import uuidv4 from "uuid/v4";
+import { v4 as uuidv4 } from 'uuid';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
