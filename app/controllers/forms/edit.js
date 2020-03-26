@@ -5,13 +5,24 @@ import { validateForm }  from '../../utils/import-triples-for-form';
 import importTriplesForForm from '../../utils/import-triples-for-form';
 import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import fetch from 'fetch';
-import { reads } from '@ember/object/computed';
 import { DELETED_STATUS } from '../../models/submission-document-status';
 import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 
 export default class FormsEditController extends Controller {
   @service currentSession
+  @service store
+
+  @tracked datasetTriples = []
+
+  @tracked addedTriples = []
+
+  @tracked removedTriples = []
+
+  constructor() {
+    super(...arguments);
+    this.ensureDeletedStatus();
+  }
 
   get formStore() {
     return this.model.formStore;
@@ -29,11 +40,12 @@ export default class FormsEditController extends Controller {
     return this.model.form;
   }
 
-  @tracked datasetTriples = []
-
-  @tracked addedTriples = []
-
-  @tracked removedTriples = []
+  async ensureDeletedStatus() {
+    this.deletedStatus = (await this.store.query('submission-document-status', {
+      page: { size: 1 },
+      'filter[:uri:]': DELETED_STATUS
+    })).firstObject;
+  }
 
   @action
   registerObserver() {
@@ -93,13 +105,8 @@ export default class FormsEditController extends Controller {
 
   @task
   *delete() {
-    const deletedStatus = (yield this.store.query('submission-document-status', {
-      page: { size: 1 },
-      'filter[:uri:]': DELETED_STATUS
-    })).firstObject;
     const user = yield this.currentSession.user;
-
-    this.model.submission.status = deletedStatus;
+    this.model.submission.status = this.deletedStatus;
     this.model.submission.modified = new Date();
     this.model.submission.lastModifier = user;
 
