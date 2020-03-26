@@ -6,13 +6,13 @@
       <td>
         <Input
                 class="input-field input-field--block input-field--small"
-                @value={{file.remoteUrl.address}}
+                @value={{file.address}}
                 @disabled={{true}}
         />
         <div class="button-group u-spacer--top--tiny">
-          <a href={{file.remoteUrl.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
-          {{#if file.remoteUrl.replicatedFile.downloadLink}}
-            <a href={{file.remoteUrl.replicatedFile.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
+          <a href={{file.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
+          {{#if file.downloadLink}}
+            <a href={{file.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
           {{/if}}
         </div>
       </td>
@@ -24,4 +24,14 @@
   <p class="smallest u-spacer--bottom--tiny"><sup>*</sup>Op het moment van versturen, wordt er een versie gedownload van de pagina die op de link te vinden is.</p>
 {{else}}
   <p class="small u-spacer--bottom--tiny text-fade">Er werden geen links toegevoegd.</p>
+{{/if}}
+
+{{#if this.errors}}
+  <WuAlert title={{'Er liep iets mis'}}>
+    <ul>
+      {{#each this.errors as |error|}}
+        <li>{{error.resultMessage}}</li>
+      {{/each}}
+    </ul>
+  </WuAlert>
 {{/if}}

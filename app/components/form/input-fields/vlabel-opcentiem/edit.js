@@ -8,7 +8,7 @@ import {
   validationResultsForField
 } from '../../../../utils/import-triples-for-form';
 import rdflib from 'ember-rdflib';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { RDF, XSD } from '../../../../utils/namespaces';
 
 const uriTemplate = 'http://data.lblod.info/tax-rates';

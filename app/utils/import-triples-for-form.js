@@ -1,7 +1,7 @@
 import { RDF, FORM, SHACL } from './namespaces';
 import { check, checkTriples } from './constraints';
 import rdflib from 'ember-rdflib';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 
 const URI_TEMPLATE = 'http://data.lblod.info/form-data/nodes/';
 
