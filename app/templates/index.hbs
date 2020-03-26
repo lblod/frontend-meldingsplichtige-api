@@ -29,18 +29,8 @@
       </c.header>
       <c.body as |row|>
         <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
-        {{#if row.formData.sessionStartedAtTime}}
-          <td>
-            {{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}
-          </td>
-        {{else}}
-          <td></td>
-        {{/if}}
-        {{#if row.sentDate}}
-          <td>{{moment-format row.sentDate "DD/MM/YYYY"}}</td>
-        {{else}}
-          <td></td>
-        {{/if}}
+        <td>{{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}</td>
+        <td>{{moment-format row.sentDate "DD/MM/YYYY"}}</td>
         <td>{{row.status.label}}</td>
         <td><LinkTo @route="forms.edit" @model={{row.id}}>Bekijk</LinkTo></td>
       </c.body>
