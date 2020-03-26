@@ -13,26 +13,27 @@ import { inject as service } from '@ember/service';
 export default class FormsEditController extends Controller {
   @service currentSession
 
-  @reads('model.formStore')
-  formStore;
+  get formStore() {
+    return this.model.formStore;
+  }
 
-  @reads('model.graphs')
-  graphs;
+  get graphs() {
+    return this.model.graphs;
+  }
 
-  @reads('model.sourceNode')
-  sourceNode;
+  get sourceNode() {
+    return this.model.sourceNode;
+  }
 
-  @reads('model.form')
-  form;
+  get form() {
+    return this.model.form;
+  }
 
-  @tracked
-  datasetTriples = [];
+  @tracked datasetTriples = []
 
-  @tracked
-  addedTriples = [];
+  @tracked addedTriples = []
 
-  @tracked
-  removedTriples = [];
+  @tracked removedTriples = []
 
   @action
   registerObserver() {
@@ -62,6 +63,12 @@ export default class FormsEditController extends Controller {
     yield fetch(`/submission-forms/${this.model.submissionDocument.id}/flatten`, {
       method: 'PUT'
     });
+
+    // Since the form data and related entities are not updated via ember-data
+    // we need to manually reload those to keep the index page up-to-date
+    const formData = yield this.model.submission.formData.reload();
+    yield formData.hasMany('types').reload();
+    yield formData.belongsTo('passedBy').reload();
   }
 
   @task
@@ -70,6 +77,11 @@ export default class FormsEditController extends Controller {
       method: 'POST',
       headers: { 'Content-Type': 'application/vnd.api+json'}
     });
+    // Since the sent date and sent status of the submission will be set by the backend
+    // and not via ember-data, we need to manually reload the submission record
+    // to keep the index page up-to-date
+    const submission = yield this.model.submission.reload();
+    yield submission.belongsTo('status').reload();
   }
 
   @task
@@ -104,7 +116,7 @@ export default class FormsEditController extends Controller {
     const user = yield this.currentSession.user;
     this.model.submission.modified = new Date();
     this.model.submission.lastModifier = user;
-    this.model.submission.save();
+    yield this.model.submission.save();
   }
 
   @task
