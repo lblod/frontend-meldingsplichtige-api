@@ -56,7 +56,7 @@ inflector.irregular('submission', 'submissions');
 inflector.irregular('remote-url', 'remote-urls'); // TODO check if this could be done better or generalised
 inflector.irregular('submission-document', 'submission-documents');
 inflector.irregular('form-data', 'form-data');
-inflector.irregular('concepts', 'concepts');
-inflector.irregular('concept-schemes', 'concept-schemes');
+inflector.irregular('concept', 'concepts');
+inflector.irregular('concept-scheme', 'concept-schemes');
 // Meet Ember Inspector's expectation of an export
 export default {};

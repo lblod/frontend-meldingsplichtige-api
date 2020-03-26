@@ -22,6 +22,7 @@
     <t.content as |c|>
       <c.header>
         <ThSortable @field="formData.passedBy.isTijdsspecialisatieVan.naam" @currentSorting={{this.sort}} @label="Orgaan" />
+        <th>Type dossier</th>
         <ThSortable @field="formData.sessionStartedAtTime" @currentSorting={{this.sort}} @label="Datum zitting/besluit" />
         <ThSortable @field="sentDate" @currentSorting={{this.sort}} @label="Datum verstuurd" />
         <ThSortable @field="status.label" @currentSorting={{this.sort}} @label="Status" />
@@ -29,6 +30,7 @@
       </c.header>
       <c.body as |row|>
         <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
+        <td><Toezicht::SubmissionType @formData={{row.formData}} /></td>
         <td>{{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}</td>
         <td>{{moment-format row.sentDate "DD/MM/YYYY"}}</td>
         <td>{{row.status.label}}</td>
