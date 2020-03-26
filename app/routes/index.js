@@ -12,4 +12,4 @@ export default class IndexRoute extends Route.extend(AuthenticatedRouteMixin, Da
       ].join(',')
     };
   }
-};
+}

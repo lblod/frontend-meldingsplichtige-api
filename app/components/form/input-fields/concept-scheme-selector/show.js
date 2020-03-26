@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { triplesForPath,
          validationResultsForField,
          updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
-import { RDF, FORM, SKOS, FOAF } from '../../../../utils/namespaces';
+import { SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsConceptSchemeSelectorShowComponent extends Component {
@@ -41,7 +41,7 @@ export default class FormInputFieldsConceptSchemeSelectorShowComponent extends C
 
   loadOptions(){
     //Selects all options that match the concept scheme from the form turtle
-    const conceptScheme=JSON.parse(this.args.field.options).conceptScheme
+    const conceptScheme=JSON.parse(this.args.field.options).conceptScheme;
     this.options = this.args.formStore
       .match( undefined,
               SKOS('inScheme'),

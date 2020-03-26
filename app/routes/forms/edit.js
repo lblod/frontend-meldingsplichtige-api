@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { warn } from '@ember/debug';
 import rdflib from 'ember-rdflib';
 import fetch from 'fetch';
 import forkingStore from '../../utils/forking-store';
@@ -14,7 +15,7 @@ export default class FormsEditRoute extends Route {
     const submissionStatus = await submission.status;
 
     if (!submissionDocument) {
-      console.warn('No submission document, transitionning to index.');
+      warn('No submission document, Transitioning to index.');
       this.transitionTo('index');
     }
 
