@@ -7,9 +7,12 @@ import { delGraphFor, addGraphFor } from '../../utils/forking-store';
 import fetch from 'fetch';
 import { reads } from '@ember/object/computed';
 import { DELETED_STATUS } from '../../models/submission-document-status';
-import { task } from 'ember-concurrency-decorators'
+import { task } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
 
 export default class FormsEditController extends Controller {
+  @service currentSession
+
   @reads('model.formStore')
   formStore;
 
@@ -71,23 +74,25 @@ export default class FormsEditController extends Controller {
 
   @task
   *deleteSubmissionForm() {
-    const submission = this.model.submission;
-    const deletedStatus = (yield this.store.query('submission-document-status', {
-      page: { size: 1 },
-      'filter[:uri:]': DELETED_STATUS
-    })).firstObject;
-
-    submission.status = deletedStatus;
-
-    yield submission.save();
-  
     yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'DELETE',
     });
   }
 
-  @task 
+  @task
   *delete() {
+    const deletedStatus = (yield this.store.query('submission-document-status', {
+      page: { size: 1 },
+      'filter[:uri:]': DELETED_STATUS
+    })).firstObject;
+    const user = yield this.currentSession.user;
+
+    this.model.submission.status = deletedStatus;
+    this.model.submission.modified = new Date();
+    this.model.submission.lastModifier = user;
+
+    yield this.model.submission.save();
+
     yield this.deleteSubmissionForm.perform();
     this.transitionToRoute('index');
   }
@@ -95,6 +100,11 @@ export default class FormsEditController extends Controller {
   @task
   *save() {
     yield this.saveSubmissionForm.perform();
+
+    const user = yield this.currentSession.user;
+    this.model.submission.modified = new Date();
+    this.model.submission.lastModifier = user;
+    this.model.submission.save();
   }
 
   @task
@@ -107,6 +117,7 @@ export default class FormsEditController extends Controller {
     else {
       yield this.saveSubmissionForm.perform();
       yield this.submitSubmissionForm.perform();
+      this.transitionToRoute('index');
     }
   }
 }

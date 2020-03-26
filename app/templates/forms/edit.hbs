@@ -3,10 +3,11 @@
     <div class="au-o-grid__item">
       <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
       <h1 class="au-u-h2 au-u-margin-bottom">Editeer Dossier</h1>
-      {{#if this.model.disclaimer}}
-        <h1 style="au-u-h3 color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
-      {{/if}}
+      <div>Gewijzigd door: {{this.model.submission.lastModifier.fullName}}</div>
+      <div>Aangemaakt op: {{moment-format this.model.submission.created 'DD-MM-YYYY'}}</div>
+      <div>Bewerkt op: {{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</div>
       {{#if this.model.submitted}}
+        <div>Verstuurd op: {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</div>
         <div class="u-spacer--bottom--small">
           <div class="alert alert--tiny alert--success">
             <div class="alert__icon" aria-hidden="true"></div>
@@ -21,23 +22,22 @@
 
 <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
   <div class="au-o-grid">
-    <div class="au-o-grid__item au-u-1-2@medium">  
+    <div class="au-o-grid__item au-u-1-2@medium">
 
       <div class="au-u-margin-bottom">
         <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
       </div>
-
-      <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
       {{#unless this.model.submitted}}
+        <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
         <AuButton class="au-c-button--ghost" {{on "click" (perform this.submit)}}>Verzenden</AuButton>
         <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" (perform this.delete)}}>Verwijder</AuButton>
       {{/unless}}
     </div>
 
     {{!-- {{#if this.datasetTriples.length}} --}}
-    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable" 
+    <div class="au-o-grid__item au-u-1-1 au-c-form--non-editable"
         {{did-insert this.registerObserver}}
-        {{did-insert this.setTriplesForTables}}>  
+        {{did-insert this.setTriplesForTables}}>
       {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
 
       <h2 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h2>
