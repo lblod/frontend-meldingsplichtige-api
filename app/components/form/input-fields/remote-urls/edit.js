@@ -141,6 +141,10 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   @action
   async removeRemoteUrl(current) {
-    this.removeRemoteDataObject(current)
+    if (current.value) {
+      this.removeRemoteDataObject(current)
+    } else {
+      this.remoteUrls = [];
+    }
   }
 }
