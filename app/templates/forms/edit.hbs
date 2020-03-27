@@ -14,11 +14,12 @@
           </div>
         </div>
       {{/if}}
+      Laatst gewijzigd door: {{this.model.submission.lastModifier.id}} <br>
+      Laatst gewijzigd op: {{moment-format this.model.submission.modified 'DD/MM/YYYY'}}
     </div>
   </div>
   <hr>
 </div>
-
 <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
   <div class="au-o-grid">
     <div class="au-o-grid__item au-u-1-2@medium">
