@@ -1,4 +1,13 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
 {{#each this.files as |file|}}
   <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
 {{/each}}
@@ -6,7 +15,7 @@
 {{#if this.errors}}
   <WuAlert isError={{true}}>
     {{#each this.errors as |error|}}
-      <li>{{error.resultMessage}}</li>
+      <li><AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText></li>
     {{/each}}
   </WuAlert>
 {{/if}}
