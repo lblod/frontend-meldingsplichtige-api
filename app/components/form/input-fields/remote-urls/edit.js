@@ -1,30 +1,27 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import {
   triplesForPath,
   validationResultsForField,
-  validationResultsForFieldPart
+  validationResultsForFieldPart,
+  addSimpleFormValue,
+  removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
 
-import {DCT, NIE} from '../../../../utils/namespaces';
+import { RDF, NIE } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
-  @service store
+  @tracked remoteUrls = [];
 
-  @tracked remoteUrls = []
-
-  @tracked errors = []
-
-  @tracked validation = []
+  @tracked errors = [];
 
   @action
-  loadData() {
+  async loadData() {
     this.storeOptions = {
       formGraph: this.args.graphs.formGraph,
       sourceNode: this.args.sourceNode,
@@ -34,109 +31,98 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       path: this.args.field.rdflibPath
     };
 
+
     this.loadValidations();
-    this.loadProvidedValue();
+    await this.loadProvidedValue();
   }
 
   loadValidations() {
-    this.validation = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
+    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    const uris = matches.triples.filter(t => t.predicate.value === DCT("hasPart").value).map(t => t.object);
 
-    for (let uri of uris) {
+    for (let uri of matches.values) {
       try {
-        let remoteUrl = this.retrieveRemoteDataObject(uri);
-        remoteUrl.validation = this.validationResultsForAddress(remoteUrl.address);
-        this.remoteUrls.pushObject(remoteUrl);
+        if(!this.isRemoteDataObject(uri)) continue;
+        this.remoteUrls.pushObject(this.retrieveRemoteDataObject(uri));
       } catch (error) {
-        this.errors.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
+        this.errors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
       }
     }
   }
 
-  retrieveRemoteDataObject(uri) {
-    const addresses = triplesForPath(this.storeOptions)
-      .triples
-      .filter(t => t.subject.value === uri.value)
-      .map(t => t.object.value);
-    if (addresses.length !== 0) {
-      return {
-        uri,
-        address: addresses[0]
-      };
-    } else {
-      throw `No remote-url could be found for ${uri}`;
+  isRemoteDataObject(subject){
+    return this.storeOptions.store.match(subject,
+                                         RDF('type'),
+                                         new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+                                         this.storeOptions.sourceGraph).length > 0;
+  }
+
+  removeRemoteDataObject(remoteObjUri){
+    const remoteObjecTs = this.storeOptions.store.match(remoteObjUri, undefined, undefined, this.storeOptions.sourceGraph);
+    if(remoteObjecTs.length){
+      this.storeOptions.store.removeStatements(remoteObjecTs);
     }
+    removeSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions); //remove hasPart
   }
 
-  validationResultsForAddress(value) {
-    return validationResultsForFieldPart(
-      {
-        values: [{value}]
-      },
-      this.args.field.uri,
-      this.storeOptions).filter(r => !r.valid);
-  }
-
-  insertRemoteDataObject(address) {
-    const uri = new rdflib.NamedNode(`${REMOTE_URI_TEMPLATE}${uuidv4()}`);
+  insertRemoteDataObject({ remoteObjUri, address } ){
     const triples = [
-      {
-        subject: this.storeOptions.sourceNode,
-        predicate: DCT('hasPart'),
-        object: uri,
+      { subject: remoteObjUri,
+        predicate: RDF('type'),
+        object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
         graph: this.storeOptions.sourceGraph
       },
       {
-        subject: uri,
+        subject: remoteObjUri,
         predicate: NIE('url'),
         object: address,
         graph: this.storeOptions.sourceGraph
-      }];
-    this.storeOptions.store.addAll(triples);
-  }
-
-  removeRemoteDataObject(remote) {
-    const uri = new rdflib.NamedNode(remote.uri);
-    const statements = [
-      ...this.storeOptions.store.match(uri, undefined, undefined, this.storeOptions.sourceGraph),
-      {
-        subject: this.storeOptions.sourceNode,
-        predicate: DCT('hasPart'),
-        object: uri,
-        graph: this.storeOptions.sourceGraph
       }
     ];
-    this.storeOptions.store.removeStatements(statements);
+    this.storeOptions.store.addAll( triples );
+    addSimpleFormValue(remoteObjUri, this.storeOptions); //adds hasPart;
+  }
+
+  retrieveRemoteDataObject(remoteObjUri) {
+    const addressesTs = this.storeOptions.store.match(remoteObjUri, NIE('url'), undefined, this.storeOptions.sourceGraph);
+    if(addressesTs.length > 1) throw `Too many addresses for ${remoteObjUri.value}.`;
+    if(addressesTs.length) {
+      const address = addressesTs[0].object.value;
+      return { remoteObjUri, address: address, validation: this.validationResultsForAddress(address) };
+    }
+    return { remoteObjUri, address: null };
   }
 
   @action
   addUrlField() {
-    this.remoteUrls.pushObject({
-      uri: null,
-      address: null,
-    });
+    this.remoteUrls.pushObject({remoteObjUri: new rdflib.namedNode(REMOTE_URI_TEMPLATE + `${uuidv4()}`), validation: [], address: ''});
   }
 
   @action
-  async updateRemoteUrl(current, newValue) {
-    if (current.remoteUrl && current.remoteUrl.address === newValue.trim()) return; //do nothing if no change
-    //If there was a previous, remove this from the store
-    if (current.uri) {
-      this.removeRemoteDataObject(current);
-    }
-    this.insertRemoteDataObject(newValue.trim());
+  updateRemoteUrl(current, newValue) {
+    const address = newValue.trim();
+    if (current.address == address) return; //do nothing if no change
+    this.removeRemoteDataObject( current.remoteObjUri );
+    this.insertRemoteDataObject({ remoteObjUri: current.remoteObjUri, address });
   }
 
   @action
   async removeRemoteUrl(current) {
-    if (current.value) {
-      this.removeRemoteDataObject(current);
-    } else {
-      this.remoteUrls = [];
-    }
+    this.removeRemoteDataObject( current.remoteObjUri );
+  }
+
+  isValidAddress(value) {
+    let errors = this.validationResultsForAddress(value);
+    return errors ? errors.length === 0 : false;
+  }
+
+  validationResultsForAddress(value) {
+    return validationResultsForFieldPart(
+      {values: [{value}]},
+      this.args.field.uri,
+      this.storeOptions).filter(r => !r.valid);
   }
 }
