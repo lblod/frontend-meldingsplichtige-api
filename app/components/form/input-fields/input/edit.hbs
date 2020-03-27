@@ -2,8 +2,7 @@
 <Input class="au-c-input au-c-input--block input-field input-field--block {{if this.errors "au-c-input--error" ""}}"
        @value={{this.value}}
        {{on "blur" this.updateValue}}/>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <span class=""> {{error.resultMessage}} </span> {{!-- form__error --}}
-  {{/each}}
-{{/if}}
+
+{{#each this.errors as |error|}}
+  <span class=""> {{error.resultMessage}} </span> {{!-- form__error --}}
+{{/each}}

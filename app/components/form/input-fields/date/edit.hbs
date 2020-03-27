@@ -3,8 +3,6 @@
               @dateFormat="DD.MM.YYYY"
               @onChange={{this.updateValue}}
               @value={{this.value}}/>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+{{#each this.errors as |error|}}
+  <span class="form__error"> {{error.resultMessage}} </span>
+{{/each}}
