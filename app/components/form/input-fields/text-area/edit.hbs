@@ -1,9 +1,20 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
-<Textarea class="textarea textarea--block component ember-text-area ember-view"
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
+<AuTextarea
+          id="{{this.inputId}}"
+          @width={{"block"}}
           @value={{this.value}}
           {{on "blur" this.updateValue}}/>
 {{#if this.errors}}
   {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
+    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
   {{/each}}
 {{/if}}

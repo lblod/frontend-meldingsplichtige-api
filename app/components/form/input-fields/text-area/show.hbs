@@ -1,4 +1,15 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
-<Textarea class="textarea textarea--block textarea--disabled"
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
+<AuTextarea
+          id="{{this.inputId}}"
+          @width={{"block"}}
           @disabled={{true}}
           @value={{this.value}}/>
