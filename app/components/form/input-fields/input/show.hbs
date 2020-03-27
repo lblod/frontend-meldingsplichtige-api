@@ -3,7 +3,7 @@
     <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
@@ -12,4 +12,5 @@
   id="{{this.inputId}}"
   @width={{"block"}}
   @value={{this.value}}
-  @disabled={{true}}/>
+  @disabled={{true}}
+/>

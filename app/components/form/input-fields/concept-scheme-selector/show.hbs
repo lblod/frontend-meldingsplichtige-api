@@ -3,16 +3,16 @@
     <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
 </div>
-<PowerSelect @disabled={{true}} @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
-  {{typeDossier.label}}
+<PowerSelect
+  @disabled={{true}}
+  @selected={{this.selected}}
+  @options={{this.options}}
+  @onChange={{null}}
+  as |concept|>
+  {{concept.label}}
 </PowerSelect>
-{{#if errors}}
-  {{#each errors as |error|}}
-    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
-{{/if}}

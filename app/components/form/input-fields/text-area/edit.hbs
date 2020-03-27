@@ -3,18 +3,18 @@
     <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
 </div>
 <AuTextarea
-          id="{{this.inputId}}"
-          @width={{"block"}}
-          @value={{this.value}}
-          {{on "blur" this.updateValue}}/>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
-{{/if}}
+  id="{{this.inputId}}"
+  @width={{"block"}}
+  @value={{this.value}}
+  {{on "blur" this.updateValue}}
+/>
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}

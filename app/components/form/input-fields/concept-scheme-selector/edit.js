@@ -1,106 +1,65 @@
-import Component from '@glimmer/component';
+import InputFieldComponent from '../input-field';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
-import { triplesForPath,
-         validationResultsForField,
-         updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
+import { triplesForPath, updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
-export default class FormInputFieldsConceptSchemeSelectorEditComponent extends Component {
+function byLabel(a, b) {
+  const textA = a.label.toUpperCase();
+  const textB = b.label.toUpperCase();
+  return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+}
+
+export default class FormInputFieldsConceptSchemeSelectorEditComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this); // this input field is not linked to the label yet, this technique does not work with the power-select
 
-  @tracked
-  selected = null;
-
-  @tracked
-  options = [];
-
-  @tracked
-  errors = [];
-
-  storeOptions = {};
+  @tracked selected = null
+  @tracked options = []
 
   @action
   loadData(){
-    //this is passed to validations and other util functions
-    this.storeOptions = {
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph,
-      metaGraph: this.args.graphs.metaGraph,
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath
-    };
-
+    super.loadData();
     this.loadOptions();
-    this.loadValidations();
-    if(this.errors.length == 0){
-      //do something if validated scraped
-      this.selectValidValue();
-    }
+    this.loadProvidedValue();
   }
 
   loadOptions(){
-    //Selects all options that match the concept scheme from the form turtle
-    const conceptScheme=JSON.parse(this.args.field.options).conceptScheme;
+    const metaGraph = this.args.graphs.metaGraph;
+    const fieldOptions = JSON.parse(this.args.field.options);
+    const conceptScheme = new rdflib.namedNode(fieldOptions.conceptScheme);
+
     this.options = this.args.formStore
-      .match( undefined,
-              SKOS('inScheme'),
-              new rdflib.namedNode(conceptScheme),
-              this.args.graphs.metaGraph)
-      .map(s => {
-        const label = this.args.formStore.any(s.subject, SKOS('prefLabel'), undefined, this.args.graphs.metaGraph);
-        return { subject: s.subject, label: label && label.value };
+      .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
+      .map(t => {
+        const label = this.args.formStore.any(t.subject, SKOS('prefLabel'), undefined, metaGraph);
+        return { subject: t.subject, label: label && label.value };
       });
-
-    this.options.sort(function(a, b) {
-      var textA = a.label.toUpperCase();
-      var textB = b.label.toUpperCase();
-      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-    });
+    this.options.sort(byLabel);
   }
 
-  loadValidations(){
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
-  }
-
-  findOption(namedNode){
-    return this.options.find((e)=>{
-      return namedNode.equals(e.subject);
-    });
-  }
-
-  cleanStore(){
-    const toRemove = triplesForPath(this.storeOptions, true).values.filter(this.findOption.bind(this));
-    toRemove.forEach( r => {
-      updateSimpleFormValue(this.storeOptions, undefined, r);
-    });
+  loadProvidedValue() {
+    if (this.isValid) {
+      // Assumes valid input
+      // This means even though we can have multiple values for one path (e.g. rdf:type)
+      // this selector will only accept one value, and we take the first value from the matches.
+      // The validation makes sure the matching value is the sole one.
+      const matches = triplesForPath(this.storeOptions, true).values;
+      this.selected = this.options.find(opt => matches.find(m => m.equals(opt.subject)));
+    }
   }
 
   @action
   updateSelection(option){
-    //Do something @onChange
-    this.cleanStore();
-    this.errors = [];
     this.selected = option;
-    updateSimpleFormValue(this.storeOptions, option.subject);
-  }
 
-  @action
-  selectValidValue(){
-    //assumes valid input
-    // This means even though we can have multiple values for one path (e.g. rdf:type)
-    // this selector will only accept one value, and we take the first value from the matches.
-    // that is also in the the options list. Our validation makes sure the matching value is the sole one.
+    // Cleanup old value(s) in the store
     const matches = triplesForPath(this.storeOptions, true).values;
-    this.selected = this.options.find((e)=>{
-      return matches.find(m => m.equals(e.subject));
-    });
-  }
+    const matchingOptions = matches.filter(m => this.options.find(opt => m.equals(opt.subject)));
+    matchingOptions.forEach(m => updateSimpleFormValue(this.storeOptions, undefined, m));
 
-  get isRequiredField() {
-    return true;
+    // Insert new value in the store
+    updateSimpleFormValue(this.storeOptions, option.subject);
   }
 }

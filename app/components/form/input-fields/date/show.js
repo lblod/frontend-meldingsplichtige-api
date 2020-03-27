@@ -1,7 +1,5 @@
-import FormInputFieldsDateEditComponent from "./edit";
+import SimpleInputFieldComponent from '../simple-value-input-field';
 
-export default class FormInputFieldsDateShowComponent extends FormInputFieldsDateEditComponent {
-  get isRequiredField() {
-    return true;
-  }
+export default class FormInputFieldsDateShowComponent extends SimpleInputFieldComponent {
+
 }

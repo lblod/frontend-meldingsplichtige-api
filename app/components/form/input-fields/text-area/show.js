@@ -1,7 +1,5 @@
-import FormInputFieldsTextAreaEditComponent from "./edit";
+import SimpleInputFieldComponent from '../simple-value-input-field';
 
-export default class FormInputFieldsTextAreaShowComponent extends FormInputFieldsTextAreaEditComponent {
-  get isRequiredField() {
-    return true;
-  }
+export default class FormInputFieldsTextAreaShowComponent extends SimpleInputFieldComponent {
+
 }

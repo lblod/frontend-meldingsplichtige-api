@@ -1,60 +1,22 @@
-import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
-import {tracked} from '@glimmer/tracking';
-import {
-  triplesForPath,
-  validationResultsForField,
-  updateSimpleFormValue
-} from '../../../../utils/import-triples-for-form';
-import { XSD } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
+import { triplesForPath, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
+import { XSD } from '../../../../utils/namespaces';
+import SimpleInputFieldComponent from '../simple-value-input-field';
 
-export default class FormInputFieldsDateTimeEditComponent extends Component {
+export default class FormInputFieldsDateTimeEditComponent extends SimpleInputFieldComponent {
   inputId = 'date-' + guidFor(this);
 
-  @tracked
-  value = null;
-
-  @tracked
-  hour = null;
-
-  @tracked
-  minutes = null;
-
-  @tracked
-  nodeValue = null;
-
-  @tracked
-  errors = [];
-
-  @tracked
-  storeOptions = {};
-
-  @action
-  loadData() {
-    this.storeOptions = {
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph,
-      metaGraph: this.args.graphs.metaGraph,
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath
-    };
-
-    this.loadValidations();
-    this.loadProvidedValue();
-  }
-
-  loadValidations() {
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
-  }
+  @tracked hour = null
+  @tracked minutes = null
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       this.nodeValue = matches.values[0];
-      let datobj = new Date(this.nodeValue.value);
+      const datobj = new Date(this.nodeValue.value);
       this.value = datobj;
       this.hour = datobj.getHours();
       this.minutes = datobj.getMinutes();
@@ -68,9 +30,5 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
     }
     const newValue = rdflib.literal(this.value.toISOString(), XSD('dateTime'));
     updateSimpleFormValue(this.storeOptions, newValue, this.nodeValue);
-  }
-
-  get isRequiredField() {
-    return true;
   }
 }
