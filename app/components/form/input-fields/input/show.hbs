@@ -1,4 +1,15 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel> {{!-- form__label --}}
-<Input class="au-c-input"
-       @disabled={{true}}
-       @value={{this.value}}/> {{!-- input-field input-field--block u-spacer--bottom--small input-field--disabled --}}
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
+<AuInput
+  id="{{this.inputId}}"
+  @width={{"block"}}
+  @value={{this.value}}
+  @disabled={{true}}/>
