@@ -1,10 +1,20 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
-<WuDatepicker @tagName="div"
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel> {{!-- setting ID's (to link the label to the input field) does not work with the datepicker plugin --}}
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
+<WuDatepicker id="{{this.inputId}}"
+              @tagName="div"
               @dateFormat="DD.MM.YYYY"
               @onChange={{this.updateValue}}
               @value={{this.value}}/>
 {{#if this.errors}}
   {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
+    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
   {{/each}}
 {{/if}}
