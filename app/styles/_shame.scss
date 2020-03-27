@@ -30,6 +30,9 @@ tr:nth-child(odd) {
 
 $au-non-editable-background    : $au-neutral-lightest !default;
 
+/* Modifiers
+   ========================================================================== */
+
 .au-c-form--non-editable {
   background-color:  $au-non-editable-background;
   overflow-x: hidden;
@@ -39,7 +42,33 @@ $au-non-editable-background    : $au-neutral-lightest !default;
     width: 100%;
 
     td {
-      
+
     }
   }
 }
+
+/* ==================================
+   #DATA-TABLE
+   ================================== */
+
+/* Modifiers
+   ========================================================================== */
+
+.data-table--error {
+  border: .1rem solid $au-neutral-lighter;
+  border-bottom: .2rem solid $au-red;
+}
+
+/* ==================================
+   #DROPZONE
+   ================================== */
+
+/* Modifiers
+   ========================================================================== */
+
+.upload--error .upload__element {
+  border-bottom: .2rem solid $au-red;
+}
+
+
+
