@@ -1,5 +1,4 @@
+import SimpleInputFieldComponent from '../simple-value-input-field';
 
-import FormInputFieldsInputEditComponent from "./edit";
-
-export default class FormInputFieldsInputShowComponent extends FormInputFieldsInputEditComponent {
+export default class FormInputFieldsInputShowComponent extends SimpleInputFieldComponent {
 }

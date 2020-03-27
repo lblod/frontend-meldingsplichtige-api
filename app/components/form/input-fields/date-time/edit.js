@@ -1,57 +1,19 @@
-import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import {
-  triplesForPath,
-  validationResultsForField,
-  updateSimpleFormValue
-} from '../../../../utils/import-triples-for-form';
-import { XSD } from '../../../../utils/namespaces';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import rdflib from 'ember-rdflib';
+import { triplesForPath, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
+import { XSD } from '../../../../utils/namespaces';
+import SimpleInputFieldComponent from '../simple-value-input-field';
 
-export default class FormInputFieldsDateTimeEditComponent extends Component {
-  @tracked
-  value = null;
-
-  @tracked
-  hour = null;
-
-  @tracked
-  minutes = null;
-
-  @tracked
-  nodeValue = null;
-
-  @tracked
-  errors = [];
-
-  @tracked
-  storeOptions = {};
-
-  @action
-  loadData() {
-    this.storeOptions = {
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph,
-      metaGraph: this.args.graphs.metaGraph,
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath
-    };
-
-    this.loadValidations();
-    this.loadProvidedValue();
-  }
-
-  loadValidations() {
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
-  }
+export default class FormInputFieldsDateTimeEditComponent extends SimpleInputFieldComponent {
+  @tracked hour = null
+  @tracked minutes = null
 
   loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
     if (matches.values.length > 0) {
       this.nodeValue = matches.values[0];
-      let datobj = new Date(this.nodeValue.value);
+      const datobj = new Date(this.nodeValue.value);
       this.value = datobj;
       this.hour = datobj.getHours();
       this.minutes = datobj.getMinutes();

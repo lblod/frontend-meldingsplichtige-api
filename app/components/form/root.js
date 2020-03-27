@@ -5,8 +5,7 @@ import { fieldsForForm }  from '../../utils/import-triples-for-form';
 import { createPropertyTreeFromFields } from '../../utils/model-factory';
 
 export default class FormRootComponent extends Component {
-  @tracked
-  propertyGroups = [];
+  @tracked propertyGroups = []
 
   @action
   loadData(){
