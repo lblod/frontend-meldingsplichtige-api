@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath,
          validationResultsForField,
@@ -8,6 +9,8 @@ import { SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsConceptSchemeSelectorEditComponent extends Component {
+  inputId = 'select-' + guidFor(this);
+
   @tracked
   selected = null;
 
@@ -95,5 +98,9 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends C
     this.selected = this.options.find((e)=>{
       return matches.find(m => m.equals(e.subject));
     });
+  }
+
+  get isRequiredField() {
+    return true;
   }
 }

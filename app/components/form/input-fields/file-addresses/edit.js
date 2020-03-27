@@ -68,4 +68,8 @@ export default class FormInputFieldsFileAddressesEditComponent extends Component
   removeFileAddress(value) {
     removeSimpleFormValue(value.fileAddress.address, this.storeOptions);
   }
+
+  get isRequiredField() {
+    return true;
+  }
 }

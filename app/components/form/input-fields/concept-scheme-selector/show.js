@@ -79,4 +79,8 @@ export default class FormInputFieldsConceptSchemeSelectorShowComponent extends C
       return matches.find(m => m.equals(e.subject));
     });
   }
+
+  get isRequiredField() {
+    return true;
+  }
 }

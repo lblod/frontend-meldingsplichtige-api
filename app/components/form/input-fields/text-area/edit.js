@@ -1,9 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 
 export default class FormInputFieldsTextAreaEditComponent extends Component {
+  inputId = 'textarea-' + guidFor(this);
+
   @tracked
   value = null;
 
@@ -49,4 +52,7 @@ export default class FormInputFieldsTextAreaEditComponent extends Component {
     updateSimpleFormValue( this.storeOptions, this.value && this.value.trim(), this.nodeValue);
   }
 
+  get isRequiredField() {
+    return true;
+  }
 }

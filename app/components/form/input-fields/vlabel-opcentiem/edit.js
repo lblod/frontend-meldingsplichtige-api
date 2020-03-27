@@ -185,4 +185,8 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
     }
     this.fields.removeObject(field);
   }
+
+  get isRequiredField() {
+    return true;
+  }
 }

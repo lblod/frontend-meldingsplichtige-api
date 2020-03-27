@@ -158,4 +158,8 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       this.args.field.uri,
       this.storeOptions).filter(r => !r.valid);
   }
+
+  get isRequiredField() {
+    return true;
+  }
 }

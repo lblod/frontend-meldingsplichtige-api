@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
+import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
 import {tracked} from '@glimmer/tracking';
 import {
   triplesForPath,
@@ -10,6 +11,8 @@ import { XSD } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsDateTimeEditComponent extends Component {
+  inputId = 'date-' + guidFor(this);
+
   @tracked
   value = null;
 
@@ -65,5 +68,9 @@ export default class FormInputFieldsDateTimeEditComponent extends Component {
     }
     const newValue = rdflib.literal(this.value.toISOString(), XSD('dateTime'));
     updateSimpleFormValue(this.storeOptions, newValue, this.nodeValue);
+  }
+
+  get isRequiredField() {
+    return true;
   }
 }

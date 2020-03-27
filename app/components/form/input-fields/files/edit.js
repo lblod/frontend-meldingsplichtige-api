@@ -116,4 +116,8 @@ export default class FormInputFieldsFilesEditComponent extends Component {
       // should probably be silently logged in later implementations
     }
   }
+
+  get isRequiredField() {
+    return true;
+  }
 }

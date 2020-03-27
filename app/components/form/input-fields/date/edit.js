@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { guidFor } from '@ember/object/internals';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
@@ -7,6 +8,8 @@ import rdflib from 'ember-rdflib';
 import { XSD } from '../../../../utils/namespaces';
 
 export default class FormInputFieldsDateEditComponent extends Component {
+  inputId = 'date-' + guidFor(this);
+
   @tracked
   value = null;
 
@@ -54,5 +57,9 @@ export default class FormInputFieldsDateEditComponent extends Component {
     }
     const newDate = rdflib.literal(dateString, XSD('date'));
     updateSimpleFormValue(this.storeOptions, newDate, this.nodeValue);
+  }
+
+  get isRequiredField() {
+    return true;
   }
 }
