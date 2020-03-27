@@ -6,7 +6,15 @@ import { triplesForPath, validationResultsForField } from '../../../utils/import
 export default class SimpleValueInputFieldComponent extends InputFieldComponent {
   @tracked value = null
   @tracked nodeValue = null
-  @tracked errors = []
+  @tracked validations = []
+
+  get errors() {
+    return this.validations.filter(r => !r.valid);
+  }
+
+  get isRequired() {
+    return this.validations.any(v => v.validationType == 'http://lblod.data.gift/vocabularies/forms/RequiredConstraint');
+  }
 
   @action
   loadData(){
@@ -15,8 +23,7 @@ export default class SimpleValueInputFieldComponent extends InputFieldComponent 
   }
 
   loadValidations(){
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions)
-      .filter(r => !r.valid);
+    this.validations = validationResultsForField(this.args.field.uri, this.storeOptions);
   }
 
   loadProvidedValue(){
