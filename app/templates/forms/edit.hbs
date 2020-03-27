@@ -7,11 +7,10 @@
       <div>Aangemaakt op: {{moment-format this.model.submission.created 'DD-MM-YYYY'}}</div>
       <div>Bewerkt op: {{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</div>
       {{#if this.model.submitted}}
-        <div>Verstuurd op: {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</div>
         <div class="u-spacer--bottom--small">
           <div class="alert alert--tiny alert--success">
             <div class="alert__icon" aria-hidden="true"></div>
-            <p class="alert__title">Het onderstaande dossier is verstuurd</p>
+            <p class="alert__title">Het onderstaande dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
           </div>
         </div>
       {{/if}}
@@ -29,9 +28,18 @@
       </div>
       {{#unless this.model.submitted}}
         <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
-        <AuButton class="au-c-button--ghost" {{on "click" (perform this.submit)}}>Verzenden</AuButton>
-        <AuButton class="au-c-button--ghost au-c-button--error" {{on "click" (perform this.delete)}}>Verwijder</AuButton>
+        <AuButton @skin={{"ghost"}} {{on "click" (perform this.submit)}}>Verzenden</AuButton>
+        <AuButton @skin={{"ghost"}} {{on "click" (perform this.delete)}}>Verwijder</AuButton>
       {{/unless}}
+
+      {{#if this.model.submitted}}
+        <div class="u-spacer--bottom--small">
+          <div class="alert alert--tiny alert--success">
+            <div class="alert__icon" aria-hidden="true"></div>
+            <p class="alert__title">Het onderstaande dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
+          </div>
+        </div>
+      {{/if}}
     </div>
 
     {{!-- {{#if this.datasetTriples.length}} --}}
