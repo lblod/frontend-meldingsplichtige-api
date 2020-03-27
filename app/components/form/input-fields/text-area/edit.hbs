@@ -2,8 +2,6 @@
 <Textarea class="textarea textarea--block component ember-text-area ember-view"
           @value={{this.value}}
           {{on "blur" this.updateValue}}/>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+{{#each this.errors as |error|}}
+  <span class="form__error"> {{error.resultMessage}} </span>
+{{/each}}

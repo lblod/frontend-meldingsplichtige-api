@@ -27,8 +27,7 @@
   </div>
   {{/if}}
 </div>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
-  {{/each}}
-{{/if}}
+
+{{#each this.errors as |error|}}
+  <span class="form__error"> {{error.resultMessage}} </span>
+{{/each}}
