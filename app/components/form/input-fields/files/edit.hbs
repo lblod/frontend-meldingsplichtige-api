@@ -11,11 +11,9 @@
 {{#each this.files as |file|}}
   <VoMuFileCard @file={{file}} @onDelete={{this.removeFile}}/>
 {{/each}}
-<VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024"/>
+<VoMuFileDropzone @onFinishUpload={{this.addFile}} @maxFileSizeMB="1024" class="{{if this.errors "upload--error" ""}}" />
 {{#if this.errors}}
-  <WuAlert isError={{true}}>
-    {{#each this.errors as |error|}}
-      <li><AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText></li>
-    {{/each}}
-  </WuAlert>
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
 {{/if}}
