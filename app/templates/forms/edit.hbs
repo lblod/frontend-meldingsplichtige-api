@@ -3,10 +3,11 @@
     <div class="au-o-grid__item">
       <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
       <h1 class="au-u-h2 au-u-margin-bottom">Editeer Dossier</h1>
-      {{#if this.model.disclaimer}}
-        <h1 style="au-u-h3 color: red; font-size: 1.2em;">{{this.model.disclaimer}}</h1>
-      {{/if}}
+      <div>Gewijzigd door: {{this.model.submission.lastModifier.fullName}}</div>
+      <div>Aangemaakt op: {{moment-format this.model.submission.created 'DD-MM-YYYY'}}</div>
+      <div>Bewerkt op: {{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</div>
       {{#if this.model.submitted}}
+        <div>Verstuurd op: {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</div>
         <div class="u-spacer--bottom--small">
           <div class="alert alert--tiny alert--success">
             <div class="alert__icon" aria-hidden="true"></div>

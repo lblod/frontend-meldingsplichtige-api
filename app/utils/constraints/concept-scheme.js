@@ -7,9 +7,6 @@ export default function conceptSchemeValidation(values, options){
   const matchingType = store.match( constraintUri, FORM("grouping"), undefined)[0].object.value;
 
   if(matchingType == 'http://lblod.data.gift/vocabularies/forms/Bag'){
-
-    console.log('matching type is bag');
-
     const conceptSchemeUri = store.match( constraintUri, FORM("conceptScheme"), undefined)[0].object;
     const matchingValues = values.filter( value => {
       return store.match( value, SKOS("inScheme"), conceptSchemeUri, metaGraph).length;

@@ -85,9 +85,4 @@ function checkTriples(constraintUri, triplesData, options){
 
 }
 
-function missingConstraint(value, options) {
-  console.log(`No constraint method found for ${options.constraintUri}`);
-  return false;
-}
-
 export { check, checkTriples };

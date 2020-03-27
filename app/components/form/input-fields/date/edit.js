@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, validationResultsForField, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
-import { reads } from '@ember/object/computed';
 import rdflib from 'ember-rdflib';
 import { XSD } from '../../../../utils/namespaces';
 

@@ -23,7 +23,9 @@ export default class FormsNewRoute extends Route {
     const submission = this.store.createRecord('submission', {
       organization: bestuurseenheid,
       status: this.conceptStatus,
-      submissionDocument
+      submissionDocument,
+
+      lastModifier: await this.currentSession.user
     });
     await submission.save();
 
