@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import {
   triplesForPath,
   validationResultsForField,
@@ -10,24 +9,16 @@ import {
   removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
 
-import { RDF } from '../../../../utils/namespaces';
+import { RDF, NIE } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
+import {v4 as uuidv4} from 'uuid';
 
-const CREATOR_URI = "http://lblod.data.gift/fronted-end-componets/remote-url-creator";
+const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
+  @tracked remoteUrls = [];
 
-  @service
-  store;
-
-  @tracked
-  remoteUrls = [];
-
-  @tracked
-  errors = [];
-
-  @tracked
-  remoteErrors = [];
+  @tracked errors = [];
 
   @action
   async loadData() {
@@ -49,27 +40,16 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
-  async loadProvidedValue() {
+  loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
 
     for (let uri of matches.values) {
       try {
         if(!this.isRemoteDataObject(uri)) continue;
-        const remotes = await this.store.query('remote-url', {'filter[:uri:]': uri.value});
-        const remoteUrl = remotes.get('firstObject');
-        if (remoteUrl) {
-          this.remoteUrls.pushObject({
-            remoteUrl,
-            errors: this.validationResultsForAddress(remoteUrl.address),
-            uri
-          });
-        } else {
-          this.remoteErrors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
-        }
+        this.remoteUrls.pushObject(this.retrieveRemoteDataObject(uri));
       } catch (error) {
-        this.remoteErrors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
+        this.errors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
       }
-
     }
   }
 
@@ -80,71 +60,58 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
                                          this.storeOptions.sourceGraph).length > 0;
   }
 
-  insertRemoteDataObject(remoteObjUri){
-    const typeT = { subject: new rdflib.NamedNode(remoteObjUri),
-                    predicate: RDF('type'),
-                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
-                    graph: this.storeOptions.sourceGraph
-                  };
-    this.storeOptions.store.addAll([ typeT ]);
-    addSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions);
+  removeRemoteDataObject(remoteObjUri){
+    const remoteObjecTs = this.storeOptions.store.match(remoteObjUri, undefined, undefined, this.storeOptions.sourceGraph);
+    if(remoteObjecTs.length){
+      this.storeOptions.store.removeStatements(remoteObjecTs);
+    }
+    removeSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions); //remove hasPart
   }
 
-  removeRemoteDataObject(remoteObjUri){
-    const typeT = { subject: new rdflib.NamedNode(remoteObjUri),
-                    predicate: RDF('type'),
-                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
-                    graph: this.storeOptions.sourceGraph
-                  };
-    this.storeOptions.store.removeStatements([ typeT ]);
-    removeSimpleFormValue(new rdflib.NamedNode(remoteObjUri), this.storeOptions);
+  insertRemoteDataObject({ remoteObjUri, address } ){
+    const triples = [
+      { subject: remoteObjUri,
+        predicate: RDF('type'),
+        object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+        graph: this.storeOptions.sourceGraph
+      },
+      {
+        subject: remoteObjUri,
+        predicate: NIE('url'),
+        object: address,
+        graph: this.storeOptions.sourceGraph
+      }
+    ];
+    this.storeOptions.store.addAll( triples );
+    addSimpleFormValue(remoteObjUri, this.storeOptions); //adds hasPart;
+  }
+
+  retrieveRemoteDataObject(remoteObjUri) {
+    const addressesTs = this.storeOptions.store.match(remoteObjUri, NIE('url'), undefined, this.storeOptions.sourceGraph);
+    if(addressesTs.length > 1) throw `Too many addresses for ${remoteObjUri.value}.`;
+    if(addressesTs.length) {
+      const address = addressesTs[0].object.value;
+      return { remoteObjUri, address: address, validation: this.validationResultsForAddress(address) };
+    }
+    return { remoteObjUri, address: null };
   }
 
   @action
   addUrlField() {
-    this.remoteUrls.pushObject({remoteUrl: null, errors: [], uri: null});
+    this.remoteUrls.pushObject({remoteObjUri: new rdflib.namedNode(REMOTE_URI_TEMPLATE + `${uuidv4()}`), validation: [], address: ''});
   }
 
   @action
-  async updateRemoteUrl(current, newValue) {
-
-    if (current.remoteUrl && current.remoteUrl.address == newValue.trim()) return; //do nothing if no change
-
-    //for every url update we should make a new remote-url. This is how the model is
+  updateRemoteUrl(current, newValue) {
     const address = newValue.trim();
-    const newRemoteUrl = this.createNewRemoteUrl(address);
-
-    try {
-        await newRemoteUrl.save();
-      } catch (error) {
-        this.remoteErrors.pushObject({resultMessage: "Er ging iets fout bij het opslaan."});
-        return;
-    }
-
-    //If there was a previous, remove this from the store
-    if(current.uri){
-      await current.remoteUrl.destroyRecord();
-      this.removeRemoteDataObject(current.uri.value);
-    }
-
-    this.insertRemoteDataObject(newRemoteUrl.uri);
+    if (current.address == address) return; //do nothing if no change
+    this.removeRemoteDataObject( current.remoteObjUri );
+    this.insertRemoteDataObject({ remoteObjUri: current.remoteObjUri, address });
   }
 
   @action
   async removeRemoteUrl(current) {
-    if(current.remoteUrl) {
-      await current.remoteUrl.destroyRecord();
-       this.removeRemoteDataObject(current.uri.value);
-    } else {
-      this.remoteUrls = [];
-    }
-  }
-
-  createNewRemoteUrl(address) {
-    return this.store.createRecord('remote-url', {
-      creator: CREATOR_URI,
-      address
-    });
+    this.removeRemoteDataObject( current.remoteObjUri );
   }
 
   isValidAddress(value) {

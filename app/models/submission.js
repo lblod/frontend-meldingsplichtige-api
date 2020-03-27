@@ -16,6 +16,7 @@ export default Model.extend({
   receivedDate: attr('datetime'),
   lastModifier: belongsTo('gebruiker'),
   formData: belongsTo('form-data'),
+  source: attr(),
 
   uri: attr(),
   href: attr(),

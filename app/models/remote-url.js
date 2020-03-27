@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 const { Model, attr, belongsTo } = DS;
 
 export default Model.extend({
@@ -6,7 +7,11 @@ export default Model.extend({
   address: attr(),
   created: attr('date'),
   modified: attr('date'),
-  replicatedFile: belongsTo('file', { inverse: null }),
+  download: belongsTo('file', { inverse: null }),
   downloadStatus: attr(),
   creator: attr(),
+
+  downloadLink: computed('filename', function () {
+    return `/files/${this.id}/download`;
+  })
 });

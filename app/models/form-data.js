@@ -16,7 +16,7 @@ export default class FormDataModel extends Model {
   @attr taxRateAmmount;
   @attr sessionStartedAtTime;
 
-  @hasMany("concepts") type;
+  @hasMany("concept") types;
   @belongsTo("submission") submission;
   @belongsTo("bestuurseenheid") isAbout;
   @belongsTo("bestuursorgaan") passedBy;

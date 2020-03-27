@@ -1,6 +1,6 @@
 {{outlet}}
 <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right">
-  <MockLogout @tagName={{'button'}} class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow; Meld u af</MockLogout>
+  <MockLogout @tagName={{"button"}} class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow; Meld u af</MockLogout>
   <div class="au-o-grid">
     <div class="au-o-grid__item au-u-1-2@medium">
       <h1 class="au-u-h1 au-u-margin-bottom">Test Loket voor meldingen</h1>
@@ -10,43 +10,32 @@
     </div>
   </div>
 
-  {{#data-table
-    content=model
-    isLoading=isLoadingModel
-    filter=filter
-    sort=sort
-    page=page
-    size=size
-  as |t|
-  }}
-  {{#t.content as |c|}}
-    {{#c.header}}
-      {{th-sortable field='formData.passedBy.isTijdsspecialisatieVan.naam' currentSorting=sort label='Orgaan'}}
-      {{th-sortable field='formData.sessionStartedAtTime' currentSorting=sort label='Datum zitting/besluit'}}
-      {{th-sortable field='sentDate' currentSorting=sort label='Datum verstuurd'}}
-      {{th-sortable field='status.label' currentSorting=sort label='Status'}}
-      {{th-sortable field='' currentSorting=sort label=''}}
-    {{/c.header}}
-    {{#c.body as |row|}}
-      <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
-      {{#if row.formData.sessionStartedAtTime}}
-        <td>
-          {{moment-format row.formData.sessionStartedAtTime 'DD/MM/YYYY'}}
-        </td>
-      {{else}}
-        <td></td>
-      {{/if}}
-
-      {{#if row.sentDate}}
-        <td>{{moment-format row.sentDate 'DD/MM/YYYY'}}</td>
-      {{else}}
-        <td></td>
-      {{/if}}
-
-      <td>{{row.status.label}}</td>
-      <td>{{#link-to 'forms.edit' row.id}}details{{/link-to}}</td>
-
-    {{/c.body}}
-  {{/t.content}}
-  {{/data-table}}
+  <DataTable
+    @content={{this.model}}
+    @isLoading={{this.isLoadingModel}}
+    @filter={{this.filter}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    as |t|
+  >
+    <t.content as |c|>
+      <c.header>
+        <ThSortable @field="formData.passedBy.isTijdsspecialisatieVan.naam" @currentSorting={{this.sort}} @label="Orgaan" />
+        <th>Type dossier</th>
+        <ThSortable @field="formData.sessionStartedAtTime" @currentSorting={{this.sort}} @label="Datum zitting/besluit" />
+        <ThSortable @field="sentDate" @currentSorting={{this.sort}} @label="Datum verstuurd" />
+        <ThSortable @field="status.label" @currentSorting={{this.sort}} @label="Status" />
+        <th></th>
+      </c.header>
+      <c.body as |row|>
+        <td>{{row.formData.passedBy.isTijdsspecialisatieVan.naam}}</td>
+        <td><Toezicht::SubmissionType @formData={{row.formData}} /></td>
+        <td>{{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}</td>
+        <td>{{moment-format row.sentDate "DD/MM/YYYY"}}</td>
+        <td>{{row.status.label}}</td>
+        <td><LinkTo @route="forms.edit" @model={{row.id}}>Bekijk</LinkTo></td>
+      </c.body>
+    </t.content>
+  </DataTable>
 </div>
