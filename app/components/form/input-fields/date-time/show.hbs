@@ -1,4 +1,4 @@
 <AuLabel {{did-insert this.loadData}} class="au-c-label">{{@field.label}}</AuLabel>
 <Input class="input-field input-field--block u-spacer--bottom--small input-field--disabled"
        @disabled={{true}}
-       @value={{this.value}}/>
+       @value={{moment-format this.value "DD/MM/YYYY humm"}}/>

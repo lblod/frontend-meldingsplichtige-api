@@ -1,8 +1,4 @@
 <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
 <Input class="input-field input-field--block u-spacer--bottom--small input-field--disabled"
        @disabled={{true}}
-       @value={{this.value}}/>
-{{!-- <WuDatepicker @dateFormat="DD.MM.YYYY"
-              @disabled={{true}}
-              @onChange={{this.updateValue}}
-              @value={{this.value}}/> --}}
+       @value={{moment-format this.value "DD/MM/YYYY"}}/>
