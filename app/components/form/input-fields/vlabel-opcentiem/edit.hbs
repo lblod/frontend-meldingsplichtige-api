@@ -1,17 +1,27 @@
-<AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+<div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
+  <div class="au-o-grid__item au-u-1-2">
+    <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+  </div>
+  <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+    {{#if this.isRequiredField}}
+      <AuPill>Verplicht</AuPill>
+    {{/if}}
+  </div>
+</div>
 {{#if this.showDifferentiatie }}
-  <div class="form__row form__row--checkbox">
-    <div class="form__label">
-      <label class="form__label">Vink aan indien er sprake is van differentiatie</label>
+  <div class="au-o-grid">
+    <div class="au-o-grid__item au-u-1-1">
+      <AuLabel>
+        <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDifferentiatie}}/>Vink aan indien er sprake is van differentiatie
+      </AuLabel> {{!-- setting ID's (to link the label to the input field) does not work with checkboxes --}}
     </div>
-    <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDifferentiatie}}/>
   </div>
 {{else}}
-  Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
-  Klik 'verwijder' als u deze wel wenst in te geven.
+  <AuHelpText>Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
+  Klik 'verwijder' als u deze wel wenst in te geven.</AuHelpText>
 {{/if}}
 
-<table class="data-table data-table--zebra data-table--tight u-spacer--tb--small">
+<table class="data-table data-table--zebra data-table--tight u-spacer--tb--small {{if this.errors "data-table--error" ""}}">
   <thead>
   <tr>
     <th>Bedrag</th>
@@ -23,21 +33,24 @@
     {{#each this.fields as |field|}}
       <tr>
         <td>
+          {{!-- <AuInput
+                  class="{{if field.errors "au-c-input--error" ""}}"
+                  @width={{"block"}}
+                  @value={{field.value.taxRate}}
+                  @focus-out={{fn this.addPrice field}}/> --}}
+                  {{!-- This is the component we want, but it I am not sure it works --}}
           <Input class="input-field input-field--block input-field--small"
-                 placeholder="Bedrag"
                  value={{field.value.taxRate}}
                  @focus-out={{fn this.addPrice field}}/>
+
           <div>
-            <p class="small u-spacer--tb--tinier form__error">
-              {{#each field.errors as |error|}}
-                <span> {{error.resultMessage}} </span>
-              {{/each}}
-            </p>
+            {{#each field.errors as |error|}}
+              <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
+            {{/each}}
           </div>
         </td>
         <td>
-          <button type="button"
-                  class="toggle small link--icon u-spacer--bottom--small"
+          <button type="button" class="toggle small link--icon u-spacer--bottom--small"
             {{on "click" (fn this.removePrice field)}}>
             Verwijder
           </button>
@@ -46,18 +59,15 @@
     {{/each}}
     <tr>
       <td colspan="5" class="data-table__add-row u-align-center">
-        <button type="button"
-                class="button button--narrow
-                      {{unless this.fields "u-spacer--tb--small" "button--alt u-spacer--tb--tiny" }}"
-          {{on "click" this.addPricePlaceholder}}>
-          <i class="vi vi-plus" aria-hidden="true"></i>Voeg bedrag opcentiem toe
-        </button>
+        <AuButton class="au-u-margin-bottom-tiny au-u-margin-top-tiny" {{on "click" this.addPricePlaceholder}}>
+          <i class="vi vi-plus vi-u-xs au-u-margin-right-tiny" aria-hidden="true"></i>Voeg bedrag opcentiem toe
+        </AuButton>
       </td>
     </tr>
   {{else}}
     <tr>
       <td colspan="5" class="data-table__add-row u-align-center">
-        Indien er sprake is van differentiatie, hoeft het bedrag niet ingevuld te worden.
+        <AuHelpText>Indien er sprake is van differentiatie, hoeft het bedrag niet ingevuld te worden.</AuHelpText>
       </td>
     </tr>
   {{/if}}
@@ -65,7 +75,7 @@
 </table>
 {{#if this.errors}}
   {{#each this.errors as |error|}}
-    <span class="form__error"> {{error.resultMessage}} </span>
+    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
   {{/each}}
 {{/if}}
 {{yield}}

@@ -3,6 +3,7 @@ import {action, set} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 import { computed } from '@ember/object';
 import { empty } from '@ember/object/computed';
+import { guidFor } from '@ember/object/internals';
 import {
   triplesForPath,
   validationResultsForField
@@ -20,6 +21,7 @@ const schemaPrice = new rdflib.NamedNode(`http://schema.org/price`);
 const taxRate = new rdflib.NamedNode(`${lblodBesluit}/taxRate`);
 
 export default class FormInputFieldsVlabelOpcentiemEditComponent extends Component {
+  inputId = 'checkbox-' + guidFor(this);
 
   @tracked
   fields = [];
