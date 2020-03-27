@@ -1,6 +1,6 @@
 <div class="au-o-grid au-o-grid--flush au-u-margin-bottom-tiny">
   <div class="au-o-grid__item au-u-1-2">
-    <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
+    <AuLabel {{did-insert this.loadData}} for={{this.inputId}}>{{@field.label}}</AuLabel> {{!-- setting ID's (to link the label to the input field) and classes does not work with power select --}}
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
     {{#if this.isRequiredField}}
@@ -8,7 +8,7 @@
     {{/if}}
   </div>
 </div>
-<PowerSelect @searchField={{"label"}} @searchEnabled={{true}} @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|>
+<PowerSelect id="{{this.inputId}}" @searchField={{"label"}} @searchEnabled={{true}} @selected={{this.selected}} @options={{this.options}} @onChange={{this.updateSelection}} as |typeDossier|> {{!-- setting ID's (to link the label to the input field) and classes does not work with power select --}}
   {{typeDossier.label}}
 </PowerSelect>
 {{#if errors}}

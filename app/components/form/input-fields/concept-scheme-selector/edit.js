@@ -9,7 +9,7 @@ import { SKOS } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 
 export default class FormInputFieldsConceptSchemeSelectorEditComponent extends Component {
-  inputId = 'select-' + guidFor(this);
+  inputId = 'select-' + guidFor(this); // this input field is not linked to the label yet, this technique does not work with the power-select
 
   @tracked
   selected = null;
