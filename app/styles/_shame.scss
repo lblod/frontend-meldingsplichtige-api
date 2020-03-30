@@ -70,5 +70,25 @@ $au-non-editable-background    : $au-neutral-lightest !default;
   border-bottom: .2rem solid $au-red;
 }
 
+/* ==================================
+   #POWER SELECT
+   ================================== */
 
+/* Modifiers
+   ========================================================================== */
+
+.ember-power-select--error .ember-power-select-trigger {
+  border-bottom: .1rem solid $au-red ;
+}
+
+/* ==================================
+   #DATE PICKER
+   ================================== */
+
+/* Modifiers
+   ========================================================================== */
+
+.au-c-input--error .input-field--datepicker {
+  border-bottom: .1rem solid $au-red ;
+}
 
