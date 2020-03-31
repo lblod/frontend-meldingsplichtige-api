@@ -1,17 +1,19 @@
-import Component from "@glimmer/component";
-import {tracked} from '@glimmer/tracking';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { triplesForPath } from '../../../../utils/import-triples-for-form';
 
-import {triplesForPath} from "../../../../utils/import-triples-for-form";
-import {DCT} from "../../../../utils/namespaces";
+import { RDF } from '../../../../utils/namespaces';
+import rdflib from 'ember-rdflib';
 
-export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
-  @service store
+export default class FormInputFieldsFilesShowComponent extends Component {
+  @service()
+  store;
 
-  @tracked remoteUrls = []
+  @tracked remoteUrls = [];
 
-  @tracked errors = []
+  @tracked errors = [];
 
   @action
   async loadData() {
@@ -23,34 +25,38 @@ export default class FormInputFieldsRemoteUrlsShowComponent extends Component {
       store: this.args.formStore,
       path: this.args.field.rdflibPath
     };
-
     await this.loadProvidedValue();
   }
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    const uris = matches.triples.filter(t => t.predicate.value === DCT("hasPart").value).map(t => t.object);
 
-    for (let uri of uris) {
+    for (let uri of matches.values) {
       try {
-        this.remoteUrls.pushObject(
-          await this.retrieveRemoteDataObject(uri, matches.triples)
-        );
+        if(!this.isRemoteDataObject(uri)) continue;
+        this.remoteUrls.pushObject(await this.retrieveRemoteDataObject(uri));
       } catch (error) {
-        this.error.pushObject({resultMessage: "Er ging iets fout bij het ophalen van de addressen."});
+        this.errors.pushObject({resultMessage : "Er ging iets fout bij het ophalen van de addressen."});
       }
     }
   }
 
-  async retrieveRemoteDataObject(uri) {
+  isRemoteDataObject(subject){
+    return this.storeOptions.store.match(subject,
+                                         RDF('type'),
+                                         new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject'),
+                                         this.storeOptions.sourceGraph).length > 0;
+  }
+
+  async retrieveRemoteDataObject(remoteObjectUri) {
     let remotes = await this.store.query('remote-url', {
-      'filter[:uri:]': uri.value,
+      'filter[:uri:]': remoteObjectUri.value,
       page: { size: 1 }
     });
     if (remotes.length) {
       return remotes.get('firstObject');
     } else {
-      throw `No remote-url could be found for ${uri}`;
+      throw `No remote-url could be found for ${remoteObjectUri}`;
     }
   }
 
