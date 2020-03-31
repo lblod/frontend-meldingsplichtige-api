@@ -21,7 +21,7 @@
   Klik 'verwijder' als u deze wel wenst in te geven.</AuHelpText>
 {{/if}}
 
-<table class="data-table data-table--zebra data-table--tight u-spacer--tb--small {{if this.errors "data-table--error" ""}}">
+<table class="data-table data-table--zebra data-table--tight au-u-margin-top-small {{if this.errors "data-table--error" ""}}"> {{!-- This error does not seem to work? --}}
   <thead>
   <tr>
     <th>Bedrag</th>
@@ -50,7 +50,7 @@
           </div>
         </td>
         <td>
-          <button type="button" class="toggle small link--icon u-spacer--bottom--small"
+          <button type="button" class="toggle small link--icon au-u-margin-bottom-tiny"
             {{on "click" (fn this.removePrice field)}}>
             Verwijder
           </button>
@@ -78,4 +78,5 @@
     <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
   {{/each}}
 {{/if}}
+{{!-- suggestion for error: <AuHelpText @error={{"error"}}>Voeg opcentiemen in of geef differentiatie aan.</AuHelpText> --}}
 {{yield}}
