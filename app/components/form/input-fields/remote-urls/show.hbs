@@ -10,7 +10,7 @@
 </div>
 <table class="data-table">
   <tbody data-test-mn="url-box-list">
-  {{#each this.remoteUrls as |file|}}
+  {{#each this.remoteUrls as |remoteUrl|}}
     <tr>
       <td>
         {{!-- <AuInput
@@ -20,13 +20,13 @@
                 {{!-- This is the component we want, but it does not work --}}
         <Input
                 class="input-field input-field--block input-field--small"
-                @value={{file.address}}
+                @value={{remoteUrl.address}}
                 @disabled={{true}}
         />
         <div class="button-group u-spacer--top--tiny">
-          <a href={{file.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
-          {{#if file.downloadLink}}
-            <a href={{file.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
+          <a href={{remoteUrl.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
+          {{#if remoteUrl.downloadLink}}
+            <a href={{remoteUrl.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
           {{/if}}
         </div>
       </td>
