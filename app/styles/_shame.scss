@@ -35,7 +35,7 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 
 .au-c-form--non-editable {
   background-color:  $au-non-editable-background;
-  overflow-x: hidden;
+  max-width: 100%;
 
   table {
     max-width: 100%;
@@ -92,3 +92,14 @@ $au-non-editable-background    : $au-neutral-lightest !default;
   border-bottom: .1rem solid $au-red ;
 }
 
+/* ==================================
+   #CHECKBOX
+   ================================== */
+
+/* Modifiers
+   ========================================================================== */
+
+.checkbox {
+  margin-right: 0;
+  min-height: 1.5rem;
+}
