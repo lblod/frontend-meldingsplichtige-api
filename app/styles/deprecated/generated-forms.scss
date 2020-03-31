@@ -133,32 +133,12 @@
 /* temporary fix for narrower forms */
 
 .form__row--date {
-  width: 49%;
   display: inline-block;
   margin-bottom: 3rem;
 
   .is-required:after {
     position: relative;
     top: 0.15rem;
-  }
-}
-
-/* temporary fix to make sure checkbox is aligned correctly */
-
-.form__row--checkbox {
-  display: flex;
-  flex-direction: row-reverse;
-
-  .form__input {
-    flex: 0 0 auto;
-  }
-
-  .form__label {
-    flex: auto;
-  }
-
-  .checkbox {
-    margin-right: 0rem;
   }
 }
 
