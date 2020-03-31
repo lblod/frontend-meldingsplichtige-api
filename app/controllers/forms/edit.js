@@ -124,6 +124,7 @@ export default class FormsEditController extends Controller {
     this.model.submission.modified = new Date();
     this.model.submission.lastModifier = user;
     yield this.model.submission.save();
+    alert('Succesvol opgeslagen'); // TODO replace with toast
   }
 
   @task
