@@ -3,7 +3,7 @@
     <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
@@ -13,18 +13,12 @@
   {{#each this.remoteUrls as |remoteUrl|}}
     <tr>
       <td>
-        {{!-- <AuInput
-                @width={{"block"}}
-                @disabled={{true}}
-                @value={{file.remoteUrl.address}}/> --}}
-                {{!-- This is the component we want, but it does not work --}}
-        <Input
-                class="input-field input-field--block input-field--small"
-                @value={{remoteUrl.address}}
-                @disabled={{true}}
-        />
+        <AuInput
+          disabled={{true}}
+          @width={{"block"}}
+          @value={{remoteUrl.address}}/>
         <div class="button-group u-spacer--top--tiny">
-          <a href={{remoteUrl.address}} target="_blank" rel="noopener" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
+          <a href={{remoteUrl.address}} target="_blank" rel="noopener noreferrer" class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-external"></i>Bekijk link</a>
           {{#if remoteUrl.downloadLink}}
             <a href={{remoteUrl.downloadLink}} download class="u-spacer--bottom--tiny button button--small button--alt"><i class="vi vi-document-small"></i>Download opgeslagen pagina<sup>*</sup></a>
           {{/if}}
@@ -34,6 +28,7 @@
   {{/each}}
   </tbody>
 </table>
+
 {{#if this.remoteUrls.length}}
   <AuHelpText class="au-u-margin-bottom-tiny"><sup>*</sup>Op het moment van versturen, wordt er een versie gedownload van de pagina die op de link te vinden is.</AuHelpText>
 {{else}}
