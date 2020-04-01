@@ -4,6 +4,7 @@ import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
 import { RDF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
+import { A } from '@ember/array';
 
 import {
   triplesForPath,
@@ -17,14 +18,9 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   @service()
   store;
 
-  @tracked
-  files = [];
+  @tracked files = A()
 
-  @tracked
-  errors = [];
-
-  @tracked
-  storeOptions = {};
+  @tracked errors = []
 
   @action
   async loadData() {
@@ -69,8 +65,6 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     this.errors.pushObject({resultMessage: `failed to retrieve file with uri ${uri}` });
   }
 
-  cachedFileUris = [];
-
   isFileDataObject(subject){
     return this.storeOptions.store.match(subject,
                                          RDF('type'),
@@ -99,11 +93,10 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   }
 
   @action
-  addFile(file, filesQueueInfo) {
-    this.cachedFileUris.push(file.uri);
-    if(filesQueueInfo.isQueueEmpty){
-      this.cachedFileUris.forEach( this.insertFileDataObject.bind(this) ); //TODO: this is still brittle. It relies implicitly in run-loop
-    }
+  addFile(file) {
+    this.insertFileDataObject(file.uri);
+    this.files.pushObject(file);
+    this.loadValidations();
   }
 
   @action
@@ -115,5 +108,6 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     } catch (error) {
       // should probably be silently logged in later implementations
     }
+    this.files.removeObject(file);
   }
 }
