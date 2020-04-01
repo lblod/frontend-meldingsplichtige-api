@@ -10,7 +10,7 @@ import {
 } from '../../../../utils/import-triples-for-form';
 
 import { RDF, NIE } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 import {v4 as uuidv4} from 'uuid';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';

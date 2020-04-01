@@ -7,7 +7,7 @@ import {
   triplesForPath,
   validationResultsForField
 } from '../../../../utils/import-triples-for-form';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 import { v4 as uuidv4 } from 'uuid';
 import { RDF, XSD } from '../../../../utils/namespaces';
 

@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { SKOS } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
