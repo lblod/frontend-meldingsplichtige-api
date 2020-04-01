@@ -172,7 +172,8 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
       this.createTaxRate();
     }
     this.updatePrice(field.value.taxRate, newValue);
-    set(field, 'value.taxRate', newValue.trim());
+    set(field, 'value.taxRate', newValue.trim()); //TODO why?
+    this.loadValidations();
   }
 
   @action
