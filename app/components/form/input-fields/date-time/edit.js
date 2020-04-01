@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 import { triplesForPath, updateSimpleFormValue } from '../../../../utils/import-triples-for-form';
 import { XSD } from '../../../../utils/namespaces';
 import SimpleInputFieldComponent from '../simple-value-input-field';

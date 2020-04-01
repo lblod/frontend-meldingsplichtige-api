@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { triplesForPath } from '../../../../utils/import-triples-for-form';
 
 import { RDF } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 export default class FormInputFieldsFilesShowComponent extends Component {
   @service()

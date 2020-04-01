@@ -5,7 +5,7 @@ import { triplesForPath,
          validationResultsForField,
          updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { SKOS } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 export default class FormInputFieldsConceptSchemeSelectorShowComponent extends Component {
   @tracked

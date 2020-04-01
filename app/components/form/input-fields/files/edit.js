@@ -3,7 +3,7 @@ import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
 import { RDF } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 import {
   triplesForPath,

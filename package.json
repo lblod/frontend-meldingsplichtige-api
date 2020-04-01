@@ -60,7 +60,6 @@
     "ember-mu-transform-helpers": "^2.0.0",
     "ember-power-select": "^3.0.6",
     "ember-qunit": "^4.6.0",
-    "ember-rdflib": "0.0.4",
     "ember-resolver": "^7.0.0",
     "ember-simple-auth": "^2.1.1",
     "ember-source": "~3.15.0",
@@ -80,6 +79,8 @@
   "dependencies": {
     "ember-moment": "^8.0.0",
     "moment": "^2.24.0",
-    "uuid": "^7.0.2"
+    "uuid": "^7.0.2",
+    "forking-store": "1.0.0",
+    "browser-rdflib": "1.0.0"
   }
 }

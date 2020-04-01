@@ -1,4 +1,4 @@
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 const { namedNode } = rdflib;
 
