@@ -13,5 +13,6 @@ export default class FormInputFieldsDateEditComponent extends SimpleInputFieldCo
     }
     const newDate = rdflib.literal(dateString, XSD('date'));
     updateSimpleFormValue(this.storeOptions, newDate, this.nodeValue);
+    this.loadData();
   }
 }

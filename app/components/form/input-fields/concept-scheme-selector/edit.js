@@ -58,5 +58,6 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends I
 
     // Insert new value in the store
     updateSimpleFormValue(this.storeOptions, option.subject);
+    this.loadData();
   }
 }
