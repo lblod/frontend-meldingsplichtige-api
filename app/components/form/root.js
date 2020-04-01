@@ -4,9 +4,12 @@ import { tracked } from '@glimmer/tracking';
 import { fieldsForForm }  from '../../utils/import-triples-for-form';
 import { createPropertyTreeFromFields } from '../../utils/model-factory';
 import { A } from '@ember/array';
+import { guidFor } from '@ember/object/internals';
 
 export default class FormRootComponent extends Component {
   @tracked fields = A()
+
+  observerLabel = `form-root-${guidFor(this)}`
 
   @action
   loadData(){
@@ -24,11 +27,11 @@ export default class FormRootComponent extends Component {
                               this.args.sourceNode,
                               this.args.graphs.metaGraph
                             );
-    }, 'form-root');
+    }, this.observerLabel);
   }
 
   willDestroy(){
-    this.storeOptions.store.deregisterObserver('form-root');
+    this.storeOptions.store.deregisterObserver(this.observerLabel);
   }
 
   getPropertyGroups(store, formGraph, sourceGraph, sourceNode, metaGraph) {

@@ -4,6 +4,7 @@ import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
 import { RDF } from '../../../../utils/namespaces';
 import rdflib from 'browser-rdflib';
+import { guidFor } from '@ember/object/internals';
 
 import {
   triplesForPath,
@@ -21,6 +22,8 @@ export default class FormInputFieldsFilesEditComponent extends Component {
 
   @tracked errors = []
 
+  observerLabel = `files-${guidFor(this)}`
+
   @action
   async loadData() {
     this.storeOptions = {
@@ -33,14 +36,14 @@ export default class FormInputFieldsFilesEditComponent extends Component {
     };
 
     this.storeOptions
-      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), 'files'); //TODO: needs unique name in theory
+      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
 
     this.loadValidations();
     await this.loadProvidedValue();
   }
 
   willDestroy(){
-    this.storeOptions.store.deregisterObserver('files');
+    this.storeOptions.store.deregisterObserver(this.observerLabel);
   }
 
   loadValidationsOnStoreUpdate(){

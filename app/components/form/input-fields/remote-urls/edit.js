@@ -12,6 +12,7 @@ import {
 import { RDF, NIE } from '../../../../utils/namespaces';
 import rdflib from 'browser-rdflib';
 import {v4 as uuidv4} from 'uuid';
+import { guidFor } from '@ember/object/internals';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
@@ -19,6 +20,8 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
   @tracked remoteUrls = []
 
   @tracked errors = []
+
+  observerLabel = `remote-urls-${guidFor(this)}` //Code have used uuidv4, but more consistent accross components
 
   @action
   async loadData() {
@@ -32,14 +35,14 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     };
 
     this.storeOptions
-      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), 'remote-urls'); //TODO: needs unique name in theory
+      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
 
     this.loadValidations();
     this.loadProvidedValue();
   }
 
   willDestroy(){
-    this.storeOptions.store.deregisterObserver('remote-urls');
+    this.storeOptions.store.deregisterObserver(this.observerLabel);
   }
 
   loadValidationsOnStoreUpdate(){
