@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   triplesForPath,
@@ -12,13 +12,14 @@ import {
 import { RDF, NIE } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 import {v4 as uuidv4} from 'uuid';
+import { A } from '@ember/array';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
-  @tracked remoteUrls = [];
+  @tracked remoteUrls = A()
 
-  @tracked errors = [];
+  @tracked errors = []
 
   @action
   async loadData() {
@@ -31,9 +32,8 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       path: this.args.field.rdflibPath
     };
 
-
     this.loadValidations();
-    await this.loadProvidedValue();
+    this.loadProvidedValue();
   }
 
   loadValidations() {
@@ -107,11 +107,14 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
     if (current.address == address) return; //do nothing if no change
     this.removeRemoteDataObject( current.remoteObjUri );
     this.insertRemoteDataObject({ remoteObjUri: current.remoteObjUri, address });
+    set(current, "validation", this.validationResultsForAddress(address)); //Keeps track of validation message for specific address
+    this.loadValidations(); // keeps track of the validation state for the form filed in general
   }
 
   @action
   async removeRemoteUrl(current) {
     this.removeRemoteDataObject( current.remoteObjUri );
+    this.remoteUrls.removeObject(current);
   }
 
   isValidAddress(value) {
