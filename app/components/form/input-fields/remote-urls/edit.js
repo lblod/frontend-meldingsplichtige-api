@@ -1,5 +1,5 @@
 import InputFieldComponent from '../input-field';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   triplesForPath,
@@ -7,10 +7,10 @@ import {
   addSimpleFormValue,
   removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
-
+import rdflib from 'browser-rdflib';
 import { RDF, NIE } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import { guidFor } from '@ember/object/internals';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
@@ -31,8 +31,26 @@ class RemoteUrl {
     return !this.isValid;
   }
 }
+
 export default class FormInputFieldsRemoteUrlsEditComponent extends InputFieldComponent {
   @tracked remoteUrls = [];
+
+  observerLabel = `remote-urls-${guidFor(this)}` // Could have used uuidv4, but more consistent accross components
+
+  constructor() {
+    super(...arguments);
+    this.args.formStore.registerObserver(this.onStoreUpdate.bind(this), this.observerLabel);
+  }
+
+  willDestroy(){
+    this.storeOptions.store.deregisterObserver(this.observerLabel);
+  }
+
+  // The validation of this fields depends on the value of other fields,
+  // hence we recalculate the validation on notification of a change in the store
+  onStoreUpdate(){
+    super.loadValidations();
+  }
 
   @action
   async loadData() {
@@ -115,11 +133,15 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends InputFieldCo
     const address = remoteUrl.address.trim();
     this.removeRemoteDataObject( remoteUrl.uri );
     this.insertRemoteDataObject({ uri: remoteUrl.uri, address });
+    const errors = this.validationErrorsForAddress(address).map(e => e.resultMessage);
+    set(remoteUrl, 'errors', errors); // update validations specific for the address
+    super.loadValidations(); // update validations of the form field in general
   }
 
   @action
   removeRemoteUrl(current) {
     this.removeRemoteDataObject( current.uri );
+    this.remoteUrls.removeObject(current);
   }
 
   validationErrorsForAddress(address) {

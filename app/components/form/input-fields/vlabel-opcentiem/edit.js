@@ -8,7 +8,7 @@ import {
   triplesForPath,
   validationResultsForField
 } from '../../../../utils/import-triples-for-form';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 import { v4 as uuidv4 } from 'uuid';
 import { RDF, XSD } from '../../../../utils/namespaces';
 
@@ -174,7 +174,8 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends Compone
       this.createTaxRate();
     }
     this.updatePrice(field.value.taxRate, newValue);
-    set(field, 'value.taxRate', newValue.trim());
+    set(field, 'value.taxRate', newValue.trim()); //TODO why?
+    this.loadValidations();
   }
 
   @action

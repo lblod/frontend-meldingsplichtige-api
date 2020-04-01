@@ -33,6 +33,10 @@ export default class InputFieldComponent extends Component {
   }
 
   loadData() {
+    this.loadValidations();
+  }
+
+  loadValidations() {
     this.validations = validationResultsForField(this.args.field.uri, this.storeOptions);
   }
 }
