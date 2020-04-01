@@ -11,15 +11,8 @@ export default class FormRootComponent extends Component {
 
   observerLabel = `form-root-${guidFor(this)}`
 
-  @action
-  loadData(){
-    this.getPropertyGroups( this.args.formStore,
-                            this.args.graphs.formGraph,
-                            this.args.graphs.sourceGraph,
-                            this.args.sourceNode,
-                            this.args.graphs.metaGraph
-                          );
-
+  constructor() {
+    super(...arguments);
     this.args.formStore.registerObserver(() => {
       this.getPropertyGroups( this.args.formStore,
                               this.args.graphs.formGraph,
@@ -28,6 +21,16 @@ export default class FormRootComponent extends Component {
                               this.args.graphs.metaGraph
                             );
     }, this.observerLabel);
+  }
+
+  @action
+  loadData(){
+    this.getPropertyGroups( this.args.formStore,
+                            this.args.graphs.formGraph,
+                            this.args.graphs.sourceGraph,
+                            this.args.sourceNode,
+                            this.args.graphs.metaGraph
+                          );
   }
 
   willDestroy(){

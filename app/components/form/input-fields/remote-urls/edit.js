@@ -23,6 +23,11 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
 
   observerLabel = `remote-urls-${guidFor(this)}` //Code have used uuidv4, but more consistent accross components
 
+  constructor() {
+    super(...arguments);
+    this.args.formStore.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
+  }
+
   @action
   async loadData() {
     this.storeOptions = {
@@ -33,9 +38,6 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       store: this.args.formStore,
       path: this.args.field.rdflibPath
     };
-
-    this.storeOptions
-      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
 
     this.loadValidations();
     this.loadProvidedValue();

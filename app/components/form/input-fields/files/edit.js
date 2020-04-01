@@ -24,6 +24,11 @@ export default class FormInputFieldsFilesEditComponent extends Component {
 
   observerLabel = `files-${guidFor(this)}`
 
+  constructor() {
+    super(...arguments);
+    this.args.formStore.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
+  }
+
   @action
   async loadData() {
     this.storeOptions = {
@@ -34,9 +39,6 @@ export default class FormInputFieldsFilesEditComponent extends Component {
       store: this.args.formStore,
       path: this.args.field.rdflibPath
     };
-
-    this.storeOptions
-      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), this.observerLabel);
 
     this.loadValidations();
     await this.loadProvidedValue();
