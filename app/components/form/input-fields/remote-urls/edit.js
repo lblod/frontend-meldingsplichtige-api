@@ -31,8 +31,20 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
       path: this.args.field.rdflibPath
     };
 
+    this.storeOptions
+      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), 'remote-urls'); //TODO: needs unique name in theory
+
     this.loadValidations();
     this.loadProvidedValue();
+  }
+
+  willDestroy(){
+    this.storeOptions.store.deregisterObserver('remote-urls');
+  }
+
+  loadValidationsOnStoreUpdate(){
+    //Required because this field being valid, depends on the state of other fields
+    this.loadValidations();
   }
 
   loadValidations() {

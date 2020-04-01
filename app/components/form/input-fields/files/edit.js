@@ -32,8 +32,20 @@ export default class FormInputFieldsFilesEditComponent extends Component {
       path: this.args.field.rdflibPath
     };
 
+    this.storeOptions
+      .store.registerObserver(this.loadValidationsOnStoreUpdate.bind(this), 'files'); //TODO: needs unique name in theory
+
     this.loadValidations();
     await this.loadProvidedValue();
+  }
+
+  willDestroy(){
+    this.storeOptions.store.deregisterObserver('files');
+  }
+
+  loadValidationsOnStoreUpdate(){
+    //Required because this field being valid, depends on the state of other fields
+    this.loadValidations();
   }
 
   loadValidations() {
