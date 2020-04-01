@@ -24,7 +24,11 @@ export default class FormRootComponent extends Component {
                               this.args.sourceNode,
                               this.args.graphs.metaGraph
                             );
-    });
+    }, 'form-root');
+  }
+
+  willDestroy(){
+    this.storeOptions.store.deregisterObserver('form-root');
   }
 
   getPropertyGroups(store, formGraph, sourceGraph, sourceNode, metaGraph) {
