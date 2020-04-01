@@ -12,12 +12,11 @@ import {
 import { RDF, NIE } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
 import {v4 as uuidv4} from 'uuid';
-import { A } from '@ember/array';
 
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 export default class FormInputFieldsRemoteUrlsEditComponent extends Component {
-  @tracked remoteUrls = A()
+  @tracked remoteUrls = []
 
   @tracked errors = []
 

@@ -4,7 +4,6 @@ import {tracked} from '@glimmer/tracking';
 import {inject as service} from '@ember/service';
 import { RDF } from '../../../../utils/namespaces';
 import rdflib from 'ember-rdflib';
-import { A } from '@ember/array';
 
 import {
   triplesForPath,
@@ -18,7 +17,7 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   @service()
   store;
 
-  @tracked files = A()
+  @tracked files = []
 
   @tracked errors = []
 
