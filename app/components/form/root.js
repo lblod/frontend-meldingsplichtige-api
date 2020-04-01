@@ -31,7 +31,7 @@ export default class FormRootComponent extends Component {
   }
 
   willDestroy(){
-    this.storeOptions.store.deregisterObserver(this.observerLabel);
+    this.args.formStore.deregisterObserver(this.observerLabel);
   }
 
   getPropertyGroups(store, formGraph, sourceGraph, sourceNode, metaGraph) {
