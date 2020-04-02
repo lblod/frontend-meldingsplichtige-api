@@ -1,26 +1,33 @@
-<div {{did-insert this.loadData}}>
+<div class="au-o-grid au-o-grid--small">
+  <div class="au-o-grid__item au-u-1-2@medium au-u-1-2@large">
 
-  {{#each this.propertyGroups as |propertyGroup|}}
-    <ul class="au-o-grid au-o-grid--small">
-      {{#each propertyGroup.sortedFields as |field|}}
-        <li class="au-o-grid__item au-u-1-1">
-          {{#if @show}}
-            {{component (component-for-display-type-show field.displayType)
-                        field=field
-                        formStore=@formStore
-                        graphs=@graphs
-                        sourceNode=@sourceNode}}
-          {{else}}
-            {{component (component-for-display-type-edit field.displayType)
-                        field=field
-                        formStore=@formStore
-                        graphs=@graphs
-                        sourceNode=@sourceNode}}
-          {{/if}}
-        </li>
+    <AuAlert @alertsize="small" class="au-u-margin-bottom-large" @alertTitle="Gelieve per besluit of besluitenlijst één dossier aan te maken." @alertskin={{"info"}}>
+    </AuAlert>
+
+    <div {{did-insert this.loadData}}>
+      {{#each this.propertyGroups as |propertyGroup|}}
+        <ul class="au-o-grid au-o-grid--small">
+          {{#each propertyGroup.sortedFields as |field|}}
+            <li class="au-o-grid__item au-u-1-1">
+              {{#if @show}}
+                {{component (component-for-display-type-show field.displayType)
+                            field=field
+                            formStore=@formStore
+                            graphs=@graphs
+                            sourceNode=@sourceNode}}
+              {{else}}
+                {{component (component-for-display-type-edit field.displayType)
+                            field=field
+                            formStore=@formStore
+                            graphs=@graphs
+                            sourceNode=@sourceNode}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
       {{/each}}
-    </ul>
-  {{/each}}
+    </div>
+  </div>
 </div>
 
 {{yield}}
