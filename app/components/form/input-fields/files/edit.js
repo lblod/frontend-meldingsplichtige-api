@@ -8,7 +8,6 @@ import { guidFor } from '@ember/object/internals';
 import { warn } from '@ember/debug';
 import {
   triplesForPath,
-  validationResultsForField,
   addSimpleFormValue,
   removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
