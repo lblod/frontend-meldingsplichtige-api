@@ -3,25 +3,28 @@
     <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
 </div>
-{{#if this.showDifferentiatie }}
+{{#if this.showDifferentiatie}}
   <div class="au-o-grid">
     <div class="au-o-grid__item au-u-1-1">
       <AuLabel>
-        <WuCheckbox @checked={{this.differentiatie}} {{on "click" this.toggleDifferentiatie}}/>Vink aan indien er sprake is van differentiatie
+        <WuCheckbox @checked={{this.differentiatie}} @onClick={{this.toggleDifferentiatie}}/>
+        Vink aan indien er sprake is van differentiatie
       </AuLabel> {{!-- setting ID's (to link the label to the input field) does not work with checkboxes --}}
     </div>
   </div>
 {{else}}
-  <AuHelpText>Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
-  Klik 'verwijder' als u deze wel wenst in te geven.</AuHelpText>
+  <AuHelpText>
+    Er kan geen sprake zijn van differentiatie wanneer er bedragen worden ingevuld. <br/>
+    Klik 'verwijder' als u deze wel wenst in te geven.
+  </AuHelpText>
 {{/if}}
 
-<table class="data-table data-table--zebra data-table--tight au-u-margin-top-small {{if this.errors "data-table--error" ""}}"> {{!-- This error does not seem to work? --}}
+<table class="data-table data-table--zebra data-table--tight au-u-margin-top-small {{if this.errors "data-table--error"}}"> {{!-- This error does not seem to work? --}}
   <thead>
   <tr>
     <th>Bedrag</th>
@@ -33,16 +36,12 @@
     {{#each this.fields as |field|}}
       <tr>
         <td>
-          {{!-- <AuInput
-                  class="{{if field.errors "au-c-input--error" ""}}"
-                  @width={{"block"}}
-                  @value={{field.value.taxRate}}
-                  @focus-out={{fn this.addPrice field}}/> --}}
-                  {{!-- This is the component we want, but it I am not sure it works --}}
-          <Input class="input-field input-field--block input-field--small"
-                 value={{field.value.taxRate}}
-                 @focus-out={{fn this.addPrice field}}/>
-
+          <AuInput
+            class="{{if field.errors "au-c-input--error"}}"
+            @width={{"block"}}
+            @value={{field.value}}
+            {{on "blur" (fn this.updatePrice field)}}
+          />
           <div>
             {{#each field.errors as |error|}}
               <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
@@ -59,7 +58,7 @@
     {{/each}}
     <tr>
       <td colspan="5" class="data-table__add-row u-align-center">
-        <AuButton class="au-u-margin-bottom-tiny au-u-margin-top-tiny" {{on "click" this.addPricePlaceholder}}>
+        <AuButton class="au-u-margin-bottom-tiny au-u-margin-top-tiny" {{on "click" this.addPrice}}>
           <i class="vi vi-plus vi-u-xs au-u-margin-right-tiny" aria-hidden="true"></i>Voeg bedrag opcentiem toe
         </AuButton>
       </td>
@@ -73,10 +72,10 @@
   {{/if}}
   </tbody>
 </table>
-{{#if this.errors}}
-  {{#each this.errors as |error|}}
-    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
-  {{/each}}
-{{/if}}
+
+{{#each this.errors as |error|}}
+  <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
+{{/each}}
+
 {{!-- suggestion for error: <AuHelpText @error={{"error"}}>Voeg opcentiemen in of geef differentiatie aan.</AuHelpText> --}}
 {{yield}}
