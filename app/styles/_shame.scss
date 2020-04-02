@@ -51,6 +51,10 @@ $au-non-editable-background    : $au-neutral-lightest !default;
    #POWER SELECT
    ================================== */
 
+.ember-power-select-trigger {
+  min-height: 3.6rem;
+}
+
 /* Modifiers
    ========================================================================== */
 
