@@ -99,7 +99,7 @@
             <AuButton class="{{if this.save.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.submit.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.delete.isRunning "au-c-button--loading au-c-button--disabled" ""}}" @skin={{"ghost"}} {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
           </div>
           <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-            <AuButtonLink class="{{if this.save.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.submit.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.delete.isRunning "au-c-button--loading au-c-button--disabled" ""}}" @skin="neutral" {{on "click" (perform this.delete)}}> {{!-- @TODO replace with icons later --}}
+            <AuButtonLink class="{{if this.save.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}} {{if this.submit.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}} {{if this.delete.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}}" @skin="neutral" {{on "click" (perform this.delete)}}> {{!-- @TODO replace with icons later --}}
               <svg class="au-c-icon au-c-icon--left au-c-icon--large" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg> Verwijder dossier
             </AuButtonLink>
           </div>
