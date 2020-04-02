@@ -3,12 +3,12 @@
     <AuLabel {{did-insert this.loadData}}>{{@field.label}}</AuLabel>
   </div>
   <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-    {{#if this.isRequiredField}}
+    {{#if this.isRequired}}
       <AuPill>Verplicht</AuPill>
     {{/if}}
   </div>
 </div>
-{{#if this.showDifferentiatie }}
+{{#if this.showDifferentiatie}}
   <div class="au-o-grid">
     <div class="au-o-grid__item au-u-1-1">
       <AuLabel form="orgaan">
@@ -32,18 +32,13 @@
     {{#each this.fields as |field|}}
       <tr>
         <td>
-          {{!-- <AuInput
-                  @width={{"block"}}
-                  @value={{field.value.taxRate}}
-                  @disabled={{true}}/> --}}
-                  {{!-- This is the component we want, but it I am not sure it works --}}
-          <Input class="input-field input-field--block input-field--small input-field--disabled"
-                 placeholder="Bedrag"
-                 @value={{field.value.taxRate}}
-                 @disabled={{true}}/>
+          <AuInput
+            @width={{"block"}}
+            @value={{field.value}}
+            disabled={{true}}
+          />
         </td>
         <td>
-
         </td>
       </tr>
     {{/each}}

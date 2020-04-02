@@ -10,5 +10,6 @@ export default class FormInputFieldsTextAreaEditComponent extends SimpleInputFie
   updateValue(e) {
     e.preventDefault();
     updateSimpleFormValue(this.storeOptions, this.value && this.value.trim(), this.nodeValue);
+    this.loadData();
   }
 }

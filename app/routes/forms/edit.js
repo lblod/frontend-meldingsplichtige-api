@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 import { warn } from '@ember/debug';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 import fetch from 'fetch';
-import forkingStore from '../../utils/forking-store';
+import forkingStore from 'forking-store';
 import { SENT_STATUS } from '../../models/submission-document-status';
 import { RDF, FORM } from '../../utils/namespaces';
 

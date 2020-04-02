@@ -1,87 +1,103 @@
-import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
-import {inject as service} from '@ember/service';
+import InputFieldComponent from '../input-field';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 import { RDF } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
-
+import rdflib from 'browser-rdflib';
+import { guidFor } from '@ember/object/internals';
+import { warn } from '@ember/debug';
 import {
   triplesForPath,
-  validationResultsForField,
   addSimpleFormValue,
   removeSimpleFormValue
 } from '../../../../utils/import-triples-for-form';
 
-export default class FormInputFieldsFilesEditComponent extends Component {
+class FileField {
+  @tracked errors = [];
 
-  @service()
-  store;
+  constructor({ record, errors }) {
+    this.record = record;
+    this.errors = errors;
+  }
 
-  @tracked
-  files = [];
+  get isValid() {
+    return this.errors.length == 0;
+  }
 
-  @tracked
-  errors = [];
+  get isInvalid() {
+    return !this.isValid;
+  }
+}
 
-  @tracked
-  storeOptions = {};
+export default class FormInputFieldsFilesEditComponent extends InputFieldComponent {
+  @service store
+
+  @tracked files = []
+
+  observerLabel = `files-${guidFor(this)}`
+
+  constructor() {
+    super(...arguments);
+    this.args.formStore.registerObserver(this.onStoreUpdate.bind(this), this.observerLabel);
+  }
+
+  willDestroy(){
+    this.storeOptions.store.deregisterObserver(this.observerLabel);
+  }
+
+  // The validation of this fields depends on the value of other fields,
+  // hence we recalculate the validation on notification of a change in the store
+  onStoreUpdate() {
+    this.loadValidations();
+  }
 
   @action
   async loadData() {
-    this.storeOptions = {
-      formGraph: this.args.graphs.formGraph,
-      sourceNode: this.args.sourceNode,
-      sourceGraph: this.args.graphs.sourceGraph,
-      metaGraph: this.args.graphs.metaGraph,
-      store: this.args.formStore,
-      path: this.args.field.rdflibPath
-    };
-
-    this.loadValidations();
+    super.loadData();
     await this.loadProvidedValue();
-  }
-
-  loadValidations() {
-    this.errors = validationResultsForField(this.args.field.uri, this.storeOptions).filter(r => !r.valid);
   }
 
   async loadProvidedValue() {
     const matches = triplesForPath(this.storeOptions);
-    if (matches.values.length > 0) {
-      for (let uri of matches.values) {
-        try {
-          if(!this.isFileDataObject(uri)) continue;
-          const files = await this.store.query('file', {'filter[:uri:]' : uri.value});
-          const uploadedFile = files.get('firstObject');
-          if(uploadedFile) {
-            this.files.pushObject(uploadedFile);
-          } else {
-            this.handleRetrievalError(uri.value);
-          }
-        } catch (error) {
-          this.handleRetrievalError(uri.value);
-        }
+
+    for (let uri of matches.values) {
+      if (this.isFileDataObject(uri)) {
+        const file = await this.retrieveFileField(uri);
+        this.files.pushObject(file);
       }
     }
   }
 
-  handleRetrievalError(uri) {
-    this.errors.pushObject({resultMessage: `failed to retrieve file with uri ${uri}` });
-  }
-
-  cachedFileUris = [];
-
-  isFileDataObject(subject){
+  isFileDataObject(subject) {
+    const fileDataObjectType = new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject');
     return this.storeOptions.store.match(subject,
                                          RDF('type'),
-                                         new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                                         fileDataObjectType,
                                          this.storeOptions.sourceGraph).length > 0;
   }
 
+  async retrieveFileField(uri) {
+    try {
+      const files = await this.store.query('file', {
+        'filter[:uri:]' : uri.value,
+        page: { size: 1 }
+      });
+      const file = files.get('firstObject');
+      if (file)
+        return new FileField( { record: file, errors: [] });
+      else
+        return new FileField( { record: null, errors: ['Geen bestand gevonden'] });
+    } catch (error) {
+      warn(`Failed to retrieve file with URI ${uri}: ${JSON.stringify(error)}`);
+      return new FileField( { record: null, errors: ['Ophalen van het bestand is mislukt'] });
+    }
+  }
+
   insertFileDataObject(fileUri){
+    const fileDataObjectType = new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject');
     const typeT = { subject: new rdflib.NamedNode(fileUri),
                     predicate: RDF('type'),
-                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                    object: fileDataObjectType,
                     graph: this.storeOptions.sourceGraph
                   };
     this.storeOptions.store.addAll([ typeT ]);
@@ -89,9 +105,10 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   }
 
   removeFileDataObject(fileUri){
+    const fileDataObjectType = new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject');
     const typeT = { subject: new rdflib.NamedNode(fileUri),
                     predicate: RDF('type'),
-                    object: new rdflib.NamedNode('http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject'),
+                    object: fileDataObjectType,
                     graph: this.storeOptions.sourceGraph
                   };
     this.storeOptions.store.removeStatements([ typeT ]);
@@ -99,25 +116,22 @@ export default class FormInputFieldsFilesEditComponent extends Component {
   }
 
   @action
-  addFile(file, filesQueueInfo) {
-    this.cachedFileUris.push(file.uri);
-    if(filesQueueInfo.isQueueEmpty){
-      this.cachedFileUris.forEach( this.insertFileDataObject.bind(this) ); //TODO: this is still brittle. It relies implicitly in run-loop
-    }
+  addFile(file) {
+    this.insertFileDataObject(file.uri);
+    this.files.pushObject(new FileField({ record: file, errors: [] }));
+    super.loadValidations(); // update validations of the form field in general
   }
 
   @action
   async removeFile(file) {
+    const fileField = this.files.find(f => f.record && f.record.uri == file.uri);
     this.removeFileDataObject(file.uri);
-    // we need to remove the uploaded file ourselves, as this is not done by the `VoMuFileCard` component.
     try {
-      await (this.store.peekRecord('file', file.id)).destroyRecord();
+      // Remove the uploaded file, as this is not done by the `VoMuFileCard` component.
+      await file.destroyRecord();
     } catch (error) {
       // should probably be silently logged in later implementations
     }
-  }
-
-  get isRequiredField() {
-    return true;
+    this.files.removeObject(fileField);
   }
 }

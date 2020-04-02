@@ -4,7 +4,7 @@ import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { triplesForPath, updateSimpleFormValue} from '../../../../utils/import-triples-for-form';
 import { SKOS } from '../../../../utils/namespaces';
-import rdflib from 'ember-rdflib';
+import rdflib from 'browser-rdflib';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -61,5 +61,6 @@ export default class FormInputFieldsConceptSchemeSelectorEditComponent extends I
 
     // Insert new value in the store
     updateSimpleFormValue(this.storeOptions, option.subject);
+    this.loadData();
   }
 }

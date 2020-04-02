@@ -65,6 +65,8 @@
   </tbody>
 </table>
 
-{{#each this.errors as |error|}}
-  <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
-{{/each}}
+{{#unless this.hasInvalidRemoteUrl}}
+  {{#each this.errors as |error|}}
+    <AuHelpText @error={{"error"}}>{{error.resultMessage}}</AuHelpText>
+  {{/each}}
+{{/unless}}

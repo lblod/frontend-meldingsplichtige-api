@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { validateForm }  from '../../utils/import-triples-for-form';
 import importTriplesForForm from '../../utils/import-triples-for-form';
-import { delGraphFor, addGraphFor } from '../../utils/forking-store';
+import { delGraphFor, addGraphFor } from 'forking-store';
 import fetch from 'fetch';
 import { DELETED_STATUS } from '../../models/submission-document-status';
 import { task } from 'ember-concurrency-decorators';
