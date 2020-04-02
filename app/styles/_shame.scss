@@ -88,8 +88,21 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 /* Modifiers
    ========================================================================== */
 
-.au-c-input--error .input-field--datepicker {
-  border-bottom: .1rem solid $au-red ;
+.au-c-date-picker-container .datepicker {
+  width: auto;
+
+  .input-field {
+    width: 100%;
+  }
+
+  .datepicker__icon {
+    right: 1.5rem;
+  }
+}
+
+
+.au-c-date-picker-container--error .input-field--datepicker {
+  border: .3rem solid $au-red ;
 }
 
 /* ==================================
