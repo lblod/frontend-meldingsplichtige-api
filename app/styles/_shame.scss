@@ -97,3 +97,35 @@ $au-non-editable-background    : $au-neutral-lightest !default;
   margin-right: 0;
   min-height: 1.5rem;
 }
+
+/* ==================================
+   #TEMPORARY GENERAL DISABLED STATE FOR FORM
+   ================================== */
+
+.au-c-form--disabled {
+  .ember-basic-dropdown-trigger,
+  .au-c-textarea,
+  .au-c-input,
+  .au-c-textarea--error,
+  .au-c-input--error,
+  .ember-power-select--error .ember-power-select-trigger,
+  .au-c-date-picker-container--error .input-field--datepicker {
+    background-color: $au-input-disabled-background-color;
+    border-color: $au-input-disabled-border-color;
+    color: $au-input-disabled-color;
+    cursor: not-allowed;
+  }
+
+  .au-c-help-text--error,
+  .upload__element__label {
+    color: $au-input-disabled-color;
+  }
+
+  .au-c-label--error:before {
+    background-color: $au-input-disabled-color;
+  }
+
+  .au-c-button{
+    background: $au-input-disabled-color;
+  }
+}
