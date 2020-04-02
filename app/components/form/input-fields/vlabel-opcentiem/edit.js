@@ -188,7 +188,7 @@ export default class FormInputFieldsVlabelOpcentiemEditComponent extends InputFi
   }
 
   @action
-  toggleDifferentiatie(event) {
+  toggleDifferentiatie() {
     this.differentiatie = !this.differentiatie;
 
     if (this.differentiatie && this.hasTaxRate)
