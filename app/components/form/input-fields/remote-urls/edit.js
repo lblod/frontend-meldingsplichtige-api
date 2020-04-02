@@ -1,5 +1,5 @@
 import InputFieldComponent from '../input-field';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
   triplesForPath,
@@ -15,7 +15,7 @@ import { guidFor } from '@ember/object/internals';
 const REMOTE_URI_TEMPLATE = 'http://data.lblod.info/remote-url/';
 
 class RemoteUrl {
-  errors = [];
+  @tracked errors = [];
 
   constructor({ uri, address, errors }) {
     this.uri = uri;
@@ -52,8 +52,12 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends InputFieldCo
     super.loadValidations();
   }
 
+  get hasInvalidRemoteUrl() {
+    return this.remoteUrls.any(url => url.isInvalid);
+  }
+
   @action
-  async loadData() {
+  loadData() {
     super.loadData();
     this.loadProvidedValue();
   }
@@ -134,7 +138,7 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends InputFieldCo
     this.removeRemoteDataObject( remoteUrl.uri );
     this.insertRemoteDataObject({ uri: remoteUrl.uri, address });
     const errors = this.validationErrorsForAddress(address).map(e => e.resultMessage);
-    set(remoteUrl, 'errors', errors); // update validations specific for the address
+    remoteUrl.errors = errors; // update validations specific for the address
     super.loadValidations(); // update validations of the form field in general
   }
 
