@@ -144,7 +144,7 @@ export default class FormInputFieldsRemoteUrlsEditComponent extends InputFieldCo
 
   @action
   removeRemoteUrl(current) {
-    this.removeRemoteDataObject( current.uri );
+    this.removeRemoteDataObject(current.uri);
     this.remoteUrls.removeObject(current);
   }
 
