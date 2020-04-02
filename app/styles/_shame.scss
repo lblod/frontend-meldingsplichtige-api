@@ -48,29 +48,6 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 }
 
 /* ==================================
-   #DATA-TABLE
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.data-table--error {
-  border: .1rem solid $au-neutral-lighter;
-  border-bottom: .2rem solid $au-red;
-}
-
-/* ==================================
-   #DROPZONE
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.upload--error .upload__element {
-  border-bottom: .2rem solid $au-red;
-}
-
-/* ==================================
    #POWER SELECT
    ================================== */
 
@@ -78,7 +55,7 @@ $au-non-editable-background    : $au-neutral-lightest !default;
    ========================================================================== */
 
 .ember-power-select--error .ember-power-select-trigger {
-  border-bottom: .1rem solid $au-red ;
+  border: .3rem solid $au-red;
 }
 
 /* ==================================
