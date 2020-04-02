@@ -9,6 +9,7 @@
   </div>
 </div>
 <AuTextarea
+  class=" {{if this.save.isRunning "au-c-textarea--disabled"}} {{if this.submit.isRunning "au-c-textarea--disabled"}} {{if this.delete.isRunning "au-c-textarea--disabled"}}"
   id="{{this.inputId}}"
   @width={{"block"}}
   @value={{this.value}}
