@@ -48,37 +48,18 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 }
 
 /* ==================================
-   #DATA-TABLE
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.data-table--error {
-  border: .1rem solid $au-neutral-lighter;
-  border-bottom: .2rem solid $au-red;
-}
-
-/* ==================================
-   #DROPZONE
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.upload--error .upload__element {
-  border-bottom: .2rem solid $au-red;
-}
-
-/* ==================================
    #POWER SELECT
    ================================== */
+
+.ember-power-select-trigger {
+  min-height: 3.6rem;
+}
 
 /* Modifiers
    ========================================================================== */
 
 .ember-power-select--error .ember-power-select-trigger {
-  border-bottom: .1rem solid $au-red ;
+  border: .3rem solid $au-red;
 }
 
 /* ==================================
@@ -88,8 +69,21 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 /* Modifiers
    ========================================================================== */
 
-.au-c-input--error .input-field--datepicker {
-  border-bottom: .1rem solid $au-red ;
+.au-c-date-picker-container .datepicker {
+  width: auto;
+
+  .input-field {
+    width: 100%;
+  }
+
+  .datepicker__icon {
+    right: 1.5rem;
+  }
+}
+
+
+.au-c-date-picker-container--error .input-field--datepicker {
+  border: .3rem solid $au-red ;
 }
 
 /* ==================================
@@ -102,4 +96,36 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 .checkbox {
   margin-right: 0;
   min-height: 1.5rem;
+}
+
+/* ==================================
+   #TEMPORARY GENERAL DISABLED STATE FOR FORM
+   ================================== */
+
+.au-c-form--disabled {
+  .ember-basic-dropdown-trigger,
+  .au-c-textarea,
+  .au-c-input,
+  .au-c-textarea--error,
+  .au-c-input--error,
+  .ember-power-select--error .ember-power-select-trigger,
+  .au-c-date-picker-container--error .input-field--datepicker {
+    background-color: $au-input-disabled-background-color;
+    border-color: $au-input-disabled-border-color;
+    color: $au-input-disabled-color;
+    cursor: not-allowed;
+  }
+
+  .au-c-help-text--error,
+  .upload__element__label {
+    color: $au-input-disabled-color;
+  }
+
+  .au-c-label--error:before {
+    background-color: $au-input-disabled-color;
+  }
+
+  .au-c-button{
+    background: $au-input-disabled-color;
+  }
 }

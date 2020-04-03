@@ -1,16 +1,20 @@
-<table class="triple">
-  <thead>
-    <tr>
-      <th>Subject</th><th>Predicate</th><th>Object</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each @triples as |triple|}}
+{{#if @triples}}
+  <table class="triple">
+    <thead>
       <tr>
-        <td>{{triple.subject}}</td>
-        <td>{{triple.predicate}}</td>
-        <td>{{triple.object}}</td>
+        <th>Subject</th>
+        <th>Predicate</th>
+        <th>Object</th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each @triples as |triple|}}
+        <tr>
+          <td>{{triple.subject}}</td>
+          <td>{{triple.predicate}}</td>
+          <td>{{triple.object}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{/if}}

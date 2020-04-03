@@ -1,6 +1,6 @@
 <main class="container">
   <main class="container-flex--contain">
-    <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left au-u-padding-right u-border--light--bottom">
+    <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left-large au-u-padding-right u-border--light--bottom">
       <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
       <h1 class="au-u-h2 au-u-margin-bottom">Bekijk aanlevering dossier</h1>
       <div class="au-o-grid">
@@ -12,20 +12,38 @@
           <AuLabel>Aangemaakt op</AuLabel>
           <p>{{moment-format this.model.submission.created 'DD-MM-YYYY'}}</p>
         </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+        <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
           <AuLabel>Bewerkt op</AuLabel>
           <p>{{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</p>
         </div>
+        {{#if this.save.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het opslaan..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
+        {{#if this.submit.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het versturen..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
+        {{#if this.delete.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het verwijderen..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
       </div>
     </header>
 
     <div class="container-flex--scroll">
-      <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right au-u-padding-bottom-large">
+      <div class="{{if this.save.isRunning "au-c-form--disabled" ""}} {{if this.submit.isRunning "au-c-form--disabled" ""}} {{if this.delete.isRunning "au-c-form--disabled" ""}} au-u-padding-top-large au-u-padding-left-large au-u-padding-right au-u-padding-bottom-large">
         <Form::Root @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
       </div>
 
       {{!-- {{#if this.datasetTriples.length}} --}}
-        <div class="au-c-form--non-editable au-u-padding-top-large au-u-padding-left au-u-padding-right au-u-padding-bottom"
+        <div class="au-c-form--non-editable au-u-padding-top-large au-u-padding-left-large au-u-padding-right au-u-padding-bottom"
             {{did-insert this.registerObserver}}
             {{did-insert this.setTriplesForTables}}>
           <h2 class="au-u-h3 au-u-margin-bottom">Informatie over aanpassingen formulier</h2>
@@ -72,22 +90,21 @@
             <p class="alert__title">Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
           </div>
         </div>
-      {{else}}
-        <div class="alert alert--tiny alert--success">
-          <div class="alert__icon" aria-hidden="true"></div>
-          <div class="alert__content">
-            <div class="alert__message">Gelieve per besluit of besluitenlijst één dossier aan te maken.</div>
-          </div>
-        </div>
       {{/if}}
 
-      <div class="button-group">
-        {{#unless this.model.submitted}}
-          <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
-          <AuButton @skin={{"ghost"}} {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
-          <AuButton @skin={{"ghost"}} {{on "click" (perform this.delete)}}>Verwijder</AuButton>
-        {{/unless}}
-      </div>
+      {{#unless this.model.submitted}}
+        <div class="au-o-grid">
+          <div class="au-o-grid__item au-u-1-2">
+            <AuButton class="{{if this.save.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.submit.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.delete.isRunning "au-c-button--loading au-c-button--disabled" ""}}" {{on "click" (perform this.save)}}>Bewaar</AuButton>
+            <AuButton class="{{if this.save.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.submit.isRunning "au-c-button--loading au-c-button--disabled" ""}} {{if this.delete.isRunning "au-c-button--loading au-c-button--disabled" ""}}" @skin={{"ghost"}} {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
+          </div>
+          <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+            <AuButtonLink class="{{if this.save.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}} {{if this.submit.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}} {{if this.delete.isRunning "au-c-button-link--loading au-c-button-link--disabled" ""}}" @skin="neutral" {{on "click" (perform this.delete)}}> {{!-- @TODO replace with icons later --}}
+              <svg class="au-c-icon au-c-icon--left au-c-icon--large" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg> Verwijder dossier
+            </AuButtonLink>
+          </div>
+        </div>
+      {{/unless}}
     </footer>
   </main>
 </main>
