@@ -25,6 +25,8 @@
         <th>Type dossier</th>
         <ThSortable @field="formData.sessionStartedAtTime" @currentSorting={{this.sort}} @label="Datum zitting/besluit" />
         <ThSortable @field="sentDate" @currentSorting={{this.sort}} @label="Datum verstuurd" />
+        {{!--<th>Aangemaakt door</th>  @TODO: Add the way this dossier has been added --}}
+        {{!--<th>Aangemaakt in</th>  @TODO: Add the way this dossier has been added --}}
         <ThSortable @field="status.label" @currentSorting={{this.sort}} @label="Status" />
         <th></th>
       </c.header>
@@ -33,7 +35,9 @@
         <td><Toezicht::SubmissionType @formData={{row.formData}} /></td>
         <td>{{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}</td>
         <td>{{moment-format row.sentDate "DD/MM/YYYY"}}</td>
-        <td>{{row.status.label}}</td>
+         {{!--<td>Voornaam Naam</td> @TODO: Add *by who* this dossier has been added --}}
+         {{!--<td>Gelinkt Notuleren</td> @TODO: Add the *way* this dossier has been added --}}
+        <td><AuPill>{{row.status.label}}</AuPill></td>  {{!-- Add warning skin for concepts and success skin for sent @skin="warning" --}}
         <td><LinkTo @route="forms.edit" @model={{row.id}}>Bekijk</LinkTo></td>
       </c.body>
     </t.content>
