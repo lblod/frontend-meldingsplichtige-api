@@ -45,6 +45,7 @@
     "ember-cli-htmlbars": "^4.2.2",
     "ember-cli-inject-live-reload": "^2.0.2",
     "ember-cli-moment-shim": "^3.7.1",
+    "ember-cli-release-tag": "^0.1.5",
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^1.0.0-beta.3",
