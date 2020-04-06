@@ -78,7 +78,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    "ember-submission-form-fields": "*",
-    "forking-store": "1.0.0"
+    "ember-submission-form-fields": "*"
   }
 }
