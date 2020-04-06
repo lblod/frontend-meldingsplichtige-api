@@ -1,8 +1,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { validateForm }  from '../../utils/import-triples-for-form';
-import importTriplesForForm from '../../utils/import-triples-for-form';
+// import { validateForm }  from '../../utils/import-triples-for-form';
+// import importTriplesForForm from '../../utils/import-triples-for-form';
+import {importTriplesForForm, validateForm} from 'ember-submission-form-fields';
 import { delGraphFor, addGraphFor } from 'forking-store';
 import fetch from 'fetch';
 import { DELETED_STATUS } from '../../models/submission-document-status';
