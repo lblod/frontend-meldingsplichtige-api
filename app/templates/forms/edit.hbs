@@ -84,10 +84,14 @@
 
     <footer class="au-u-padding-top au-u-padding-bottom-large au-u-padding-left au-u-padding-right u-border--light--top">
       {{#if this.model.submitted}}
-        <div class="u-spacer--bottom--small">
-          <div class="alert alert--tiny alert--success">
-            <div class="alert__icon" aria-hidden="true"></div>
-            <p class="alert__title">Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
+        <div class="au-o-grid">
+          <div class="au-o-grid__item au-u-1-2">
+            <div class="u-spacer--bottom--small">
+              <div class="alert alert--tiny alert--success">
+                <div class="alert__icon" aria-hidden="true"></div>
+                <p class="alert__title">Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
+              </div>
+            </div>
           </div>
         </div>
       {{/if}}
