@@ -114,11 +114,13 @@ $au-non-editable-background    : $au-neutral-lightest !default;
     border-color: $au-input-disabled-border-color;
     color: $au-input-disabled-color;
     cursor: not-allowed;
+    pointer-events: none;
   }
 
   .au-c-help-text--error,
   .upload__element__label {
     color: $au-input-disabled-color;
+    pointer-events: none;
   }
 
   .au-c-label--error:before {
