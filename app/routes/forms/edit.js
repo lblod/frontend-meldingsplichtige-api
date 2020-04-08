@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { warn } from '@ember/debug';
 import rdflib from 'browser-rdflib';
 import fetch from 'fetch';
-import {ForkingStore} from 'ember-submission-form-fields';
+import {ForkingStore} from '@lblod/ember-submission-form-fields';
 import { SENT_STATUS } from '../../models/submission-document-status';
 import { RDF, FORM } from '../../utils/namespaces';
 

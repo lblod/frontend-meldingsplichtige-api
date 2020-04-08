@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {importTriplesForForm, validateForm,  delGraphFor, addGraphFor} from 'ember-submission-form-fields';
+import {importTriplesForForm, validateForm,  delGraphFor, addGraphFor} from '@lblod/ember-submission-form-fields';
 import fetch from 'fetch';
 import { DELETED_STATUS } from '../../models/submission-document-status';
 import { task } from 'ember-concurrency-decorators';
