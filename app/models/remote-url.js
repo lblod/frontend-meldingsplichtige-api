@@ -11,6 +11,21 @@ export default Model.extend({
   downloadStatus: attr(),
   creator: attr(),
 
+  downloadSuccess: computed('dowloadStatus', function(){
+    return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/success';
+  }),
+
+  downloadOngoing: computed('dowloadStatus', function(){
+    const ongoingStatuses = ['http://lblod.data.gift/file-download-statuses/ongoing',
+                             'http://lblod.data.gift/file-download-statuses/ready-to-be-cached'
+                            ];
+    return ongoingStatuses.includes(this.downloadStatus);
+  }),
+
+  downloadFailed: computed('dowloadStatus', function(){
+    return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/failure';
+  }),
+
   downloadLink: computed('filename', function () {
     return `/files/${this.id}/download`;
   })
