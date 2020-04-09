@@ -1,6 +1,6 @@
 <main class="container">
   <main class="container-flex--contain">
-    <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left au-u-padding-right u-border--light--bottom">
+    <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left-large au-u-padding-right u-border--light--bottom">
       <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
       <h1 class="au-u-h2 au-u-margin-bottom">Bekijk aanlevering dossier</h1>
       <div class="au-o-grid">
@@ -13,15 +13,33 @@
           <AuLabel>Aangemaakt op</AuLabel>
           <p>{{moment-format this.model.submission.created 'DD-MM-YYYY'}}</p>
         </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+        <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
           <AuLabel>Bewerkt op</AuLabel>
           <p>{{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</p>
         </div>
+        {{#if this.save.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het opslaan..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
+        {{#if this.submit.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het versturen..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
+        {{#if this.delete.isRunning}}
+          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
+            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het verwijderen..." @alertskin={{"info"}}>
+            </AuAlert>
+          </div>
+        {{/if}}
       </div>
     </header>
 
     <div class="container-flex--scroll">
-      <div class="au-u-padding-top-large au-u-padding-left au-u-padding-right au-u-padding-bottom-large">
+      <div class="au-u-padding-top-large au-u-padding-left-large au-u-padding-right au-u-padding-bottom-large {{if this.save.isRunning "au-c-form--disabled" ""}} {{if this.submit.isRunning "au-c-form--disabled" ""}} {{if this.delete.isRunning "au-c-form--disabled" ""}}">
         <Form @form={{this.form}} @show={{this.model.submitted}} @graphs={{this.graphs}} @sourceNode={{this.sourceNode}} @formStore={{this.formStore}} />
       </div>
 
@@ -77,20 +95,21 @@
             </div>
           </div>
         </div>
-      {{else}}
-        <div class="alert alert--tiny alert--success">
-          <div class="alert__icon" aria-hidden="true"></div>
-          <div class="alert__content">
-            <div class="alert__message">Gelieve per besluit of besluitenlijst één dossier aan te maken.</div>
-          </div>
-        </div>
       {{/if}}
 
       <div class="button-group">
         {{#unless this.model.submitted}}
-          <AuButton {{on "click" (perform this.save)}}>Bewaar</AuButton>
-          <AuButton @skin={{"ghost"}} {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
-          <AuButton @skin={{"ghost"}} {{on "click" (perform this.delete)}}>Verwijder</AuButton>
+          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                    @loading={{if this.submit.isRunning "loading" ""}}
+                    {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
+          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                    @loading={{if this.save.isRunning "loading" ""}}
+                    @skin={{"ghost"}}
+                    {{on "click" (perform this.save)}}>Bewaar</AuButton>
+          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                    @loading={{if this.delete.isRunning "loading" ""}}
+                    @skin={{"ghost"}}
+                    {{on "click" (perform this.delete)}}>Verwijder</AuButton>
         {{/unless}}
       </div>
     </footer>
