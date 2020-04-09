@@ -24,8 +24,8 @@
         <ThSortable @field="formData.passedBy.isTijdsspecialisatieVan.naam" @currentSorting={{this.sort}} @label="Orgaan" />
         <th>Type dossier</th>
         <ThSortable @class="au-u-visible-small-up" @field="formData.sessionStartedAtTime" @currentSorting={{this.sort}} @label="Datum zitting/besluit" />
-        <th class="au-u-visible-medium-up">Aangemaakt door</th> {{!-- @TODO: Add the way this dossier has been added --}}
-        <th class="au-u-visible-small-up">Laatst gewijzigd door</th>  {{!--@TODO: Add the way this dossier has been added --}}
+         {{!--<th class="au-u-visible-medium-up">Aangemaakt door</th> @TODO: Add the way this dossier has been added --}}
+        {{!--<th class="au-u-visible-small-up">Laatst gewijzigd door</th>  @TODO: Add the way this dossier has been added --}}
         <ThSortable @class="au-u-visible-large-up" @field="sentDate" @currentSorting={{this.sort}} @label="Datum verstuurd" />
         <ThSortable @field="status.label" @currentSorting={{this.sort}} @label="Status" />
         <th></th>
@@ -40,16 +40,16 @@
         <td class="au-u-visible-small-up">
           {{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}
         </td>
-        <td class="au-u-visible-medium-up">
+        {{!--<td class="au-u-visible-medium-up">
           <AuHelpText>Scenario made by someone in loket:</AuHelpText> Voornaam Naam
           <br>
           <AuHelpText>Scenario automatic:</AuHelpText> Automatisch bij publicatie
-        </td> {{!--@TODO: Add *by who* or *the way* this dossier has been added --}}
-        <td class="au-u-visible-small-up">
+        </td> @TODO: Add *by who* or *the way* this dossier has been added --}}
+        {{!--<td class="au-u-visible-small-up">
           <AuHelpText>Scenario edits have been made by a human:</AuHelpText> Voornaam Naam
           <br>
           <AuHelpText>Scenario no edits have been made by a human:</AuHelpText> Automatisch aangemaakt bij publicatie
-        </td> {{!--@TODO: Add *by who or what* this dossier has been edited --}}
+        </td> @TODO: Add *by who or what* this dossier has been edited --}}
         <td class="au-u-visible-large-up">
           {{moment-format row.sentDate "DD/MM/YYYY"}}
         </td>
