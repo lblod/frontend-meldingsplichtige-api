@@ -103,20 +103,32 @@
         </div>
       {{/if}}
 
-      <div class="button-group">
-        {{#unless this.model.submitted}}
-          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                    @loading={{if this.submit.isRunning "loading" ""}}
-                    {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
-          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                    @loading={{if this.save.isRunning "loading" ""}}
-                    @skin={{"ghost"}}
-                    {{on "click" (perform this.save)}}>Bewaar</AuButton>
-          <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                    @loading={{if this.delete.isRunning "loading" ""}}
-                    @skin={{"ghost"}}
-                    {{on "click" (perform this.delete)}}>Verwijder</AuButton>
-        {{/unless}}
+      <div class="au-o-grid">
+        <div class="au-o-grid__item au-u-1-2">
+          <div class="button-group">
+            {{#unless this.model.submitted}}
+              <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                        @loading={{if this.submit.isRunning "loading" ""}}
+                        {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
+              <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                        @loading={{if this.save.isRunning "loading" ""}}
+                        @skin={{"ghost"}}
+                        {{on "click" (perform this.save)}}>Bewaar</AuButton>
+            {{/unless}}
+          </div>
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+          <div class="button-group">
+            {{#unless this.model.submitted}}
+              <AuButtonLink @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
+                            @loading={{if this.delete.isRunning "loading" ""}}
+                            @skin={{"neutral"}}
+                            {{on "click" (perform this.delete)}}>
+                            Verwijder dossier
+                            </AuButtonLink>
+            {{/unless}}
+          </div>
+        </div>
       </div>
     </footer>
   </main>
