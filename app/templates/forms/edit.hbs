@@ -1,139 +1,135 @@
-<main class="container">
-  <main class="container-flex--contain">
-    <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left-large au-u-padding-right u-border--light--bottom">
-      <LinkTo @route="index" class="au-c-button-link au-c-button-link--neutral au-u-margin-bottom-small">&leftarrow;  Terug naar overzicht</LinkTo>
-      <h1 class="au-u-h2 au-u-margin-bottom">Bekijk aanlevering dossier</h1>
-      <div class="au-o-grid">
-        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
-          <AuLabel>Gewijzigd door</AuLabel>
-          {{#if this.model.submission.lastModifier.fullName}}
-            <p>{{this.model.submission.lastModifier.fullName}}</p>
-          {{else if this.model.submission.task.created}}
-            <p>Automatisch aangemaakt bij publicatie</p>
-          {{/if}}
-          {{!-- <AuPill>Automatische melding vanuit notuleringspakket</AuPill> --}}
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
-          <AuLabel>Aangemaakt op</AuLabel>
-          <p>{{moment-format this.model.submission.created 'DD-MM-YYYY'}}</p>
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
-          <AuLabel>Bewerkt op</AuLabel>
-          <p>{{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</p>
-        </div>
-        {{#if this.save.isRunning}}
-          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
-            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het opslaan..." @alertskin={{"info"}}>
-            </AuAlert>
-          </div>
+
+<main class="container-flex--contain">
+  <header class="au-u-padding-top-large au-u-padding-bottom au-u-padding-left-large au-u-padding-right u-border--light--bottom">
+    <LinkTo @route="index" class="au-c-link au-c-link--secondary au-u-margin-bottom-small"><AuIcon @icon="arrow-left" @alignment="left" /> Terug naar overzicht</LinkTo>
+    <h1 class="au-u-h2 au-u-margin-bottom">Bekijk aanlevering dossier</h1>
+    <div class="au-o-grid">
+      <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+        <AuLabel>Gewijzigd door</AuLabel>
+        {{#if this.model.submission.lastModifier.fullName}}
+          <p>{{this.model.submission.lastModifier.fullName}}</p>
+        {{else if this.model.submission.task.created}}
+          <p>Automatisch aangemaakt bij publicatie</p>
         {{/if}}
-        {{#if this.submit.isRunning}}
-          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
-            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het versturen..." @alertskin={{"info"}}>
-            </AuAlert>
-          </div>
-        {{/if}}
-        {{#if this.delete.isRunning}}
-          <div class="au-o-grid__item au-u-1-2 au-u-2-6@medium">
-            <AuAlert @alertsize="small" class="au-u-margin-bottom-none" @alertTitle="Aan het verwijderen..." @alertskin={{"info"}}>
-            </AuAlert>
-          </div>
-        {{/if}}
+        {{!-- <AuPill>Automatische melding vanuit notuleringspakket</AuPill> --}}
       </div>
-    </header>
-
-    <div class="container-flex--scroll">
-      <div class="au-u-padding-top-large au-u-padding-left-large au-u-padding-right au-u-padding-bottom-large {{if this.save.isRunning "au-c-form--disabled" ""}} {{if this.submit.isRunning "au-c-form--disabled" ""}} {{if this.delete.isRunning "au-c-form--disabled" ""}}">
-        <SubmissionForm @form={{this.form}}
-          @show={{this.model.submitted}}
-          @graphs={{this.graphs}}
-          @sourceNode={{this.sourceNode}}
-          @formStore={{this.formStore}}
-          @forceShowErrors={{this.forceShowErrors}}
-        />
+      <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+        <AuLabel>Aangemaakt op</AuLabel>
+        <p>{{moment-format this.model.submission.created 'DD-MM-YYYY'}}</p>
       </div>
-
-      {{!-- {{#if this.datasetTriples.length}} --}}
-        <div class="au-c-form--non-editable au-u-padding-top-large au-u-padding-left au-u-padding-right au-u-padding-bottom"
-            {{did-insert this.registerObserver}}
-            {{did-insert this.setTriplesForTables}}>
-          <h2 class="au-u-h3 au-u-margin-bottom">Informatie over aanpassingen formulier</h2>
-          {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
-
-          <h3 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h3>
-          {{#if this.datasetTriples}}
-            <p class="au-u-margin-bottom-tiny">Aantal gegevens gevonden in automatische melding: {{this.datasetTriples.length}}</p>
-            <div class="au-u-margin-bottom">
-              <TriplesTable @triples={{this.datasetTriples}} />
-            </div>
-          {{else}}
-            <AuHelpText class="au-u-margin-bottom">Geen items gevonden in automatische melding, of automatische melding gedaan.</AuHelpText>
-          {{/if}}
-
-          <h3 class="au-u-h4">Manueel toegevoegde informatie aan dossier {{!-- ADDED triples --}}</h3>
-          {{#if this.addedTriples}}
-            <p class="au-u-margin-bottom-tiny">Aantal toegevoegde items aan dossier: {{this.addedTriples.length}}</p>
-            <div class="au-u-margin-bottom">
-              <TriplesTable @triples={{this.addedTriples}} />
-            </div>
-          {{else}}
-            <AuHelpText class="au-u-margin-bottom">Geen gegevens toegevoegd aan dossier.</AuHelpText>
-          {{/if}}
-
-          <h3 class="au-u-h4">Overschreven of verwijderde informatie van automatisch vergaarde informatie {{!-- REMOVED triples --}}</h3>
-          {{#if this.removedTriples}}
-            <p class="au-u-margin-bottom-tiny">Aantal gegevens van automatische melding overschreven of verwijderd: {{this.removedTriples.length}}</p>
-            <div class="au-u-margin-bottom">
-              <TriplesTable @triples={{this.removedTriples}} />
-            </div>
-          {{else}}
-            <AuHelpText class="au-u-margin-bottom">Geen gegevens van automatische melding overschreven of verwijderd.</AuHelpText>
-          {{/if}}
-        </div>
-      {{!-- {{/if}} --}}
-    </div>
-
-    <footer class="au-u-padding-top au-u-padding-bottom-large au-u-padding-left au-u-padding-right u-border--light--top">
-      {{#if this.model.submitted}}
-        <div class="au-o-grid">
-          <div class="au-o-grid__item au-u-1-2">
-            <div class="u-spacer--bottom--small">
-              <div class="alert alert--tiny alert--success">
-                <div class="alert__icon" aria-hidden="true"></div>
-                <p class="alert__title">Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
-              </div>
-            </div>
-          </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-3-6@medium">
+        <AuLabel>Bewerkt op</AuLabel>
+        <p>{{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</p>
+      </div>
+      {{#if this.save.isRunning}}
+        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+          <AuAlert @alertIcon="info-circle" @alertTitle="Aan het opslaan..."  @alertskin={{"info"}} @alertsize="small" class="au-u-margin-bottom-none"></AuAlert>
         </div>
       {{/if}}
+      {{#if this.submit.isRunning}}
+        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+          <AuAlert @alertIcon="info-circle" @alertTitle="Aan het versturen..."  @alertskin={{"info"}} @alertsize="small" class="au-u-margin-bottom-none"></AuAlert>
+        </div>
+      {{/if}}
+      {{#if this.delete.isRunning}}
+        <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
+          <AuAlert @alertIcon="info-circle" @alertTitle="Aan het verwijderen..."  @alertskin={{"info"}} @alertsize="small" class="au-u-margin-bottom-none"></AuAlert>
+        </div>
+      {{/if}}
+    </div>
+  </header>
 
+  <div class="container-flex--scroll">
+    <div class="au-u-padding-top-large au-u-padding-left-large au-u-padding-right au-u-padding-bottom-large {{if this.save.isRunning "au-c-form--disabled" ""}} {{if this.submit.isRunning "au-c-form--disabled" ""}} {{if this.delete.isRunning "au-c-form--disabled" ""}}">
+      <SubmissionForm @form={{this.form}}
+        @show={{this.model.submitted}}
+        @graphs={{this.graphs}}
+        @sourceNode={{this.sourceNode}}
+        @formStore={{this.formStore}}
+        @forceShowErrors={{this.forceShowErrors}}
+      />
+    </div>
+
+    {{!-- {{#if this.datasetTriples.length}} --}}
+      <div class="au-c-form--non-editable au-u-padding-top-large au-u-padding-left au-u-padding-right au-u-padding-bottom"
+          {{did-insert this.registerObserver}}
+          {{did-insert this.setTriplesForTables}}>
+        <h2 class="au-u-h3 au-u-margin-bottom">Informatie over aanpassingen formulier</h2>
+        {{!-- <h1 class="au-u-h3 au-u-margin-bottom-small">Triples in Form</h1> --}}
+
+        <h3 class="au-u-h4">Automatisch vergaarde informatie{{!-- Triples --}}</h3>
+        {{#if this.datasetTriples}}
+          <p class="au-u-margin-bottom-tiny">Aantal gegevens gevonden in automatische melding: {{this.datasetTriples.length}}</p>
+          <div class="au-u-margin-bottom">
+            <TriplesTable @triples={{this.datasetTriples}} />
+          </div>
+        {{else}}
+          <AuHelpText class="au-u-margin-bottom">Geen items gevonden in automatische melding, of automatische melding gedaan.</AuHelpText>
+        {{/if}}
+
+        <h3 class="au-u-h4">Manueel toegevoegde informatie aan dossier {{!-- ADDED triples --}}</h3>
+        {{#if this.addedTriples}}
+          <p class="au-u-margin-bottom-tiny">Aantal toegevoegde items aan dossier: {{this.addedTriples.length}}</p>
+          <div class="au-u-margin-bottom">
+            <TriplesTable @triples={{this.addedTriples}} />
+          </div>
+        {{else}}
+          <AuHelpText class="au-u-margin-bottom">Geen gegevens toegevoegd aan dossier.</AuHelpText>
+        {{/if}}
+
+        <h3 class="au-u-h4">Overschreven of verwijderde informatie van automatisch vergaarde informatie {{!-- REMOVED triples --}}</h3>
+        {{#if this.removedTriples}}
+          <p class="au-u-margin-bottom-tiny">Aantal gegevens van automatische melding overschreven of verwijderd: {{this.removedTriples.length}}</p>
+          <div class="au-u-margin-bottom">
+            <TriplesTable @triples={{this.removedTriples}} />
+          </div>
+        {{else}}
+          <AuHelpText class="au-u-margin-bottom">Geen gegevens van automatische melding overschreven of verwijderd.</AuHelpText>
+        {{/if}}
+      </div>
+    {{!-- {{/if}} --}}
+  </div>
+
+  <footer class="au-u-padding-top au-u-padding-bottom-large au-u-padding-left au-u-padding-right u-border--light--top">
+    {{#if this.model.submitted}}
       <div class="au-o-grid">
         <div class="au-o-grid__item au-u-1-2">
-          <div class="button-group">
-            {{#unless this.model.submitted}}
-              <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                        @loading={{if this.submit.isRunning "loading" ""}}
-                        {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
-              <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                        @loading={{if this.save.isRunning "loading" ""}}
-                        @skin={{"ghost"}}
-                        {{on "click" (perform this.save)}}>Bewaar</AuButton>
-            {{/unless}}
-          </div>
-        </div>
-        <div class="au-o-grid__item au-u-1-2 au-u-text-right">
-          <div class="button-group">
-            {{#unless this.model.submitted}}
-              <AuButtonLink @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "disabled"}}
-                            @loading={{if this.delete.isRunning "loading" ""}}
-                            @skin={{"neutral"}}
-                            {{on "click" (perform this.delete)}}>
-                            Verwijder dossier
-                            </AuButtonLink>
-            {{/unless}}
+          <div class="u-spacer--bottom--small">
+            <AuAlert @alertIcon="check" @alertTitle="Dossier verstuurd"  @alertskin={{"success"}} class="au-u-margin-bottom-none">
+              Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}
+            </AuAlert>
           </div>
         </div>
       </div>
-    </footer>
-  </main>
+    {{/if}}
+
+    <div class="au-o-grid">
+      <div class="au-o-grid__item au-u-1-2">
+        <div class="button-group">
+          {{#unless this.model.submitted}}
+            <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+                      @loading={{if this.submit.isRunning "true"}}
+                      {{on "click" (perform this.submit)}}>Verzend naar Vlaamse overheid</AuButton>
+            <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+                      @loading={{if this.save.isRunning "true"}}
+                      @skin={{"secondary"}}
+                      {{on "click" (perform this.save)}}>Bewaar</AuButton>
+          {{/unless}}
+        </div>
+      </div>
+      <div class="au-o-grid__item au-u-1-2 au-u-text-right">
+        <div class="button-group">
+          {{#unless this.model.submitted}}
+            <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+                      @loading={{if this.delete.isRunning "true"}}
+                      @skin={{"tertiary"}}
+                      @alert={{"true"}}
+                      {{on "click" (perform this.delete)}}>
+                      <AuIcon @icon="bin" @alignment="left" /> Verwijder dossier
+                      </AuButton>
+          {{/unless}}
+        </div>
+      </div>
+    </div>
+  </footer>
 </main>
