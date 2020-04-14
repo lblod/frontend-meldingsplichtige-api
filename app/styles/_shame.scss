@@ -28,7 +28,7 @@ tr:nth-child(odd) {
 /* Variables
    ========================================================================== */
 
-$au-non-editable-background    : $au-neutral-lightest !default;
+$au-non-editable-background    : $au-gray-100 !default;
 
 /* Modifiers
    ========================================================================== */
@@ -59,7 +59,7 @@ $au-non-editable-background    : $au-neutral-lightest !default;
    ========================================================================== */
 
 .ember-power-select--error .ember-power-select-trigger {
-  border: .3rem solid $au-red;
+  border: .3rem solid $au-red-600;
 }
 
 /* ==================================
@@ -83,7 +83,7 @@ $au-non-editable-background    : $au-neutral-lightest !default;
 
 
 .au-c-date-picker-container--error .input-field--datepicker {
-  border: .3rem solid $au-red ;
+  border: .3rem solid $au-red-600;
 }
 
 /* ==================================
@@ -131,30 +131,3 @@ $au-non-editable-background    : $au-neutral-lightest !default;
     background: $au-input-disabled-color;
   }
 }
-
-/* ==========================================================================
-   #VISIBLE
-   ========================================================================== */
-
-/**
- * Show visually and on screen readers starting from certain breakpoints, but hide visually and for screen readers on others.
- */
-
-.au-u-visible-small-up {
-  @include mq($until: small) {
-    display: none !important;
-  }
-}
-
-.au-u-visible-medium-up {
-  @include mq($until: medium) {
-    display: none !important;
-  }
-}
-
-.au-u-visible-large-up {
-  @include mq($until: large) {
-    display: none !important;
-  }
-}
-
