@@ -1,2 +1,10 @@
-{{!-- <AuHeader @appTitle="Testomgeving Meldingsplichtige API"></AuHeader> --}}
-{{outlet}}
+<div class="container">
+  <AuHeader @appTitle="Testomgeving Meldingsplichtige API">
+    {{#if session.isAuthenticated}}
+      <MockLogout @tagName={{"button"}} class="au-c-dropdown__item">
+        <AuIcon @icon="logout" @alignment="left" />Afmelden
+      </MockLogout>
+    {{/if}}
+  </AuHeader>
+  {{outlet}}
+</div>
