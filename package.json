@@ -2,10 +2,12 @@
   "name": "frontend-meldingsplichtige-api",
   "version": "0.1.0",
   "private": true,
-  "description": "Small description for frontend-meldingsplichtige-api goes here",
-  "repository": "",
-  "license": "MIT",
-  "author": "",
+  "description": "Test frontend for the automatic submission API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lblod/frontend-meldingsplichtige-api.git"
+  },
+  "author": "redpencil.io",
   "directories": {
     "doc": "doc",
     "test": "tests"
