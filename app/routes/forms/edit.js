@@ -4,7 +4,7 @@ import rdflib from 'browser-rdflib';
 import fetch from 'fetch';
 import {ForkingStore} from '@lblod/ember-submission-form-fields';
 import { SENT_STATUS } from '../../models/submission-document-status';
-import { RDF, FORM } from '../../utils/namespaces';
+import { RDF, FORM } from '@lblod/submission-form-helpers';
 
 export default class FormsEditRoute extends Route {
   async model(params) {
