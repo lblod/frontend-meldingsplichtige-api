@@ -20,7 +20,7 @@
     "test": "ember test"
   },
   "devDependencies": {
-    "@lblod/ember-submission-form-fields": "^0.5.7",
+    "@lblod/ember-submission-form-fields": "^0.5.9",
     "@appuniversum/appuniversum": "^0.0.7",
     "@appuniversum/ember-appuniversum": "0.0.16",
     "@ember/optional-features": "^1.3.0",
