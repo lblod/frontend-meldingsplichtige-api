@@ -102,14 +102,11 @@ export default class FormsEditController extends Controller {
 
   @task
   *delete() {
-    const user = yield this.currentSession.user;
-    this.model.submission.status = this.deletedStatus;
-    this.model.submission.modified = new Date();
-    this.model.submission.lastModifier = user;
-
-    yield this.model.submission.save();
-
     yield this.deleteSubmissionForm.perform();
+    // Since the sent date and sent status of the submission will be set by the backend
+    // and not via ember-data, we need to manually reload the submission record
+    // to keep the index page up-to-date
+    yield this.model.submission.reload();
     this.transitionToRoute('index');
   }
 
