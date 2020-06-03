@@ -95,7 +95,7 @@ export default class FormsEditController extends Controller {
 
   @task
   *deleteSubmissionForm() {
-    yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+    yield fetch(`/submissions/${this.model.submission.id}`, {
       method: 'DELETE',
     });
   }
