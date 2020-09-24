@@ -20,6 +20,7 @@
     "test": "ember test"
   },
   "dependencies": {
+    "ember-cli-release": "^1.0.0-beta.2",
     "ember-fetch": "^8.0.1"
   },
   "devDependencies": {
