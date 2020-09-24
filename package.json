@@ -19,6 +19,9 @@
     "start": "ember serve",
     "test": "ember test"
   },
+  "dependencies": {
+    "ember-fetch": "^8.0.1"
+  },
   "devDependencies": {
     "@lblod/ember-submission-form-fields": "^0.8.1",
     "@appuniversum/appuniversum": "^0.0.7",
@@ -59,7 +62,6 @@
     "ember-data": "~3.16.0",
     "ember-data-table": "^1.2.2",
     "ember-export-application-global": "^2.0.1",
-    "ember-fetch": "^7.0.0",
     "ember-load-initializers": "^2.1.1",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-mu-transform-helpers": "^2.0.0",
