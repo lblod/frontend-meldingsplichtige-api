@@ -1,6 +1,6 @@
-import DS from 'ember-data';
-const { Model, attr } = DS;
+import Model, { attr } from '@ember-data/model';
 
-export default Model.extend({
-  label: attr('string')
-});
+export default class AuthenticityTypeModel extends Model {
+  @attr('string') label;
+}
+

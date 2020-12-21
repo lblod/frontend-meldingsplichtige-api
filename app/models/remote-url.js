@@ -1,32 +1,30 @@
-import DS from 'ember-data';
-import { computed } from '@ember/object';
-const { Model, attr, belongsTo } = DS;
+import Model, { attr, belongsTo } from '@ember-data/model';
 
-export default Model.extend({
-  uri: attr(),
-  address: attr(),
-  created: attr('date'),
-  modified: attr('date'),
-  download: belongsTo('file', { inverse: null }),
-  downloadStatus: attr(),
-  creator: attr(),
+export default class RemoteUrlModel extends Model {
+  @attr() uri;
+  @attr() address;
+  @attr('date') created;
+  @attr('date') modified;
+  @attr() downloadStatus;
+  @attr() creator;
+  @belongsTo('file', { inverse: null }) download;
 
-  downloadSuccess: computed('dowloadStatus', function(){
+  get downloadSuccess() {
     return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/success';
-  }),
+  }
 
-  downloadOngoing: computed('dowloadStatus', function(){
+  get downloadOngoing() { 
     const ongoingStatuses = ['http://lblod.data.gift/file-download-statuses/ongoing',
-                             'http://lblod.data.gift/file-download-statuses/ready-to-be-cached'
+                            'http://lblod.data.gift/file-download-statuses/ready-to-be-cached'
                             ];
     return ongoingStatuses.includes(this.downloadStatus);
-  }),
+  }
 
-  downloadFailed: computed('dowloadStatus', function(){
+  get downloadFailed() {
     return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/failure';
-  }),
+  }
 
-  downloadLink: computed('filename', function () {
+  get downloadLink() {
     return `/files/${this.id}/download`;
-  })
-});
+  }
+}

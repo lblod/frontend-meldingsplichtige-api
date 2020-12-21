@@ -1,10 +1,9 @@
-import DS from 'ember-data';
-const { Model, attr, belongsTo, hasMany } = DS;
+import Model, { attr, belongsTo, hasMany }  from '@ember-data/model';
 
-export default Model.extend({
-  openbaar: attr('boolean'),
-  gevolg: attr('language-string'),
-  vorigeBehandelingVanAgendapunt: belongsTo('behandeling-van-agendapunt'),
-  onderwerp: belongsTo('agendapunt'),
-  submissionDocuments: hasMany('submission-document')
-});
+export default class BehandelingVanAgendapuntModel extends Model {
+  @attr('boolean') openbaar; 
+  @attr('language-string') gevolg; 
+  @belongsTo('behandeling-van-agendapunt') vorigeBehandelingVanAgendapunt; 
+  @belongsTo('agendapunt') onderwerp; 
+  @hasMany('submission-document') submissionDocuments; 
+}
