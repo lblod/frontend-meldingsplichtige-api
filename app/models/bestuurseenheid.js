@@ -1,10 +1,9 @@
-import DS from 'ember-data';
-const { Model, attr, belongsTo, hasMany } = DS;
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-export default Model.extend({
-  uri: attr(),
-  naam: attr('string'),
-  alternatieveNaam: attr(),
-  classificatie: belongsTo('bestuurseenheid-classificatie-code'),
-  bestuursorganens: hasMany('bestuursorgaan')
-});
+export default class BestuurseenheidModel extends Model {
+  @attr() uri; 
+  @attr('string') naam; 
+  @attr() alternatieveNaam; 
+  @belongsTo('bestuurseenheid-classificatie-code') classificatie; 
+  @hasMany('bestuursorgaan') bestuursorganens; 
+}

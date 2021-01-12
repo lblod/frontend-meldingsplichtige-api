@@ -1,13 +1,12 @@
-import DS from 'ember-data';
-const { Model, attr, belongsTo, hasMany } = DS;
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
-export default Model.extend({
-  uri: attr(),
-  naam: attr('string'),
-  bindingEinde: attr('date'),
-  bindingStart: attr('date'),
-  bestuurseenheid: belongsTo('bestuurseenheid'),
-  classificatie: belongsTo('bestuursorgaan-classificatie-code'),
-  isTijdsspecialisatieVan: belongsTo('bestuursorgaan', { inverse: 'heeftTijdsspecialisaties' }),
-  heeftTijdsspecialisaties: hasMany('bestuursorgaan', { inverse: 'isTijdsspecialisatieVan' })
-});
+export default class BestuursorgaanModel extends Model {
+  @attr() uri;
+  @attr('string') naam;
+  @attr('date') bindingEinde;
+  @attr('date') bindingStart;
+  @belongsTo('bestuurseenheid') bestuurseenheid;
+  @belongsTo('bestuursorgaan-classificatie-code') classificatie;
+  @belongsTo('bestuursorgaan', { inverse: 'heeftTijdsspecialisaties' })isTijdsspecialisatieVan;
+  @hasMany('bestuursorgaan', { inverse: 'isTijdsspecialisatieVan' }) heeftTijdsspecialisaties;
+}

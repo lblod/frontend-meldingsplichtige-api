@@ -1,8 +1,7 @@
-import DS from 'ember-data';
-const { Model, attr, belongsTo } = DS;
+import Model, { attr, belongsTo } from '@ember-data/model';
 
-export default Model.extend({
-  provider: attr(),
-  voId: attr(),
-  gebruiker: belongsTo('gebruiker')
-});
+export default class AccountModel extends Model {
+  @attr() provider;
+  @attr() voId;
+  @belongsTo('gebruiker') gebruiker;
+}

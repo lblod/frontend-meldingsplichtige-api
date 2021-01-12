@@ -1,8 +1,8 @@
-import DS from 'ember-data';
-const { Model, attr, belongsTo, hasMany } = DS;
+import Model, { attr, belongsTo, hasMany }  from '@ember-data/model';
 
-export default Model.extend({
-  gestartOpTijdstip: attr('datetime'),
-  bestuursorgaan: belongsTo('bestuursorgaan'),
-  agendapuntens: hasMany('agendapunt')
-});
+export default class ZittingModel extends Model {
+  @attr('datetime') gestartOpTijdstip;
+  @belongsTo('bestuursorgaan') bestuursorgaan;
+  @hasMany('agendapunt') agendapuntens;
+}
+
