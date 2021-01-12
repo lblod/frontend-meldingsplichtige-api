@@ -1,6 +1,6 @@
 {
   "name": "frontend-meldingsplichtige-api",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": true,
   "description": "Test frontend for the automatic submission API",
   "repository": {
@@ -26,6 +26,7 @@
     "ember-fetch": "^8.0.1"
   },
   "devDependencies": {
+    "@lblod/ember-submission-form-fields": "^0.8.23",
     "@appuniversum/appuniversum": "^0.0.7",
     "@appuniversum/ember-appuniversum": "0.0.16",
     "@ember/optional-features": "^1.3.0",
@@ -33,7 +34,6 @@
     "@glimmer/component": "^1.0.1",
     "@glimmer/tracking": "^1.0.0",
     "@lblod/ember-mock-login": "^0.4.7",
-    "@lblod/ember-submission-form-fields": "^0.8.1",
     "@lblod/ember-vo-mu-file-upload": "^0.6.0",
     "@lblod/ember-vo-webuniversum": "^0.22.6",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
