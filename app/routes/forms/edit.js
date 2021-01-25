@@ -51,4 +51,14 @@ export default class FormsEditRoute extends Route {
              submitted: submissionStatus.uri === SENT_STATUS
            };
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      /**
+       * NOTE: when exciting a controller, we want forceShowErrors to be reset.
+       *       prevent it from "leaking" to other form edit-routes.
+       */
+      controller.set('forceShowErrors', false);
+    }
+  }
 }
