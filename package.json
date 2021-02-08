@@ -27,7 +27,7 @@
     "ember-moment": "^8.0.1"
   },
   "devDependencies": {
-    "@lblod/ember-submission-form-fields": "^0.9.0",
+    "@lblod/ember-submission-form-fields": "^0.9.3",
     "@appuniversum/appuniversum": "^0.0.7",
     "@appuniversum/ember-appuniversum": "0.0.16",
     "@ember/optional-features": "^1.3.0",
