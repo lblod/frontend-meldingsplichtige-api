@@ -1,10 +1,10 @@
 <div class="container">
-  <AuHeader @appTitle="Testomgeving Meldingsplichtige API" @brandLink="https://www.vlaanderen.be/nl" @homeRoute="index">
+  <AuMainHeader @appTitle="Testomgeving Meldingsplichtige API" @brandLink="https://www.vlaanderen.be/nl" @homeRoute="index">
     {{#if session.isAuthenticated}}
       <MockLogout @tagName={{"button"}} class="au-c-dropdown__item">
         <AuIcon @icon="logout" @alignment="left" />Afmelden
       </MockLogout>
     {{/if}}
-  </AuHeader>
+  </AuMainHeader>
   {{outlet}}
 </div>
