@@ -1,6 +1,6 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
-export default class AutomaticSubmissionTaskModel extends Model {
-  @attr() created;
+export default class JobModel extends Model {
+  @attr('datetime') created;
   @belongsTo('submission') submission;
 }
