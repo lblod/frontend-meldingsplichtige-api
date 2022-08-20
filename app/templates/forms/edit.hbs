@@ -89,8 +89,8 @@
     {{!-- {{/if}} --}}
   </div>
 
-  <AuToolbar @border="top" @size="large" class="au-u-padding-left-large">
-    <AuToolbarGroup>
+  <AuToolbar @border="top" @size="large" class="au-u-padding-left-large" as |Group|>
+    <Group>
       {{#if this.model.submitted}}
         <AuAlert @alertIcon="check" @alertTitle="Dossier verstuurd" @alertskin="success" @alertsize="small" class="au-u-margin-bottom-none">
           <p>Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
@@ -109,11 +109,11 @@
                   @loading={{if this.save.isRunning "true"}}
                   @skin={{"secondary"}}
                   {{on "click" (perform this.save)}}>Bewaar</AuButton>
-        <AuLink @linkRoute="index" @skin="secondary">Annuleer</AuLink>
+        <AuLink @route="index" @skin="secondary">Annuleer</AuLink>
       {{else}}
-        <AuLink @linkRoute="index" @skin="secondary">Sluit</AuLink>
+        <AuLink @route="index" @skin="secondary">Sluit</AuLink>
       {{/unless}}
-    </AuToolbarGroup>
+    </Group>
 
     {{#unless this.model.submitted}}
       <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
