@@ -4,4 +4,3 @@ export default class SubmissionDocumentModel extends Model {
   @attr() uri;
   @belongsTo('submission') submission;
 }
-

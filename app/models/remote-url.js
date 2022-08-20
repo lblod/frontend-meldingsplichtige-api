@@ -10,18 +10,25 @@ export default class RemoteUrlModel extends Model {
   @belongsTo('file', { inverse: null }) download;
 
   get downloadSuccess() {
-    return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/success';
+    return (
+      this.downloadStatus ===
+      'http://lblod.data.gift/file-download-statuses/success'
+    );
   }
 
-  get downloadOngoing() { 
-    const ongoingStatuses = ['http://lblod.data.gift/file-download-statuses/ongoing',
-                            'http://lblod.data.gift/file-download-statuses/ready-to-be-cached'
-                            ];
+  get downloadOngoing() {
+    const ongoingStatuses = [
+      'http://lblod.data.gift/file-download-statuses/ongoing',
+      'http://lblod.data.gift/file-download-statuses/ready-to-be-cached',
+    ];
     return ongoingStatuses.includes(this.downloadStatus);
   }
 
   get downloadFailed() {
-    return this.downloadStatus === 'http://lblod.data.gift/file-download-statuses/failure';
+    return (
+      this.downloadStatus ===
+      'http://lblod.data.gift/file-download-statuses/failure'
+    );
   }
 
   get downloadLink() {

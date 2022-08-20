@@ -9,11 +9,9 @@ export default class GebruikerModel extends Model {
 
   get group() {
     return this.bestuurseenheden.firstObject;
-   } // used for mock login
+  } // used for mock login
 
   get fullName() {
     return `${this.voornaam} ${this.achternaam}`.trim();
   }
-
 }
-

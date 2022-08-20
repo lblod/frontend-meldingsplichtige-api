@@ -24,11 +24,11 @@ module.exports = function (environment) {
     moment: {
       allowEmpty: true,
       includeLocales: ['nl-be'],
-      includeTimezone: 'all'
+      includeTimezone: 'all',
     },
     torii: {
-      disableRedirectInitializer: true
-    }
+      disableRedirectInitializer: true,
+    },
   };
 
   if (environment === 'development') {

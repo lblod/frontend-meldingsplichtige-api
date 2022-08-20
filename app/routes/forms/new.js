@@ -3,14 +3,17 @@ import { inject as service } from '@ember/service';
 import { CONCEPT_STATUS } from '../../models/submission-document-status';
 
 export default class FormsNewRoute extends Route {
-  @service currentSession
+  @service currentSession;
   @service store;
 
   async beforeModel() {
-    const conceptStatuses = await this.store.query('submission-document-status', {
-      page: { size: 1 },
-      'filter[:uri:]': CONCEPT_STATUS
-    });
+    const conceptStatuses = await this.store.query(
+      'submission-document-status',
+      {
+        page: { size: 1 },
+        'filter[:uri:]': CONCEPT_STATUS,
+      }
+    );
 
     if (conceptStatuses.length)
       this.conceptStatus = conceptStatuses.firstObject;
@@ -19,7 +22,10 @@ export default class FormsNewRoute extends Route {
   async model() {
     const bestuurseenheid = await this.currentSession.group;
 
-    const submissionDocument = this.store.createRecord('submissionDocument', {});
+    const submissionDocument = this.store.createRecord(
+      'submissionDocument',
+      {}
+    );
     await submissionDocument.save();
     const currentUser = await this.currentSession.user;
     const submission = this.store.createRecord('submission', {
@@ -28,7 +34,7 @@ export default class FormsNewRoute extends Route {
       submissionDocument,
 
       creator: currentUser,
-      lastModifier: currentUser
+      lastModifier: currentUser,
     });
     await submission.save();
 

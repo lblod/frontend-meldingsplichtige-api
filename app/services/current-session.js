@@ -12,17 +12,27 @@ export default class CurrentSessionService extends Service {
 
   async load() {
     if (this.session.isAuthenticated) {
-      this.account = await this.store.find('account', this.session.data.authenticated.relationships.account.data.id);
+      this.account = await this.store.find(
+        'account',
+        this.session.data.authenticated.relationships.account.data.id
+      );
       this.user = await this.account.get('gebruiker');
-      this.group = await this.store.find('bestuurseenheid', this.session.data.authenticated.relationships.group.data.id);
+      this.group = await this.store.find(
+        'bestuurseenheid',
+        this.session.data.authenticated.relationships.group.data.id
+      );
       this.roles = await this.session.data.authenticated.data.attributes.roles;
 
       this.canAccessToezicht = this.canAccess('LoketLB-toezichtGebruiker');
       this.canAccessBbcdr = this.canAccess('LoketLB-bbcdrGebruiker');
       this.canAccessMandaat = this.canAccess('LoketLB-mandaatGebruiker');
       this.canAccessBerichten = this.canAccess('LoketLB-berichtenGebruiker');
-      this.canAccessLeidinggevenden = this.canAccess('LoketLB-leidinggevendenGebruiker');
-      this.canAccessPersoneelsbeheer = this.canAccess('LoketLB-personeelsbeheer');
+      this.canAccessLeidinggevenden = this.canAccess(
+        'LoketLB-leidinggevendenGebruiker'
+      );
+      this.canAccessPersoneelsbeheer = this.canAccess(
+        'LoketLB-personeelsbeheer'
+      );
       this.canAccessSubsidies = this.canAccess('LoketLB-subsidies');
     }
   }

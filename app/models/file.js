@@ -17,7 +17,7 @@ export default class FileModel extends Model {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
   }
 
-  get downloadLink(){
+  get downloadLink() {
     return `/files/${this.id}/download?name=${this.filename}`;
   }
 }

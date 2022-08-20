@@ -6,7 +6,7 @@ module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
     sassOptions: {
-      includePaths: []
+      includePaths: [],
     },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
