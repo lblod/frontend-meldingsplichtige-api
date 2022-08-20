@@ -14,11 +14,11 @@
       </div>
       <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
         <AuLabel>Aangemaakt op</AuLabel>
-        <p>{{moment-format this.model.submission.created 'DD-MM-YYYY'}}</p>
+        <p>{{date-format this.model.submission.created "dd/MM/yyyy"}}</p>
       </div>
       <div class="au-o-grid__item au-u-1-2 au-u-3-6@medium">
         <AuLabel>Bewerkt op</AuLabel>
-        <p>{{moment-format this.model.submission.modified 'DD-MM-YYYY'}}</p>
+        <p>{{date-format this.model.submission.modified "dd/MM/yyyy"}}</p>
       </div>
       {{#if this.save.isRunning}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-6@medium">
@@ -93,7 +93,7 @@
     <Group>
       {{#if this.model.submitted}}
         <AuAlert @alertIcon="check" @alertTitle="Dossier verstuurd" @alertskin="success" @alertsize="small" class="au-u-margin-bottom-none">
-          <p>Dit dossier werd verstuurd op {{moment-format this.model.submission.sentDate 'DD-MM-YYYY'}}</p>
+          <p>Dit dossier werd verstuurd op {{date-format this.model.submission.sentDate 'dd/MM/yyyy'}}</p>
         </AuAlert>
       {{/if}}
       {{#if (and this.forceShowErrors (not this.isValidForm))}}

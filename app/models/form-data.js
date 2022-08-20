@@ -14,7 +14,7 @@ export default class FormDataModel extends Model {
   @attr hasAdditionalTaxRate;
   @attr link;
   @attr taxRateAmmount;
-  @attr sessionStartedAtTime;
+  @attr('datetime') sessionStartedAtTime;
 
   @hasMany('concept') types;
   @belongsTo('submission') submission;

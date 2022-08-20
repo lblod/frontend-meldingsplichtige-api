@@ -60,7 +60,7 @@
         <Toezicht::SubmissionType @formData={{row.formData}} />
       </td>
       <td class="au-u-visible-small-up">
-        {{moment-format row.formData.sessionStartedAtTime "DD/MM/YYYY"}}
+        {{date-format row.formData.sessionStartedAtTime "dd/MM/yyyy"}}
       </td>
       <td class="au-u-visible-medium-up">
         {{#if row.job}}
@@ -77,7 +77,7 @@
         {{/if}}
       </td>
       <td class="au-u-visible-large-up">
-        {{moment-format row.sentDate "DD/MM/YYYY"}}
+        {{date-format row.sentDate "dd/MM/yyyy"}}
       </td>
       <td>
         <AuPill @skin={{if row.status.isSent "success" "default"}}>{{row.status.label}}</AuPill>
