@@ -1,28 +1,24 @@
 import Route from '@ember/routing/route';
-import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 
-export default Route.extend(ApplicationRouteMixin, {
-  currentSession: service(),
+export default class ApplicationRoute extends Route {
+  @service currentSession;
+  @service session;
 
-  beforeModel() {
-    return this._loadCurrentSession();
-  },
-
-  sessionAuthenticated() {
-    this._super(...arguments);
-    this._loadCurrentSession();
-  },
+  async beforeModel() {
+    await this.session.setup();
+    return this.loadCurrentSession();
+  }
 
   sessionInvalidated() {
     this.transitionTo('mock-login');
-  },
+  }
 
-  _loadCurrentSession() {
+  loadCurrentSession() {
     return this.currentSession.load().catch((e) => {
       warn(e, { id: 'session-load-failure' });
       this.session.invalidate();
     });
   }
-});
+}

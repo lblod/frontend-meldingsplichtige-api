@@ -7,7 +7,10 @@ module.exports = function (defaults) {
     // Add options here
     sassOptions: {
       includePaths: []
-    }
+    },
+    'ember-simple-auth': {
+      useSessionSetupMethod: true,
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated

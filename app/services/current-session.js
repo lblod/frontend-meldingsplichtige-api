@@ -1,11 +1,11 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { get, computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
 
-export default Service.extend({
-  session: service('session'),
-  store: service('store'),
+export default class CurrentSessionService extends Service {
+  @service session;
+  @service store;
+
   async load() {
     if (this.get('session.isAuthenticated')) {
       const session = this.session;
@@ -35,26 +35,31 @@ export default Service.extend({
       this.set('canAccessPersoneelsbeheer', this.canAccess('LoketLB-personeelsbeheer'));
       this.set('canAccessSubsidies', this.canAccess('LoketLB-subsidies'));
     }
-  },
+  }
+
   canAccess(role) {
     return this._roles.includes(role);
-  },
+  }
 
   // constructs a task which resolves in the promise
-  makePropertyPromise: task(function * (property) {
+  @task
+  *makePropertyPromise(property) {
     yield waitForProperty(this, property);
     return this.get(property);
-  }),
+  }
+
   // this is a promise
-  account: computed('_account', function() {
+  get account() {
     return this.makePropertyPromise.perform('_account');
-  }),
+  }
+
   // this contains a promise
-  user: computed('_user', function() {
+  get user() {
     return this.makePropertyPromise.perform('_user');
-  }),
+  }
+
   // this contains a promise
-  group: computed('_group', function() {
+  get group() {
     return this.makePropertyPromise.perform('_group');
-  })
-});
+  }
+}

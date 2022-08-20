@@ -4,6 +4,7 @@ import { CONCEPT_STATUS } from '../../models/submission-document-status';
 
 export default class FormsNewRoute extends Route {
   @service currentSession
+  @service store;
 
   async beforeModel() {
     const conceptStatuses = await this.store.query('submission-document-status', {

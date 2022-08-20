@@ -5,8 +5,11 @@ import fetch from 'fetch';
 import {ForkingStore} from '@lblod/ember-submission-form-fields';
 import { SENT_STATUS } from '../../models/submission-document-status';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
+import { inject as service } from '@ember/service';
 
 export default class FormsEditRoute extends Route {
+  @service store;
+
   async model(params) {
     // Fetch data from backend
 
