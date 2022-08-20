@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default Route.extend({
+export default class LoginRoute extends Route {
+  @service router;
+
   beforeModel() {
-    this.transitionTo('mock-login');
+    this.router.transitionTo('mock-login');
   }
-});
+}

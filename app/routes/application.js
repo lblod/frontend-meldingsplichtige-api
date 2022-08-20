@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 export default class ApplicationRoute extends Route {
   @service currentSession;
   @service session;
+  @service router;
 
   async beforeModel() {
     await this.session.setup();
@@ -12,7 +13,7 @@ export default class ApplicationRoute extends Route {
   }
 
   sessionInvalidated() {
-    this.transitionTo('mock-login');
+    this.router.transitionTo('login');
   }
 
   loadCurrentSession() {
