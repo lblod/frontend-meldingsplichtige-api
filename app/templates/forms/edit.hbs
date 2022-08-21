@@ -59,26 +59,14 @@
               <AuLabel>Bewerkt op</AuLabel>
               <p>{{date-format this.model.submission.modified "dd/MM/yyyy"}}</p>
             </div>
-            {{#if this.save.isRunning}}
+            {{#if this.model.submitted}}
               <AuAlert
-                @icon="document-added"
-                @title="Aan het opslaan..."
-                @skin="warning"
-                @size="small"/>
-            {{/if}}
-            {{#if this.submit.isRunning}}
-              <AuAlert
-                @icon="upload"
-                @title="Aan het versturen..."
-                @skin="warning"
-                @size="small"/>
-            {{/if}}
-            {{#if this.delete.isRunning}}
-              <AuAlert
-                @icon="trash"
-                @title="Aan het verwijderen..."
-                @skin="error"
-                @size="small"/>
+                @icon="check"
+                @title="Dossier verstuurd"
+                @skin="success"
+                @size="small">
+                <p>Dit dossier werd verstuurd op {{date-format this.model.submission.sentDate 'dd/MM/yyyy'}}</p>
+              </AuAlert>
             {{/if}}
           </div>
           {{!--End submission info--}}
@@ -171,63 +159,46 @@
       {{/if}}
     </div>
 
-    <AuToolbar
-      @border="top"
-      @size="large"
-      as |Group|>
-      <Group>
-        {{#if this.model.submitted}}
-          <AuAlert
-            @icon="check"
-            @title="Dossier verstuurd"
-            @skin="success"
-            @size="small">
-            <p>Dit dossier werd verstuurd op {{date-format this.model.submission.sentDate 'dd/MM/yyyy'}}</p>
-          </AuAlert>
-        {{/if}}
-        {{#if (and this.forceShowErrors (not this.isValidForm))}}
-          <AuAlert
-            @icon="alert-triangle"
-            @title="Kan dossier niet versturen"
-            @skin="error"
-            @size="small">
-            <p>Kan formulier niet versturen door ontbrekende of foutief ingevulde velden.</p>
-          </AuAlert>
-        {{/if}}
-        {{#if this.model.submitted}}
-          <AuLink @route="index" @skin="secondary">Sluit</AuLink>
-        {{else}}
+    {{#unless this.model.submitted}}
+      <AuToolbar
+        @border="top"
+        @size="large"
+        as |Group|>
+        <Group>
           <AuButton
             @icon="upload"
             @iconAlignment="left"
             @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
             @loading={{if this.submit.isRunning "true"}}
+            @loadingMessage="Versturen naar Vlaamse Overheid"
             {{on "click" (perform this.submit)}}>
-            Verzend naar Vlaamse overheid
+            Verzend naar Vlaamse Overheid
           </AuButton>
           <AuButton
             @icon="draft"
             @iconAlignment="left"
             @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
             @loading={{if this.save.isRunning "true"}}
+            @loadingMessage="Bewaren van dossier"
             @skin={{"secondary"}}
             {{on "click" (perform this.save)}}>
             Bewaar
           </AuButton>
-        {{/if}}
-      </Group>
-      {{#unless this.model.submitted}}
-        <AuButton
-          @icon="trash"
-          @iconAlignment="left"
-          @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
-          @loading={{if this.delete.isRunning "true"}}
-          @skin="primary"
-          @alert="true"
-          {{on "click" (perform this.delete)}}>
-          Verwijder dossier
-        </AuButton>
-      {{/unless}}
-    </AuToolbar>
+        </Group>
+        <Group>
+          <AuButton
+            @icon="trash"
+            @iconAlignment="left"
+            @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+            @loading={{if this.delete.isRunning "true"}}
+            @loadingMessage="Verwijderen van dossier"
+            @skin="primary"
+            @alert={{true}}
+            {{on "click" (perform this.delete)}}>
+            Verwijder dossier
+          </AuButton>
+        </Group>
+      </AuToolbar>
+    {{/unless}}
   </mc.content>
 </AuMainContainer>

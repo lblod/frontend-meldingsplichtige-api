@@ -15,6 +15,7 @@ import { inject as service } from '@ember/service';
 export default class FormsEditController extends Controller {
   @service currentSession;
   @service store;
+  @service toaster;
 
   @tracked formVisible = true;
   @tracked triplesVisible = false;
@@ -139,23 +140,49 @@ export default class FormsEditController extends Controller {
 
   @task
   *delete() {
+    this.toaster.notify('Het dossier wordt verwijderd...', 'Verwijderen', {
+      icon: 'three-dots',
+      timeOut: '5000',
+      closable: true,
+    });
     yield this.deleteSubmission.perform();
+    this.toaster.success(
+      'Het dossier werd successvol verwijderd',
+      'Verwijderd',
+      { icon: 'check', timeOut: '10000', closable: true }
+    );
     this.transitionToRoute('index');
   }
 
   @task
   *save() {
+    this.toaster.notify('Het dossier wordt opgeslagen...', 'Opslaan', {
+      icon: 'three-dots',
+      timeOut: '5000',
+      closable: true,
+    });
+
     yield this.saveSubmissionForm.perform();
 
     const user = yield this.currentSession.user;
     this.model.submission.modified = new Date();
     this.model.submission.lastModifier = user;
     yield this.model.submission.save();
-    alert('Succesvol opgeslagen'); // TODO replace with toast
+
+    this.toaster.success(
+      'Het dossier werd successvol opgeslagen',
+      'Opgeslagen',
+      { icon: 'check', timeOut: '10000', closable: true }
+    );
   }
 
   @task
   *submit() {
+    this.toaster.notify('Het dossier wordt verzonden...', 'Verzenden', {
+      icon: 'three-dots',
+      timeOut: '5000',
+      closable: true,
+    });
     const options = {
       ...this.graphs,
       sourceNode: this.sourceNode,
@@ -163,11 +190,24 @@ export default class FormsEditController extends Controller {
     };
     const isValid = validateForm(this.form, options);
     if (!isValid) {
-      alert('Gelieve het formulier correct in te vullen');
+      this.toaster.error(
+        'Kan dossier niet versturen door ontbrekende of foutief ingevulde velden.',
+        'Kan dossier niet versturen',
+        {
+          icon: 'cross',
+          timeOut: undefined,
+          closable: true,
+        }
+      );
       this.forceShowErrors = true;
     } else {
       yield this.saveSubmissionForm.perform();
       yield this.submitSubmissionForm.perform();
+      this.toaster.success(
+        'Het dossier werd successvol verzonden',
+        'Verzonden',
+        { icon: 'check', timeOut: '10000', closable: true }
+      );
       this.transitionToRoute('index');
     }
   }

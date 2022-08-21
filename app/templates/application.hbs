@@ -13,6 +13,8 @@
   </AuMainHeader>
   <AuBodyContainer
     @scroll={{true}}>
+    {{!--Use the toaster service to display toasters--}}
+    <AuToaster />
     {{outlet}}
   </AuBodyContainer>
 </AuApp>
