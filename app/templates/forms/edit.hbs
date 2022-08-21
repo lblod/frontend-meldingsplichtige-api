@@ -1,64 +1,88 @@
-<AuMainContainer as |mc|>
+<AuMainContainer 
+  {{did-insert this.registerObserver}}
+  {{did-insert this.setTriplesForTables}}
+  as |mc|>
   <mc.sidebar>
     <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content au-u-padding">
+      <div class="au-c-sidebar__content">
+        <AuLink
+          @route="index"
+          @icon="arrow-left"
+          @iconAlignment="left"
+          @skin="button"
+          class="au-u-margin">
+          Annuleren en terug
+        </AuLink>
         <nav class="au-u-margin-bottom">
           <ul class="au-c-list-navigation">
             <li class="au-c-list-navigation__item">
               <AuLink
-                @route="index"
-                @icon="arrow-left"
+                @icon="document"
                 @iconAlignment="left"
-                @skin="button">
-                Annuleren en terug
+                @skin="primary"
+                class="au-c-list-navigation__link {{if this.formVisible "active"}}"
+                {{on "click" this.showForm}}>
+                Formulier bewerken
+              </AuLink>
+            </li>
+            <li class="au-c-list-navigation__item">
+              <AuLink
+                @icon="html"
+                @iconAlignment="left"
+                @skin="primary"
+                class="au-c-list-navigation__link {{if this.triplesVisible "active"}}"
+                {{on "click" this.showTriples}}>
+                Triples samenvatting
               </AuLink>
             </li>
           </ul>
         </nav>
-        {{!--Submission info--}}
-        <AuHeading @level="3" @skin="4" class="au-u-margin-bottom">
-          Dossierinformatie
-        </AuHeading>
-        <div class="au-u-flex--inline au-u-flex--wrap au-u-flex--spaced">
-          <div>
-            <AuLabel>Gewijzigd door</AuLabel>
-            {{#if this.model.submission.lastModifier.fullName}}
-            <p>{{this.model.submission.lastModifier.fullName}}</p>
-            {{else if this.model.submission.job}}
-            <p>Automatisch aangemaakt bij publicatie</p>
+        <div class="au-u-padding au-u-padding-top-tiny">
+          {{!--Submission info--}}
+          <AuHeading @level="3" @skin="4" class="au-u-margin-bottom">
+            Dossierinformatie
+          </AuHeading>
+          <div class="au-u-flex--inline au-u-flex--wrap au-u-flex--spaced">
+            <div>
+              <AuLabel>Gewijzigd door</AuLabel>
+              {{#if this.model.submission.lastModifier.fullName}}
+                <p>{{this.model.submission.lastModifier.fullName}}</p>
+              {{else if this.model.submission.job}}
+                <p>Automatisch aangemaakt bij publicatie</p>
+              {{/if}}
+            </div>
+            <div>
+              <AuLabel>Aangemaakt op</AuLabel>
+              <p>{{date-format this.model.submission.created "dd/MM/yyyy"}}</p>
+            </div>
+            <div>
+              <AuLabel>Bewerkt op</AuLabel>
+              <p>{{date-format this.model.submission.modified "dd/MM/yyyy"}}</p>
+            </div>
+            {{#if this.save.isRunning}}
+              <AuAlert
+                @icon="document-added"
+                @title="Aan het opslaan..."
+                @skin="warning"
+                @size="small"/>
+            {{/if}}
+            {{#if this.submit.isRunning}}
+              <AuAlert
+                @icon="upload"
+                @title="Aan het versturen..."
+                @skin="warning"
+                @size="small"/>
+            {{/if}}
+            {{#if this.delete.isRunning}}
+              <AuAlert
+                @icon="trash"
+                @title="Aan het verwijderen..."
+                @skin="error"
+                @size="small"/>
             {{/if}}
           </div>
-          <div>
-            <AuLabel>Aangemaakt op</AuLabel>
-            <p>{{date-format this.model.submission.created "dd/MM/yyyy"}}</p>
-          </div>
-          <div>
-            <AuLabel>Bewerkt op</AuLabel>
-            <p>{{date-format this.model.submission.modified "dd/MM/yyyy"}}</p>
-          </div>
-          {{#if this.save.isRunning}}
-            <AuAlert
-              @icon="document-added"
-              @title="Aan het opslaan..."
-              @skin="warning"
-              @size="small"/>
-          {{/if}}
-          {{#if this.submit.isRunning}}
-            <AuAlert
-              @icon="upload"
-              @title="Aan het versturen..."
-              @skin="warning"
-              @size="small"/>
-          {{/if}}
-          {{#if this.delete.isRunning}}
-            <AuAlert
-              @icon="trash"
-              @title="Aan het verwijderen..."
-              @skin="error"
-              @size="small"/>
-          {{/if}}
+          {{!--End submission info--}}
         </div>
-        {{!--End submission info vertical--}}
       </div>
     </div>
   </mc.sidebar>
@@ -71,7 +95,8 @@
         Bekijk aanlevering dossier
       </AuHeading>
     </AuToolbar>
-    <div class="au-u-padding">
+
+    <div class="au-u-padding {{unless this.formVisible "au-u-hidden"}}">
       <SubmissionForm @form={{this.form}}
         @show={{this.model.submitted}}
         @graphs={{this.graphs}}
@@ -80,9 +105,7 @@
         @forceShowErrors={{this.forceShowErrors}}/>
     </div>
 
-    <div class="au-u-padding au-u-background-gray-100"
-      {{did-insert this.registerObserver}}
-      {{did-insert this.setTriplesForTables}}>
+    <div class="au-u-padding {{unless this.triplesVisible "au-u-hidden"}}">
       <AuHeading @level="3" @skin="3">
         Informatie over aanpassingen formulier
       </AuHeading>

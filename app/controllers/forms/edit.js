@@ -16,14 +16,24 @@ export default class FormsEditController extends Controller {
   @service currentSession;
   @service store;
 
+  @tracked formVisible = true;
+  @tracked triplesVisible = false;
+
   @tracked datasetTriples = [];
   @tracked addedTriples = [];
   @tracked removedTriples = [];
   @tracked forceShowErrors = false;
 
+  deletedStatus;
+
   constructor() {
     super(...arguments);
     this.ensureDeletedStatus();
+  }
+
+  reset() {
+    this.formVisible = true;
+    this.triplesVisible = false;
   }
 
   get formStore() {
@@ -160,5 +170,17 @@ export default class FormsEditController extends Controller {
       yield this.submitSubmissionForm.perform();
       this.transitionToRoute('index');
     }
+  }
+
+  @action
+  showForm() {
+    this.formVisible = true;
+    this.triplesVisible = false;
+  }
+
+  @action
+  showTriples() {
+    this.formVisible = false;
+    this.triplesVisible = true;
   }
 }
