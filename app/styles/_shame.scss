@@ -4,15 +4,6 @@
    Some parts will be reused, but most of them will not.
    ========================================================================== */
 
-th {
-  background-color: white;
-  font-weight: bold;
-}
-
-tr:nth-child(odd) {
-  background-color: #f2f2f2;
-}
-
 /* ==================================
    #NON-EDITABLE
    ================================== */
@@ -37,57 +28,6 @@ $au-non-editable-background    : $au-gray-100 !default;
 
     }
   }
-}
-
-/* ==================================
-   #POWER SELECT
-   ================================== */
-
-.ember-power-select-trigger {
-  min-height: 3.6rem;
-}
-
-/* Modifiers
-   ========================================================================== */
-
-.ember-power-select--error .ember-power-select-trigger {
-  border: .3rem solid $au-red-600;
-}
-
-/* ==================================
-   #DATE PICKER
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.au-c-date-picker-container .datepicker {
-  width: auto;
-
-  .input-field {
-    width: 100%;
-  }
-
-  .datepicker__icon {
-    right: 1.5rem;
-  }
-}
-
-
-.au-c-date-picker-container--error .input-field--datepicker {
-  border: .3rem solid $au-red-600;
-}
-
-/* ==================================
-   #CHECKBOX
-   ================================== */
-
-/* Modifiers
-   ========================================================================== */
-
-.checkbox {
-  margin-right: 0;
-  min-height: 1.5rem;
 }
 
 /* ==================================
@@ -159,6 +99,10 @@ $au-non-editable-background    : $au-gray-100 !default;
     padding: $au-unit-tiny;
   }
 }
+
+/******************************************************************************
+  Utility classes (that should be added to AppUniversum :p )
+******************************************************************************/
 
 .au-u-monospace {
   font-family: var(--au-font-tertiary);
