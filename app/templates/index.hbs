@@ -83,7 +83,14 @@
         <AuPill @skin={{if row.status.isSent "success" "default"}}>{{row.status.label}}</AuPill>
       </td>
       <td>
-        <LinkTo @route="forms.edit" @model={{row.id}}>Bekijk</LinkTo>
+        <AuLink
+          @route='forms.edit'
+          @model={{row.id}}
+          @skin="button"
+          @icon="visible"
+          @iconAlignment="left">
+          Bekijk
+        </AuLink>
       </td>
     </c.body>
   </t.content>
