@@ -11,9 +11,9 @@ export default class FormDataModel extends Model {
   @attr chartOfAccount;
   @attr taxType;
   @attr taxRate;
-  @attr hasAdditionalTaxRate;
+  @attr('boolean') hasAdditionalTaxRate;
   @attr link;
-  @attr taxRateAmmount;
+  @attr('number') taxRateAmmount;
   @attr('datetime') sessionStartedAtTime;
 
   @hasMany('concept') types;

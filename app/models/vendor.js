@@ -1,6 +1,7 @@
-import Model, { attr } from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class VendorModel extends Model {
-  @attr('string') name;
-  @attr('string') key;
+  @attr name;
+  @attr key;
+  @hasMany('bestuurseenheid') canActOnBehalfOf;
 }

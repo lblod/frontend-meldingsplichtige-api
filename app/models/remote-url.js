@@ -1,12 +1,12 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class RemoteUrlModel extends Model {
-  @attr() uri;
-  @attr() address;
-  @attr('date') created;
-  @attr('date') modified;
-  @attr() downloadStatus;
-  @attr() creator;
+  @attr uri;
+  @attr address;
+  @attr('datetime') created;
+  @attr('datetime') modified;
+  @attr downloadStatus;
+  @attr creator;
   @belongsTo('file', { inverse: null }) download;
 
   get downloadSuccess() {
