@@ -1,97 +1,111 @@
 {{outlet}}
-<AuDataTable
-  @content={{this.model}}
-  @isLoading={{this.isLoadingModel}}
-  @filter={{this.filter}}
-  @sort={{this.sort}}
-  @page={{this.page}}
-  @size={{this.size}}
-  as |t|>
-  <t.menu as |menu|>
-    <menu.general>
-      <AuToolbar class="au-u-padding" as |Group|>
-        <Group>
-          <AuHeading @level="1" @skin="1">
-            Test loket voor meldingen
-          </AuHeading>
-        </Group>
-        <Group>
+{{#let (t "main.title")
+       (t "main.create-submission")
+       (t "submission.unit")
+       (t "submission.type")
+       (t "submission.date")
+       (t "submission.creator")
+       (t "submission.modifier")
+       (t "submission.sent")
+       (t "submission.status")
+       (t "submission.action")
+       (t "submission.created-automatic")
+       (t "submission.details")
+  as |title create unit type date creator modifier sent status act createdAutomatic details|}}
+  <AuDataTable
+    @content={{this.model}}
+    @isLoading={{this.isLoadingModel}}
+    @filter={{this.filter}}
+    @sort={{this.sort}}
+    @page={{this.page}}
+    @size={{this.size}}
+    as |t|>
+    <t.menu as |menu|>
+      <menu.general>
+        <AuToolbar class="au-u-padding" as |Group|>
+          <Group>
+            <AuHeading @level="1" @skin="1">
+              {{title}}
+            </AuHeading>
+          </Group>
+          <Group>
+            <AuLink
+              @route="forms.new"
+              @skin="button"
+              @icon="plus"
+              @iconAlignment="left">
+              {{create}}
+            </AuLink>
+          </Group>
+        </AuToolbar>
+      </menu.general>
+    </t.menu>
+    <t.content as |c|>
+      <c.header>
+        <AuDataTableThSortable
+          @field="formData.passedBy.isTijdsspecialisatieVan.naam"
+          @currentSorting={{this.sort}}
+          @label={{unit}}/>
+        <th>{{type}}</th>
+        <AuDataTableThSortable
+          @class="au-u-visible-small-up"
+          @field="formData.sessionStartedAtTime"
+          @currentSorting={{this.sort}}
+          @label={{date}}/>
+        <th>{{creator}}</th>
+        <th>{{modifier}}</th>
+        <AuDataTableThSortable
+          @class="au-u-visible-large-up"
+          @field="sentDate"
+          @currentSorting={{this.sort}}
+          @label={{sent}}/>
+        <AuDataTableThSortable
+          @field="status.label"
+          @currentSorting={{this.sort}}
+          @label={{status}}/>
+        <th>{{act}}</th>
+      </c.header>
+      <c.body as |row|>
+        <td>
+          {{row.formData.passedBy.isTijdsspecialisatieVan.naam}}
+        </td>
+        <td>
+          <Toezicht::SubmissionType @formData={{row.formData}} />
+        </td>
+        <td class="au-u-visible-small-up">
+          {{date-format row.formData.sessionStartedAtTime "dd/MM/yyyy"}}
+        </td>
+        <td class="au-u-visible-medium-up">
+          {{#if row.job}}
+            <p class="au-u-muted au-u-para-tiny">{{createdAutomatic}}</p>
+          {{else}}
+            <p>{{row.creator.fullName}}</p>
+          {{/if}}
+        </td>
+        <td class="au-u-visible-small-up">
+          {{#if row.job}}
+            <p class="au-u-muted au-u-para-tiny">{{createdAutomatic}}</p>
+          {{else}}
+            <p>{{row.lastModifier.fullName}}</p>
+          {{/if}}
+        </td>
+        <td class="au-u-visible-large-up">
+          {{date-format row.sentDate "dd/MM/yyyy"}}
+        </td>
+        <td>
+          <AuPill @skin={{if row.status.isSent "success" "default"}}>{{row.status.label}}</AuPill>
+        </td>
+        <td>
           <AuLink
-            @route="forms.new"
+            @route='forms.edit'
+            @model={{row.id}}
             @skin="button"
-            @icon="plus"
+            @icon="visible"
             @iconAlignment="left">
-            Maak nieuw formulier aan
+            {{details}}
           </AuLink>
-        </Group>
-      </AuToolbar>
-    </menu.general>
-  </t.menu>
-  <t.content as |c|>
-    <c.header>
-      <AuDataTableThSortable
-        @field="formData.passedBy.isTijdsspecialisatieVan.naam"
-        @currentSorting={{this.sort}}
-        @label="Orgaan"/>
-      <th>Type dossier</th>
-      <AuDataTableThSortable
-        @class="au-u-visible-small-up"
-        @field="formData.sessionStartedAtTime"
-        @currentSorting={{this.sort}}
-        @label="Datum zitting/besluit"/>
-      <th>Aangemaakt door</th>
-      <th>Laatst gewijzigd door</th>
-      <AuDataTableThSortable
-        @class="au-u-visible-large-up"
-        @field="sentDate"
-        @currentSorting={{this.sort}}
-        @label="Datum verstuurd"/>
-      <AuDataTableThSortable
-        @field="status.label"
-        @currentSorting={{this.sort}}
-        @label="Status"/>
-      <th>Actie</th>
-    </c.header>
-    <c.body as |row|>
-      <td>
-        {{row.formData.passedBy.isTijdsspecialisatieVan.naam}}
-      </td>
-      <td>
-        <Toezicht::SubmissionType @formData={{row.formData}} />
-      </td>
-      <td class="au-u-visible-small-up">
-        {{date-format row.formData.sessionStartedAtTime "dd/MM/yyyy"}}
-      </td>
-      <td class="au-u-visible-medium-up">
-        {{#if row.job}}
-          <AuHelpText>Automatisch bij publicatie</AuHelpText>
-        {{else}}
-          <AuHelpText>{{row.creator.fullName}}</AuHelpText>
-        {{/if}}
-      </td>
-      <td class="au-u-visible-small-up">
-        {{#if row.job}}
-          <AuHelpText>Automatisch aangemaakt bij publicatie</AuHelpText>
-        {{else}}
-          <AuHelpText>{{row.lastModifier.fullName}}</AuHelpText>
-        {{/if}}
-      </td>
-      <td class="au-u-visible-large-up">
-        {{date-format row.sentDate "dd/MM/yyyy"}}
-      </td>
-      <td>
-        <AuPill @skin={{if row.status.isSent "success" "default"}}>{{row.status.label}}</AuPill>
-      </td>
-      <td>
-        <AuLink
-          @route='forms.edit'
-          @model={{row.id}}
-          @skin="button"
-          @icon="visible"
-          @iconAlignment="left">
-          Bekijk
-        </AuLink>
-      </td>
-    </c.body>
-  </t.content>
-</AuDataTable>
+        </td>
+      </c.body>
+    </t.content>
+  </AuDataTable>
+{{/let}}

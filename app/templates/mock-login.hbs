@@ -12,11 +12,21 @@
 
     <div class="au-o-region-large">
       <div class="au-o-layout">
-        <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
+        <AuHeading @skin="4">
+          {{t "mock-login.title"}}
+        </AuHeading>
         <p class="au-u-margin-top-small au-u-margin-bottom">
           {{#let (unique-id) as |id|}}
-            <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
-            <input class="au-c-input au-c-input--block js-js-input-pattern-bound" id={{id}} placeholder="Aalst, Berchem, &hellip;" value={{this.gemeente}} autofocus oninput={{perform this.updateSearch value='target.value'}}>
+            <AuLabel for={{id}}>
+              {{t "mock-login.search-label"}}
+            </AuLabel>
+            <input
+              class="au-c-input au-c-input--block js-js-input-pattern-bound"
+              id={{id}}
+              placeholder={{t "mock-login.placeholder"}}
+              value={{this.gemeente}}
+              autofocus
+              oninput={{perform this.updateSearch value='target.value'}} />
           {{/let}}
         </p>
 
@@ -25,55 +35,31 @@
             <AuLoader @padding="small" />
           {{else}}
             {{#if this.login.errorMessage}}
-              <AuAlert @alertIcon="alert-triangle" @alertTitle={{this.login.errorMessage}} @alertSkin="warning" />
+              <AuAlert
+                @alertIcon="alert-triangle"
+                @alertTitle={{this.login.errorMessage}}
+                @alertSkin="warning" />
             {{/if}}
             {{#each this.model as |account|}}
-              <AuButton class="au-u-flex au-u-flex--row au-u-flex--start au-c-card au-u-margin-bottom-small" @skin="secondary" @width="block"  @size="large" type="button" {{on "click" (fn login.login account.id account.gebruiker.group.id)}}>
+              <AuButton
+                class="au-u-flex au-u-flex--row au-u-flex--start au-c-card au-u-margin-bottom-small"
+                @skin="secondary"
+                @width="block"
+                @size="large"
+                type="button"
+                {{on "click" (fn login.login account.id account.gebruiker.group.id)}}>
                 {{account.gebruiker.voornaam}} {{account.gebruiker.achternaam}}
               </AuButton>
             {{/each}}
-            <NumberPagination @page={{this.page}} @size={{this.size}} @nbOfItems={{this.model.length}} @total={{this.model.meta.count}} @links={{this.model.meta.pagination}} />
+            <NumberPagination
+              @page={{this.page}}
+              @size={{this.size}}
+              @nbOfItems={{this.model.length}}
+              @total={{this.model.meta.count}}
+              @links={{this.model.meta.pagination}} />
           {{/if}}
         </MockLogin>
       </div>
     </div>
   </main>
 </AuBodyContainer>
-
-{{!--
-<div class="page">
-  <div id="main" itemprop="mainContentOfPage" role="main" tabindex="-1" class="main-content">
-    <div class="col--9-12--s col--5-12--m col--6-12">
-      <div class="grid grid--align-right">
-        <div class="col--1-1 col--10-12--m col--6-12--l">
-          <h2 class="h4 u-spacer">Kies een bestuurseenheid om mee in te loggen.</h2>
-          <input class="input-field input-field--block au-u-margin-bottom" placeholder="Aalst, Berchem,..." value={{this.gemeente}} autofocus oninput={{perform this.updateSearch value='target.value'}}>
-          <MockLogin as |login|>
-            {{#if this.queryStore.isRunning}}
-              <div class="loader-wrapper">
-                <div class="loader">
-                  <span class="u-visually-hidden">Aan het laden</span>
-                </div>
-              </div>
-            {{else}}
-              {{#if login.errorMessage}}
-                <WuAlert @title={{login.errorMessage}} @isWarning={{true}} />
-              {{/if}}
-              <login.each-account @accounts={{this.model}} as |account|>
-                <WuInfoTile class="u-spacer--tiny" as |i|>
-                  <i.content>
-                    {{account.gebruiker.voornaam}} {{account.gebruiker.achternaam}}
-                  </i.content>
-                </WuInfoTile>
-              </login.each-account>
-              <NumberPagination
-                @page={{this.page}} @size={{this.size}} @nbOfItems={{this.model.length}}
-                @total={{this.model.meta.count}} @links={{this.model.meta.pagination}} />
-            {{/if}}
-          </MockLogin>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
---}}

@@ -16,6 +16,7 @@ export default class FormsEditController extends Controller {
   @service currentSession;
   @service store;
   @service toaster;
+  @service intl;
 
   @tracked formVisible = true;
   @tracked triplesVisible = false;
@@ -140,15 +141,19 @@ export default class FormsEditController extends Controller {
 
   @task
   *delete() {
-    this.toaster.notify('Het dossier wordt verwijderd...', 'Verwijderen', {
-      icon: 'three-dots',
-      timeOut: '5000',
-      closable: true,
-    });
+    this.toaster.notify(
+      this.intl.t('edit.toast.delete'),
+      this.intl.t('edit.toast.delete-title'),
+      {
+        icon: 'three-dots',
+        timeOut: '5000',
+        closable: true,
+      }
+    );
     yield this.deleteSubmission.perform();
     this.toaster.success(
-      'Het dossier werd successvol verwijderd',
-      'Verwijderd',
+      this.intl.t('edit.toast.delete-success'),
+      this.intl.t('edit.toast.delete-success-title'),
       { icon: 'check', timeOut: '10000', closable: true }
     );
     this.transitionToRoute('index');
@@ -156,11 +161,15 @@ export default class FormsEditController extends Controller {
 
   @task
   *save() {
-    this.toaster.notify('Het dossier wordt opgeslagen...', 'Opslaan', {
-      icon: 'three-dots',
-      timeOut: '5000',
-      closable: true,
-    });
+    this.toaster.notify(
+      this.intl.t('edit.toast.save'),
+      this.intl.t('edit.toast.save-title'),
+      {
+        icon: 'three-dots',
+        timeOut: '5000',
+        closable: true,
+      }
+    );
 
     yield this.saveSubmissionForm.perform();
 
@@ -170,19 +179,23 @@ export default class FormsEditController extends Controller {
     yield this.model.submission.save();
 
     this.toaster.success(
-      'Het dossier werd successvol opgeslagen',
-      'Opgeslagen',
+      this.intl.t('edit.toast.save-success'),
+      this.intl.t('edit.toast.save-success-title'),
       { icon: 'check', timeOut: '10000', closable: true }
     );
   }
 
   @task
   *submit() {
-    this.toaster.notify('Het dossier wordt verzonden...', 'Verzenden', {
-      icon: 'three-dots',
-      timeOut: '5000',
-      closable: true,
-    });
+    this.toaster.notify(
+      this.intl.t('edit.toast.send'),
+      this.intl.t('edit.toast.send-title'),
+      {
+        icon: 'three-dots',
+        timeOut: '5000',
+        closable: true,
+      }
+    );
     const options = {
       ...this.graphs,
       sourceNode: this.sourceNode,
@@ -191,8 +204,8 @@ export default class FormsEditController extends Controller {
     const isValid = validateForm(this.form, options);
     if (!isValid) {
       this.toaster.error(
-        'Kan dossier niet versturen door ontbrekende of foutief ingevulde velden.',
-        'Kan dossier niet versturen',
+        this.intl.t('edit.toast.send-fail'),
+        this.intl.t('edit.toast.send-fail-title'),
         {
           icon: 'cross',
           timeOut: undefined,
@@ -204,8 +217,8 @@ export default class FormsEditController extends Controller {
       yield this.saveSubmissionForm.perform();
       yield this.submitSubmissionForm.perform();
       this.toaster.success(
-        'Het dossier werd successvol verzonden',
-        'Verzonden',
+        this.intl.t('edit.toast.send-success'),
+        this.intl.t('edit.toast.send-success-title'),
         { icon: 'check', timeOut: '10000', closable: true }
       );
       this.transitionToRoute('index');

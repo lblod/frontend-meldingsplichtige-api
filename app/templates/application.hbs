@@ -2,12 +2,12 @@
   <AuMainHeader
     @brandLink="https://www.vlaanderen.be/nl"
     @homeRoute="index"
-    @appTitle="Testomgeving Meldingsplichtige API">
+    @appTitle={{t "title"}}>
     {{#if this.session.isAuthenticated}}
       <MockLogout
         @tagName={{"button"}}
         class="au-c-button au-c-button--naked">
-        <AuIcon @icon="logout"/>&nbsp;Afmelden
+        <AuIcon @icon="logout"/>&nbsp;{{t "logout"}}
       </MockLogout>
     {{/if}}
   </AuMainHeader>
