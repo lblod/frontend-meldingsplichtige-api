@@ -21,7 +21,7 @@ export default class CurrentSessionService extends Service {
         'bestuurseenheid',
         this.session.data.authenticated.relationships.group.data.id
       );
-      this.roles = await this.session.data.authenticated.data.attributes.roles;
+      this.roles = this.session.data.authenticated.data.attributes.roles;
 
       this.canAccessToezicht = this.canAccess('LoketLB-toezichtGebruiker');
       this.canAccessBbcdr = this.canAccess('LoketLB-bbcdrGebruiker');
