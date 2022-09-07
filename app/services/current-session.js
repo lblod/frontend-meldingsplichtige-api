@@ -16,7 +16,7 @@ export default class CurrentSessionService extends Service {
         'account',
         this.session.data.authenticated.relationships.account.data.id
       );
-      this.user = await this.account.get('gebruiker');
+      this.user = await this.account.gebruiker;
       this.group = await this.store.find(
         'bestuurseenheid',
         this.session.data.authenticated.relationships.group.data.id
