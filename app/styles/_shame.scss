@@ -65,42 +65,6 @@ $au-non-editable-background    : $au-gray-100 !default;
 }
 
 /******************************************************************************
-  Pagination on the mock-login (possibly among others)
-******************************************************************************/
-
-.data-table-pagination {
-  margin-top: $au-unit;
-
-  div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.data-table-pagination-left {
-  @extend .au-c-help-text;
-}
-
-.data-table-pagination-right {
-  display: flex;
-  gap: $au-unit-tiny;
-
-  button {
-    @extend .au-c-button;
-    @extend .au-c-button--link;
-  }
-
-  select {
-    background-color: var(--au-white);
-    border: .1rem solid var(--au-gray-300);
-    border-radius: $au-radius;
-    padding: $au-unit-tiny;
-  }
-}
-
-/******************************************************************************
   Utility classes (that should be added to AppUniversum :p )
 ******************************************************************************/
 

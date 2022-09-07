@@ -51,7 +51,7 @@
                 {{account.gebruiker.voornaam}} {{account.gebruiker.achternaam}}
               </AuButton>
             {{/each}}
-            <NumberPagination
+            <AuDataTableNumberPagination
               @page={{this.page}}
               @size={{this.size}}
               @nbOfItems={{this.model.length}}
