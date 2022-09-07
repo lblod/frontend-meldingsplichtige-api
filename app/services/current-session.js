@@ -12,11 +12,11 @@ export default class CurrentSessionService extends Service {
 
   async load() {
     if (this.session.isAuthenticated) {
-      this.account = await this.store.find(
+      this.account = await this.store.findRecord(
         'account',
         this.session.data.authenticated.relationships.account.data.id
       );
-      this.user = await this.account.get('gebruiker');
+      this.user = await this.account.gebruiker;
       this.group = await this.store.find(
         'bestuurseenheid',
         this.session.data.authenticated.relationships.group.data.id
