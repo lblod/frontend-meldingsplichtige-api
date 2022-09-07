@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class IndexRoute extends Route.extend(DataTableRouteMixin) {
   @service session;
+  @service store;
   modelName = 'submission';
 
   beforeModel(transition) {
