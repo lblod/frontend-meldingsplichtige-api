@@ -5,6 +5,7 @@ import { CONCEPT_STATUS } from '../../models/submission-document-status';
 export default class FormsNewRoute extends Route {
   @service currentSession;
   @service store;
+  @service router;
 
   async beforeModel() {
     const conceptStatuses = await this.store.query(
@@ -42,6 +43,6 @@ export default class FormsNewRoute extends Route {
   }
 
   afterModel(model) {
-    this.transitionTo('forms.edit', model.id);
+    this.router.transitionTo('forms.edit', model.id);
   }
 }

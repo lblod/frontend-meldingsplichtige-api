@@ -15,6 +15,7 @@ import { inject as service } from '@ember/service';
 export default class FormsEditController extends Controller {
   @service currentSession;
   @service store;
+  @service router;
   @service toaster;
   @service intl;
 
@@ -156,7 +157,7 @@ export default class FormsEditController extends Controller {
       this.intl.t('edit.toast.delete-success-title'),
       { icon: 'check', timeOut: '10000', closable: true }
     );
-    this.transitionToRoute('index');
+    this.router.transitionTo('index');
   }
 
   @task
@@ -221,7 +222,7 @@ export default class FormsEditController extends Controller {
         this.intl.t('edit.toast.send-success-title'),
         { icon: 'check', timeOut: '10000', closable: true }
       );
-      this.transitionToRoute('index');
+      this.router.transitionTo('index');
     }
   }
 
