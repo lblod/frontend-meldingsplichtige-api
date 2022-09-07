@@ -40,4 +40,10 @@ export default class CurrentSessionService extends Service {
   canAccess(role) {
     return this.roles.includes(role);
   }
+
+  async ensureLoaded() {
+    if (!(this.user && this.group)) {
+      return await this.load();
+    }
+  }
 }
