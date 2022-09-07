@@ -1,7 +1,18 @@
 # frontend-meldingsplichtige-api
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This web application is used for testing the process of creating and submitting automatic submissions for the Loket stack. You can also create a manual submission if needed.
+
+## Run this in the stack
+
+Look at the information below if you don't already have experience with Ember webapps. You will also need the [app-meldingsplichtige-api stack](https://github.com/lblod/app-meldingsplichtige-api) running to be able to use this application. Then use
+
+```bash
+ember serve --proxy http://localhost/ --port <<desired port>>
+```
+
+where "localhost" is where the stack is running, to run this application.
+
+# Ember app details
 
 ## Prerequisites
 
@@ -35,9 +46,8 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Linting
 
-* `npm run lint:hbs`
-* `npm run lint:js`
-* `npm run lint:js -- --fix`
+* `npm run lint`
+* `npm run lint:fix`
 
 ### Building
 
@@ -46,7 +56,7 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 ### Deploying
 
-Specify what it takes to deploy your app.
+No specifications about deployment yet
 
 ## Further Reading / Useful Links
 

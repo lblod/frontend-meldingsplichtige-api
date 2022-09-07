@@ -1,10 +1,20 @@
-<div class="container">
-  <AuMainHeader @appTitle="Testomgeving Meldingsplichtige API" @brandLink="https://www.vlaanderen.be/nl" @homeRoute="index">
-    {{#if session.isAuthenticated}}
-      <MockLogout @tagName={{"button"}} class="au-c-dropdown__item">
-        <AuIcon @icon="logout" @alignment="left" />Afmelden
+<AuApp>
+  <AuMainHeader
+    @brandLink="https://www.vlaanderen.be/nl"
+    @homeRoute="index"
+    @appTitle={{t "title"}}>
+    {{#if this.session.isAuthenticated}}
+      <MockLogout
+        @tagName="button"
+        class="au-c-button au-c-button--naked">
+        <AuIcon @icon="logout"/>&nbsp;{{t "logout"}}
       </MockLogout>
     {{/if}}
   </AuMainHeader>
-  {{outlet}}
-</div>
+  <AuBodyContainer
+    @scroll={{true}}>
+    {{!--Use the toaster service to display toasters--}}
+    <AuToaster />
+    {{outlet}}
+  </AuBodyContainer>
+</AuApp>

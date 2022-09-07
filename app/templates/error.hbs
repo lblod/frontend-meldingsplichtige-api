@@ -1,0 +1,14 @@
+<AuAlert
+  @title={{t "error.title"}}
+  @skin="error"
+  @icon="cross"
+  @size="default"
+  class="au-u-margin-large">
+  <p class="au-u-margin-bottom au-u-margin-top">
+    {{t "error.body"}}
+  </p>
+  <AuHr />
+  <p class="au-u-bold au-u-margin-top">
+    <code class="au-u-monospace">{{this.model}}</code>
+  </p>
+</AuAlert>

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'frontend-meldingsplichtige-api',
     environment,
@@ -13,22 +13,17 @@ module.exports = function(environment) {
       },
       EXTEND_PROTOTYPES: {
         // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
+        Date: false,
+      },
     },
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    moment: {
-      allowEmpty: true,
-      includeLocales: ['nl-be'],
-      includeTimezone: 'all'
-    },
     torii: {
-      disableRedirectInitializer: true
-    }
+      disableRedirectInitializer: true,
+    },
   };
 
   if (environment === 'development') {

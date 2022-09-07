@@ -1,13 +1,13 @@
 {{#if @triples}}
-  <table class="triple">
-    <thead>
+  <AuTable>
+    <:header>
       <tr>
-        <th>Subject</th>
-        <th>Predicate</th>
-        <th>Object</th>
+        <th>{{t "triples.subject"}}</th>
+        <th>{{t "triples.predicate"}}</th>
+        <th>{{t "triples.object"}}</th>
       </tr>
-    </thead>
-    <tbody>
+    </:header>
+    <:body>
       {{#each @triples as |triple|}}
         <tr>
           <td>{{triple.subject}}</td>
@@ -15,6 +15,6 @@
           <td>{{triple.object}}</td>
         </tr>
       {{/each}}
-    </tbody>
-  </table>
+    </:body>
+  </AuTable>
 {{/if}}
