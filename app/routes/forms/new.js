@@ -21,7 +21,6 @@ export default class FormsNewRoute extends Route {
   }
 
   async model() {
-    await this.currentSession.ensureLoaded();
     const bestuurseenheid = await this.currentSession.group;
 
     const submissionDocument = this.store.createRecord(
