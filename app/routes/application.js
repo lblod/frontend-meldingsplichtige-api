@@ -15,10 +15,6 @@ export default class ApplicationRoute extends Route {
     return this.loadCurrentSession();
   }
 
-  sessionInvalidated() {
-    this.router.transitionTo('login');
-  }
-
   loadCurrentSession() {
     return this.currentSession.load().catch((e) => {
       warn(e, { id: 'session-load-failure' });

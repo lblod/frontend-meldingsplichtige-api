@@ -5,7 +5,7 @@
     @appTitle={{t "title"}}>
     {{#if this.session.isAuthenticated}}
       <MockLogout
-        @tagName={{"button"}}
+        @tagName="button"
         class="au-c-button au-c-button--naked">
         <AuIcon @icon="logout"/>&nbsp;{{t "logout"}}
       </MockLogout>
