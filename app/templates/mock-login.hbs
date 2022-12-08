@@ -29,9 +29,8 @@
               oninput={{perform this.updateSearch value='target.value'}} />
           {{/let}}
         </p>
-
         <MockLogin as |login|>
-          {{#if this.queryStore.isRunning}}
+          {{#if (or this.queryStore.isRunning this.isLoading)}}
             <AuLoader @padding="small" />
           {{else}}
             {{#if this.login.errorMessage}}
