@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class MockLoginRoute extends Route {
   queryParams = {
@@ -24,4 +25,15 @@ export default class MockLoginRoute extends Route {
       sort: 'gebruiker.achternaam',
     });
   }
+
+  /* eslint-disable ember/no-controller-access-in-routes */
+  @action
+  async loading(transition) {
+    const controller = this.controllerFor('mock-login');
+    controller.set('isLoading', true);
+    transition.promise.finally(function () {
+      controller.set('isLoading', false);
+    });
+  }
+  /* eslint-enable ember/no-controller-access-in-routes */
 }
