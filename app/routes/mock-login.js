@@ -26,6 +26,7 @@ export default class MockLoginRoute extends Route {
     });
   }
 
+  /* eslint-disable ember/no-controller-access-in-routes */
   @action
   async loading(transition) {
     const controller = this.controllerFor('mock-login');
@@ -34,4 +35,5 @@ export default class MockLoginRoute extends Route {
       controller.set('isLoading', false);
     });
   }
+  /* eslint-enable ember/no-controller-access-in-routes */
 }
