@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { warn } from '@ember/debug';
-import rdflib from 'browser-rdflib';
+import { NamedNode } from 'rdflib';
 import fetch from 'fetch';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SENT_STATUS } from '../../models/submission-document-status';
@@ -29,12 +29,12 @@ export default class FormsEditRoute extends Route {
 
     const formStore = new ForkingStore();
 
-    const metaGraph = new rdflib.NamedNode('http://data.lblod.info/metagraph');
+    const metaGraph = new NamedNode('http://data.lblod.info/metagraph');
     formStore.parse(meta, metaGraph, 'text/turtle');
-    const formGraph = new rdflib.NamedNode('http://data.lblod.info/form');
+    const formGraph = new NamedNode('http://data.lblod.info/form');
     formStore.parse(form, formGraph, 'text/turtle');
 
-    const sourceGraph = new rdflib.NamedNode(
+    const sourceGraph = new NamedNode(
       `http://data.lblod.info/submission-document/data/${submissionDocument.id}`
     );
     if (removals || additions) {
@@ -61,7 +61,7 @@ export default class FormsEditRoute extends Route {
       form: formNode,
       formStore,
       graphs,
-      sourceNode: new rdflib.NamedNode(submissionDocument.uri),
+      sourceNode: new NamedNode(submissionDocument.uri),
       submission,
       submissionDocument,
       submitted: submissionStatus.uri === SENT_STATUS,
