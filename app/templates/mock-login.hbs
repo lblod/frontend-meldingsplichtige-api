@@ -35,9 +35,9 @@
           {{else}}
             {{#if this.login.errorMessage}}
               <AuAlert
-                @alertIcon="alert-triangle"
-                @alertTitle={{this.login.errorMessage}}
-                @alertSkin="warning" />
+                @icon="alert-triangle"
+                @title={{this.login.errorMessage}}
+                @skin="warning" />
             {{/if}}
             {{#each this.model as |account|}}
               <AuButton
