@@ -26,6 +26,7 @@
     "test:ember": "ember test"
   },
   "overrides": {
+    "@embroider/util": "^1.11.1",
     "n3": {
       "readable-stream": "4.3.0"
     }
