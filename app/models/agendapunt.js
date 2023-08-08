@@ -5,7 +5,21 @@ export default class AgendapuntModel extends Model {
   @attr('boolean') geplandOpenbaar;
   @attr titel;
   @attr('uri-set') type;
-  @belongsTo('agendapunt') vorigeAgendapunt;
-  @belongsTo('behandeling-van-agendapunt') behandeling;
-  @hasMany('agendapunt') referenties;
+
+  @belongsTo('agendapunt', {
+    async: true,
+    inverse: null,
+  })
+  vorigeAgendapunt;
+  @belongsTo('behandeling-van-agendapunt', {
+    async: true,
+    inverse: 'onderwerp',
+  })
+  behandeling;
+
+  @hasMany('agendapunt', {
+    async: true,
+    inverse: 'vorigeAgendapunt',
+  })
+  referenties;
 }

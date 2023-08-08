@@ -4,7 +4,21 @@ export default class BestuurseenheidModel extends Model {
   @attr uri;
   @attr naam;
   @attr alternatieveNaam;
-  @belongsTo('bestuurseenheid-classificatie-code') classificatie;
-  @hasMany('bestuursorgaan') bestuursorganen;
-  @hasMany('vendor') vendors;
+
+  @belongsTo('bestuurseenheid-classificatie-code', {
+    async: true,
+    inverse: null,
+  })
+  classificatie;
+
+  @hasMany('bestuursorgaan', {
+    async: true,
+    inverse: 'bestuurseenheid',
+  })
+  bestuursorganen;
+  @hasMany('vendor', {
+    async: true,
+    inverse: 'canActOnBehalfOf',
+  })
+  vendors;
 }

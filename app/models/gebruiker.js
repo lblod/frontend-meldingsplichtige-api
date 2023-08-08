@@ -4,8 +4,17 @@ export default class GebruikerModel extends Model {
   @attr voornaam;
   @attr achternaam;
   @attr rijksregisterNummer;
-  @hasMany('account') accounts;
-  @hasMany('bestuurseenheid') bestuurseenheden;
+
+  @hasMany('account', {
+    async: true,
+    inverse: 'gebruiker',
+  })
+  accounts;
+  @hasMany('bestuurseenheid', {
+    async: true,
+    inverse: null,
+  })
+  bestuurseenheden;
 
   get group() {
     return this.bestuurseenheden.firstObject;
