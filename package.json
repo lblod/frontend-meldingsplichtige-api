@@ -75,6 +75,7 @@
     "ember-mu-transform-helpers": "^2.0.0",
     "ember-noop": "^1.0.0",
     "ember-page-title": "^7.0.0",
+    "ember-power-select": "^6.0.0",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
     "ember-simple-auth": "^4.2.2",
