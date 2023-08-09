@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { task, timeout, restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class MockLoginController extends Controller {
   queryParams = ['gemeente', 'page'];
@@ -30,5 +31,15 @@ export default class MockLoginController extends Controller {
     this.page = 0;
     this.gemeente = value;
     this.model = yield this.queryStore.perform();
+  }
+
+  @action
+  async login(loginF, account) {
+    const accountId = account.id;
+    const gebruiker = account.gebruiker;
+    const bestuurseenheden = await gebruiker.get('bestuurseenheden');
+    const group = await bestuurseenheden[0];
+    const groupId = await group.id;
+    return loginF(accountId, groupId);
   }
 }

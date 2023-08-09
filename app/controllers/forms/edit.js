@@ -61,7 +61,7 @@ export default class FormsEditController extends Controller {
         page: { size: 1 },
         'filter[:uri:]': DELETED_STATUS,
       })
-    ).firstObject;
+    )[0];
   }
 
   @action
