@@ -9,7 +9,7 @@ import {
 } from '@lblod/ember-submission-form-fields';
 import fetch from 'fetch';
 import { DELETED_STATUS } from '../../models/submission-document-status';
-import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 
 export default class FormsEditController extends Controller {
@@ -92,9 +92,8 @@ export default class FormsEditController extends Controller {
     );
   }
 
-  @task
-  *saveSubmissionForm() {
-    yield fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
+  saveSubmissionForm = task(async () => {
+    await fetch(`/submission-forms/${this.model.submissionDocument.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/vnd.api+json' },
       body: JSON.stringify({
@@ -103,7 +102,7 @@ export default class FormsEditController extends Controller {
         ),
       }),
     });
-    yield fetch(
+    await fetch(
       `/submission-forms/${this.model.submissionDocument.id}/flatten`,
       {
         method: 'PUT',
@@ -112,14 +111,13 @@ export default class FormsEditController extends Controller {
 
     // Since the form data and related entities are not updated via ember-data
     // we need to manually reload those to keep the index page up-to-date
-    const formData = yield this.model.submission.belongsTo('formData').reload();
-    yield formData.hasMany('types').reload();
-    yield formData.belongsTo('passedBy').reload();
-  }
+    const formData = await this.model.submission.belongsTo('formData').reload();
+    await formData.hasMany('types').reload();
+    await formData.belongsTo('passedBy').reload();
+  });
 
-  @task
-  *submitSubmissionForm() {
-    yield fetch(
+  submitSubmissionForm = task(async () => {
+    await fetch(
       `/submission-forms/${this.model.submissionDocument.id}/submit`,
       {
         method: 'POST',
@@ -129,19 +127,17 @@ export default class FormsEditController extends Controller {
     // Since the sent date and sent status of the submission will be set by the backend
     // and not via ember-data, we need to manually reload the submission record
     // to keep the index page up-to-date
-    const submission = yield this.model.submission.reload();
-    yield submission.belongsTo('status').reload();
-  }
+    const submission = await this.model.submission.reload();
+    await submission.belongsTo('status').reload();
+  });
 
-  @task
-  *deleteSubmission() {
-    yield fetch(`/submissions/${this.model.submission.id}`, {
+  deleteSubmission = task(async () => {
+    await fetch(`/submissions/${this.model.submission.id}`, {
       method: 'DELETE',
     });
-  }
+  });
 
-  @task
-  *delete() {
+  delete = task(async () => {
     this.toaster.notify(
       this.intl.t('edit.toast.delete'),
       this.intl.t('edit.toast.delete-title'),
@@ -151,17 +147,16 @@ export default class FormsEditController extends Controller {
         closable: true,
       }
     );
-    yield this.deleteSubmission.perform();
+    await this.deleteSubmission.perform();
     this.toaster.success(
       this.intl.t('edit.toast.delete-success'),
       this.intl.t('edit.toast.delete-success-title'),
       { icon: 'check', timeOut: '10000', closable: true }
     );
     this.router.transitionTo('index');
-  }
+  });
 
-  @task
-  *save() {
+  save = task(async () => {
     this.toaster.notify(
       this.intl.t('edit.toast.save'),
       this.intl.t('edit.toast.save-title'),
@@ -172,22 +167,21 @@ export default class FormsEditController extends Controller {
       }
     );
 
-    yield this.saveSubmissionForm.perform();
+    await this.saveSubmissionForm.perform();
 
-    const user = yield this.currentSession.user;
+    const user = await this.currentSession.user;
     this.model.submission.modified = new Date();
     this.model.submission.lastModifier = user;
-    yield this.model.submission.save();
+    await this.model.submission.save();
 
     this.toaster.success(
       this.intl.t('edit.toast.save-success'),
       this.intl.t('edit.toast.save-success-title'),
       { icon: 'check', timeOut: '10000', closable: true }
     );
-  }
+  });
 
-  @task
-  *submit() {
+  submit = task(async () => {
     this.toaster.notify(
       this.intl.t('edit.toast.send'),
       this.intl.t('edit.toast.send-title'),
@@ -215,8 +209,8 @@ export default class FormsEditController extends Controller {
       );
       this.forceShowErrors = true;
     } else {
-      yield this.saveSubmissionForm.perform();
-      yield this.submitSubmissionForm.perform();
+      await this.saveSubmissionForm.perform();
+      await this.submitSubmissionForm.perform();
       this.toaster.success(
         this.intl.t('edit.toast.send-success'),
         this.intl.t('edit.toast.send-success-title'),
@@ -224,7 +218,7 @@ export default class FormsEditController extends Controller {
       );
       this.router.transitionTo('index');
     }
-  }
+  });
 
   @action
   showForm() {
