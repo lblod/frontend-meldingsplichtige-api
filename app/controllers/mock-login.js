@@ -35,7 +35,7 @@ export default class MockLoginController extends Controller {
   async login(loginF, account) {
     const accountId = account.id;
     const gebruiker = account.gebruiker;
-    const bestuurseenheden = await gebruiker.get('bestuurseenheden');
+    const bestuurseenheden = await gebruiker.bestuurseenheden;
     const group = await bestuurseenheden[0];
     const groupId = await group.id;
     return loginF(accountId, groupId);
