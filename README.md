@@ -1,10 +1,15 @@
 # frontend-meldingsplichtige-api
 
-This web application is used for testing the process of creating and submitting automatic submissions for the Loket stack. You can also create a manual submission if needed.
+This web application is used for testing the process of creating and submitting
+automatic submissions for the Loket stack. You can also create a manual
+submission if needed.
 
 ## Run this in the stack
 
-Look at the information below if you don't already have experience with Ember webapps. You will also need the [app-meldingsplichtige-api stack](https://github.com/lblod/app-meldingsplichtige-api) running to be able to use this application. Then use
+Look at the information below if you don't already have experience with Ember
+webapps. You will also need the [app-meldingsplichtige-api
+stack](https://github.com/lblod/app-meldingsplichtige-api) running to be able
+to use this application. Then use
 
 ```bash
 ember serve --proxy http://localhost/ --port <<desired port>>
@@ -33,11 +38,13 @@ You will need the following things properly installed on your computer.
 
 * `ember serve`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+* Visit your tests at
+  [http://localhost:4200/tests](http://localhost:4200/tests).
 
 ### Code Generators
 
-Make use of the many generators for code, try `ember help generate` for more details
+Make use of the many generators for code, try `ember help generate` for more
+details
 
 ### Running Tests
 
@@ -63,5 +70,7 @@ No specifications about deployment yet
 * [ember.js](https://emberjs.com/)
 * [ember-cli](https://cli.emberjs.com/release/)
 * Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+  * [ember inspector for
+    chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
+  * [ember inspector for
+    firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
