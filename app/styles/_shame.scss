@@ -72,6 +72,9 @@ $au-non-editable-background    : $au-gray-100 !default;
   font-family: var(--au-font-tertiary);
 }
 
-.pointer {
-  cursor: pointer;
+.au-u-button-to-list-navigation {
+  width: 100%;
+  height: inherit;
+  border: none;
+  border-radius: 0;
 }
