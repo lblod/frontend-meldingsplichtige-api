@@ -1,0 +1,18 @@
+pipeline:
+  lint:
+    image: node:18-alpine
+    commands:
+      # Need git for pulling some package dependencies (erikap/sparql-client)
+      - apk --no-cache add git openssh
+      - npm ci
+      - npm run lint:js
+      - npm run lint:hbs
+      - npm run lint:dependency
+  build:
+    image: plugins/docker
+    settings:
+      repo: ${CI_REPO}
+      dry_run: true
+when:
+  event:
+    - pull_request
