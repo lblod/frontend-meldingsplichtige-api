@@ -5,7 +5,7 @@ export default class AccountModel extends Model {
   @attr voId;
 
   @belongsTo('gebruiker', {
-    async: false,
+    async: true,
     inverse: 'accounts',
   })
   gebruiker;
