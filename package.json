@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "date-fns": "^2.29.2",
-    "ember-cli-release": "^1.0.0-beta.2",
     "ember-fetch": "^8.1.2"
   },
   "devDependencies": {
