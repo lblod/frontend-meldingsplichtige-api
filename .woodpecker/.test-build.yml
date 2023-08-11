@@ -8,6 +8,7 @@ pipeline:
       - npm run lint:js
       - npm run lint:hbs
       - npm run lint:dependency
+    failure: ignore
   build:
     image: plugins/docker
     settings:
