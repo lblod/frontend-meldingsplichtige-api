@@ -73,7 +73,7 @@
     "ember-mu-transform-helpers": "^2.0.0",
     "ember-noop": "^1.0.0",
     "ember-page-title": "^7.0.0",
-    "ember-power-select": "^6.0.0",
+    "ember-power-select": "^7.0.0",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
     "ember-simple-auth": "^4.2.2",
@@ -96,6 +96,13 @@
     "stylelint-prettier": "^3.0.0",
     "tracked-built-ins": "^3.1.1",
     "webpack": "^5.78.0"
+  },
+  "overrides": {
+    "ember-modifier": "$ember-modifier",
+    "ember-concurrency": "$ember-concurrency",
+    "@lblod/ember-submission-form-fields": {
+      "ember-power-select": "$ember-power-select"
+    }
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
