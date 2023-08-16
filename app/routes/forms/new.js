@@ -16,8 +16,7 @@ export default class FormsNewRoute extends Route {
       }
     );
 
-    if (conceptStatuses.length)
-      this.conceptStatus = conceptStatuses.firstObject;
+    if (conceptStatuses.length) this.conceptStatus = conceptStatuses[0];
   }
 
   async model() {

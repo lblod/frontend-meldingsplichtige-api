@@ -16,8 +16,25 @@ export default class FormDataModel extends Model {
   @attr('number') taxRateAmmount;
   @attr('datetime') sessionStartedAtTime;
 
-  @hasMany('concept') types;
-  @belongsTo('submission') submission;
-  @belongsTo('bestuurseenheid') isAbout;
-  @belongsTo('bestuursorgaan') passedBy;
+  @hasMany('concept', {
+    async: true,
+    inverse: null,
+  })
+  types;
+
+  @belongsTo('submission', {
+    async: true,
+    inverse: 'formData',
+  })
+  submission;
+  @belongsTo('bestuurseenheid', {
+    async: true,
+    inverse: null,
+  })
+  isAbout;
+  @belongsTo('bestuursorgaan', {
+    async: true,
+    inverse: null,
+  })
+  passedBy;
 }

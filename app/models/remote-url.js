@@ -7,7 +7,12 @@ export default class RemoteUrlModel extends Model {
   @attr('datetime') modified;
   @attr downloadStatus;
   @attr creator;
-  @belongsTo('file', { inverse: null }) download;
+
+  @belongsTo('file', {
+    async: true,
+    inverse: null,
+  })
+  download;
 
   get downloadSuccess() {
     return (

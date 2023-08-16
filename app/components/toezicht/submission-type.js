@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { all } from 'ember-concurrency';
-import { task, keepLatestTask } from 'ember-concurrency-decorators';
+import { task, all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 
 const CONCEPT_SCHEME_REGULATION_TYPE =
@@ -17,28 +16,26 @@ export default class ToezichtSubmissionTypeComponent extends Component {
   @tracked decisionType;
   @tracked regulationType;
 
-  @keepLatestTask
-  *loadData() {
-    const formData = yield this.args.formData;
+  loadData = task({ keepLatest: true }, async () => {
+    const formData = await this.args.formData;
 
     if (formData) {
-      const concepts = yield formData.types;
-      yield all(concepts.map((c) => this.updateSubmissionType.perform(c)));
+      const concepts = await formData.types;
+      return all(concepts.map((c) => this.updateSubmissionType.perform(c)));
     }
-  }
+  });
 
-  @task
-  *updateSubmissionType(concept) {
-    const topConceptSchemes = yield concept.topConceptSchemes;
+  updateSubmissionType = task(async (concept) => {
+    const topConceptSchemes = await concept.topConceptSchemes;
     const topConceptSchemeUris = topConceptSchemes.map((cs) => cs.uri);
     const isTopConcept =
       topConceptSchemeUris.includes(CONCEPT_SCHEME_DECISION_TYPE) ||
       topConceptSchemeUris.includes(CONCEPT_SCHEME_DOCUMENT_TYPE);
     if (isTopConcept) this.decisionType = concept;
 
-    const conceptSchemes = yield concept.conceptSchemes;
+    const conceptSchemes = await concept.conceptSchemes;
     const conceptSchemeUris = conceptSchemes.map((cs) => cs.uri);
     if (conceptSchemeUris.includes(CONCEPT_SCHEME_REGULATION_TYPE))
       this.regulationType = concept;
-  }
+  });
 }

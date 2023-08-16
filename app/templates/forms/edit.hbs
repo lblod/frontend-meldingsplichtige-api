@@ -1,4 +1,4 @@
-<AuMainContainer 
+<AuMainContainer
   {{did-insert this.registerObserver}}
   {{did-insert this.setTriplesForTables}}
   as |mc|>
@@ -16,24 +16,24 @@
         <nav class="au-u-margin-bottom">
           <ul class="au-c-list-navigation">
             <li class="au-c-list-navigation__item">
-              <AuLink
+              <AuButton
+                @skin="link"
                 @icon="document"
                 @iconAlignment="left"
-                @skin="primary"
-                class="au-c-list-navigation__link {{if this.formVisible "active"}}"
+                class="au-c-list-navigation__link au-u-button-to-list-navigation {{if this.formVisible "active"}}"
                 {{on "click" this.showForm}}>
                 {{t "edit.nav.edit-form"}}
-              </AuLink>
+              </AuButton>
             </li>
             <li class="au-c-list-navigation__item">
-              <AuLink
+              <AuButton
+                @skin="link"
                 @icon="html"
                 @iconAlignment="left"
-                @skin="primary"
-                class="au-c-list-navigation__link {{if this.triplesVisible "active"}}"
+                class="au-c-list-navigation__link au-u-button-to-list-navigation {{if this.triplesVisible "active"}}"
                 {{on "click" this.showTriples}}>
                 {{t "edit.nav.triples-summary"}}
-              </AuLink>
+              </AuButton>
             </li>
           </ul>
         </nav>

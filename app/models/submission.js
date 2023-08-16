@@ -18,13 +18,51 @@ export default class Submission extends Model {
   @attr source;
   @attr uri;
   @attr href;
-  @belongsTo('bestuurseenheid') organization;
-  @belongsTo('vendor') publisher;
-  @belongsTo('submission-document') submissionDocument;
-  @belongsTo('submission-document-status') status;
-  @belongsTo('gebruiker') creator;
-  @belongsTo('gebruiker') lastModifier;
-  @belongsTo('form-data') formData;
-  @belongsTo('job') job;
-  @hasMany('file') files;
+
+  @belongsTo('bestuurseenheid', {
+    async: true,
+    inverse: null,
+  })
+  organization;
+  @belongsTo('vendor', {
+    async: true,
+    inverse: null,
+  })
+  publisher;
+  @belongsTo('submission-document', {
+    async: true,
+    inverse: 'submission',
+  })
+  submissionDocument;
+  @belongsTo('submission-document-status', {
+    async: true,
+    inverse: null,
+  })
+  status;
+  @belongsTo('gebruiker', {
+    async: true,
+    inverse: null,
+  })
+  creator;
+  @belongsTo('gebruiker', {
+    async: true,
+    inverse: null,
+  })
+  lastModifier;
+  @belongsTo('form-data', {
+    async: true,
+    inverse: 'submission',
+  })
+  formData;
+  @belongsTo('job', {
+    async: true,
+    inverse: 'submission',
+  })
+  job;
+
+  @hasMany('file', {
+    async: true,
+    inverse: null,
+  })
+  files;
 }

@@ -6,8 +6,7 @@
         src="/assets/images/loket-header-1600.jpg"
         srcset="/assets/images/loket-header-320.jpg 320w, /assets/images/loket-header-1024.jpg 1024w, /assets/images/loket-header-1600.jpg 1600w"
         alt=""
-        role="presentation"
-      >
+        role="none">
     </AuContentHeader>
 
     <div class="au-o-region-large">
@@ -25,7 +24,6 @@
               id={{id}}
               placeholder={{t "mock-login.placeholder"}}
               value={{this.gemeente}}
-              autofocus
               oninput={{perform this.updateSearch value='target.value'}} />
           {{/let}}
         </p>
@@ -46,7 +44,7 @@
                 @width="block"
                 @size="large"
                 type="button"
-                {{on "click" (fn login.login account.id account.gebruiker.group.id)}}>
+                {{on "click" (fn this.login login.login account)}}>
                 {{account.gebruiker.voornaam}} {{account.gebruiker.achternaam}}
               </AuButton>
             {{/each}}

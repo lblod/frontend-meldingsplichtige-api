@@ -71,3 +71,10 @@ $au-non-editable-background    : $au-gray-100 !default;
 .au-u-monospace {
   font-family: var(--au-font-tertiary);
 }
+
+.au-u-button-to-list-navigation {
+  width: 100%;
+  height: inherit;
+  border: none;
+  border-radius: 0;
+}
