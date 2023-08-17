@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "before:init": [
+      "npm run lint:hbs",
+      "npm run lint:js",
+      "npm run lint:dependency"
+    ]
+  },
+  "git": {
+    "tagAnnotation": "v${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "github": {
+    "release": true
+  }
+}
