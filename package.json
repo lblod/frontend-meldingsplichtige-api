@@ -25,7 +25,8 @@
     "lint:dependency": "ember dependency-lint",
     "start": "ember serve",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
-    "test:ember": "ember test"
+    "test:ember": "ember test",
+    "release": "release-it"
   },
   "dependencies": {
     "date-fns": "^2.29.2",
@@ -90,6 +91,7 @@
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
     "rdflib": "^2.2.19",
+    "release-it": "^16.1.5",
     "sass": "^1.54.4",
     "stylelint": "^15.4.0",
     "stylelint-config-standard": "^32.0.0",
