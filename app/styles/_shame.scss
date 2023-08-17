@@ -11,22 +11,18 @@
 /* Variables
    ========================================================================== */
 
-$au-non-editable-background    : $au-gray-100 !default;
+$au-non-editable-background: $au-gray-100 !default;
 
 /* Modifiers
    ========================================================================== */
 
 .au-c-form--non-editable {
-  background-color:  $au-non-editable-background;
+  background-color: $au-non-editable-background;
   max-width: 100%;
 
   table {
     max-width: 100%;
     width: 100%;
-
-    td {
-
-    }
   }
 }
 
@@ -55,11 +51,11 @@ $au-non-editable-background    : $au-gray-100 !default;
     pointer-events: none;
   }
 
-  .au-c-label--error:before {
+  .au-c-label--error::before {
     background-color: $au-input-disabled-color;
   }
 
-  .au-c-button{
+  .au-c-button {
     background: $au-input-disabled-color;
   }
 }
