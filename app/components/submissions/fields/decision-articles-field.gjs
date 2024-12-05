@@ -266,7 +266,7 @@ class DecisionArticlesField extends Component {
     {{else}}
       <div class="au-u-text-center">
         <AuHelpText>
-          Er werden nog geen artikels toegevoegd
+          {{t "submission.cross-reference.no-articles-added"}}
         </AuHelpText>
       </div>
     {{/if}}
@@ -279,14 +279,14 @@ class DecisionArticlesField extends Component {
           @width="block"
           {{on "click" this.createArticle}}
         >
-          Voeg artikel toe
+          {{t "submission.cross-reference.add-article"}}
         </AuButton>
       </div>
     {{/unless}}
 
     {{#if this.hasErrors}}
       <AuHelpText @error={{true}}>
-        Gelieve minstens 1 artikel toe te voegen
+        {{t "submission.cross-reference.min-one-article"}}
       </AuHelpText>
     {{/if}}
   </template>
@@ -431,7 +431,7 @@ class ArticleDetails extends Component {
     <div class="decision-article-field-details" ...attributes>
       <div class="au-u-flex au-u-flex--between au-u-margin-bottom">
         <AuHeading @level="2" @skin="4">
-          Artikel
+          {{t "submission.cross-reference.article"}}
           {{@count}}
         </AuHeading>
 
@@ -443,7 +443,7 @@ class ArticleDetails extends Component {
             @alert={{true}}
             {{on "click" @onRemove}}
           >
-            Artikel verwijderen
+            {{t "submission.cross-reference.remove-article"}}
           </AuButton>
         {{/unless}}
       </div>
@@ -462,7 +462,7 @@ class ArticleDetails extends Component {
             @required={{not @isReadOnly}}
             class="au-u-margin-bottom"
           >
-            <:label>Artikeltype</:label>
+            <:label>{{t "submission.cross-reference.article-type"}}</:label>
           </ConceptSchemeSelect>
         {{/if}}
 
@@ -471,16 +471,16 @@ class ArticleDetails extends Component {
             {{#if this.hasDecisionsError}}
               <ErrorBadge />
             {{/if}}
-            Documenten
+            {{t "submission.cross-reference.docments"}}
             {{#unless @isReadOnly}}
               <RequiredPill />
             {{/unless}}
           </:title>
           <:header>
             <tr>
-              <th>Naam</th>
-              <th>Ingezonden door</th>
-              <th>Ingezonden op</th>
+              <th>{{t "submission.cross-reference.name"}}</th>
+              <th>{{t "submission.cross-reference.submitted-by"}}</th>
+              <th>{{t "submission.cross-reference.submitted-on"}}</th>
               {{#unless this.isReadOnly}}
                 <th></th>
               {{/unless}}
@@ -506,21 +506,21 @@ class ArticleDetails extends Component {
                         @icon={{BinIcon}}
                         {{on "click" (fn this.removeDecision decision)}}
                       >
-                        Verwijder
+                        {{t "submission.cross-reference.remove"}}
                       </AuButton>
                     </td>
                   {{/unless}}
                 </tr>
               {{else}}
                 <tr>
-                  <td colspan="4">Er werden nog geen documenten toegevoegd</td>
+                  <td colspan="4">{{t "submission.cross-reference.no-documents-added"}}</td>
                 </tr>
               {{/each}}
             {{else}}
               <tr>
                 <td colspan="4">
                   <AuHelpText @error={{true}} class="au-u-margin-top-none">
-                    Er ging iets fout bij het opvragen van de documenten
+                    {{t "submission.cross-reference.error-requesting"}}
                   </AuHelpText>
                 </td>
               </tr>
@@ -536,7 +536,7 @@ class ArticleDetails extends Component {
             class="au-u-margin-top-small"
             {{on "click" (fn (mut this.showModal) true)}}
           >
-            Voeg documenten toe
+            {{t "submission.cross-reference.add-documents"}}
           </AuButton>
 
           {{#if this.showModal}}
@@ -555,11 +555,11 @@ class ArticleDetails extends Component {
 
         {{#if this.hasDecisionsError}}
           <AuHelpText @error={{true}}>
-            Gelieve minstens 1 document toe te voegen
+            {{t "submission.cross-reference.min-one-document"}}
           </AuHelpText>
         {{/if}}
       {{else}}
-        <AuLoader>Gegevens aan het laden</AuLoader>
+        <AuLoader>{{t "submission.cross-reference.loading"}}</AuLoader>
       {{/if}}
     </div>
   </template>
@@ -577,7 +577,7 @@ const ErrorBadge = <template>
 
 // Matches the Appuniversum version: https://github.com/appuniversum/ember-appuniversum/blob/f5bcb51c76333c4ac11858bdc17916f50f628bf5/addon/components/au-label.gts#L67
 const RequiredPill = <template>
-  <AuPill>Verplicht</AuPill>
+  <AuPill>{{t "submission.cross-reference.required"}}</AuPill>
 </template>;
 
 /// Template helpers

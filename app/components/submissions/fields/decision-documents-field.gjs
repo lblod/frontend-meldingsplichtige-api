@@ -168,12 +168,11 @@ class DecisionDocumentsField extends Component {
     {{!--
       <AuHelpText @skin="secondary" class="au-u-margin-bottom-small">
         <AuIcon @icon={{InfoCircleIcon}} />
-        Voor een vlotte raadpleging van de gerefereerde documenten, raden we aan
-        om eerst aan te loggen op
+        {{t "submission.cross-reference.please-log-in"}}
         <AuLinkExternal
           @skin="secondary"
           href={{(worshipDecisionsDatabaseUrl)}}
-        >Databank Erediensten</AuLinkExternal>
+        >{{t "submission.cross-reference.databank-erediensten"}}</AuLinkExternal>
       </AuHelpText>
     --}}
 
@@ -182,9 +181,9 @@ class DecisionDocumentsField extends Component {
         <AuTable @size="small" class="au-table-test">
           <:header>
             <tr>
-              <th>Naam</th>
-              <th>Ingezonden door</th>
-              <th>Ingezonden op</th>
+              <th>{{t "submission.cross-reference.name"}}</th>
+              <th>{{t "submission.cross-reference.submitted-by"}}</th>
+              <th>{{t "submission.cross-reference.submitted-on"}}</th>
               {{#unless this.isReadOnly}}
                 <th></th>
               {{/unless}}
@@ -200,14 +199,14 @@ class DecisionDocumentsField extends Component {
                 />
               {{else}}
                 <tr>
-                  <td colspan="4">Er werden nog geen documenten toegevoegd</td>
+                  <td colspan="4">{{t "submission.cross-reference.no-documents-added"}}</td>
                 </tr>
               {{/each}}
             {{else}}
               <tr>
                 <td colspan="4">
                   <AuHelpText @error={{true}} class="au-u-margin-top-none">
-                    Er ging iets fout bij het opvragen van de documenten
+                    {{t "submission.cross-reference.error-requesting"}}
                   </AuHelpText>
                 </td>
               </tr>
@@ -223,7 +222,7 @@ class DecisionDocumentsField extends Component {
             class="au-u-margin-top-small"
             {{on "click" (fn (mut this.showModal) true)}}
           >
-            Voeg documenten toe
+            {{t "submission.cross-reference.add-documents"}}
           </AuButton>
 
           {{#if this.showModal}}
@@ -242,11 +241,11 @@ class DecisionDocumentsField extends Component {
 
         {{#if this.hasErrors}}
           <AuHelpText @error={{true}}>
-            Gelieve minstens 1 document toe te voegen
+            {{t "submission.cross-reference.min-one-document"}}
           </AuHelpText>
         {{/if}}
       {{else}}
-        <AuLoader>Gegevens aan het laden</AuLoader>
+        <AuLoader>{{t "submission.cross-reference.loading"}}</AuLoader>
       {{/if}}
     </div>
   </template>
@@ -270,7 +269,7 @@ const DocumentDetails = <template>
           @icon={{BinIcon}}
           {{on "click" @onRemove}}
         >
-          Verwijder
+          {{t "submission.cross-reference.remove"}}
         </AuButton>
       </td>
     {{/unless}}

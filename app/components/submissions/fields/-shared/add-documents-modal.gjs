@@ -94,7 +94,7 @@ export class AddDocumentsModal extends Component {
     {{! template-lint-disable no-negated-condition}}
     {{#if (not this.searchMode)}}
       <AuModal @modalOpen={{true}} @closeModal={{@onClose}} @overflow={{true}}>
-        <:title>Documenten zoeken</:title>
+        <:title>{{t "submission.cross-reference.search-documents"}}</:title>
         <:body>
           <ConceptSchemeSelect
             @formStore={{@formStore}}
@@ -104,7 +104,7 @@ export class AddDocumentsModal extends Component {
             @required={{true}}
             @onChange={{fn (mut this.org)}}
           >
-            <:label>Ingezonden door</:label>
+            <:label>{{t "submission.cross-reference.submitted-by"}}</:label>
           </ConceptSchemeSelect>
         </:body>
         <:footer>
@@ -114,26 +114,26 @@ export class AddDocumentsModal extends Component {
               @disabled={{this.shouldSelectOrg}}
               {{on "click" this.search.perform}}
             >
-              Documenten zoeken
+              {{t "submission.cross-reference.search-documents"}}
             </AuButton>
           </div>
         </:footer>
       </AuModal>
     {{else}}
       <AuModal @modalOpen={{true}} @closeModal={{@onClose}}>
-        <:title>Documenten toevoegen</:title>
+        <:title>{{t "submission.cross-reference.adding-documents"}}</:title>
         <:body>
           {{#if this.search.isIdle}}
             <div>
               <AuTable>
                 <:title>
-                  Ingezonden door "{{this.orgName}}"
+                  {{t "submission.cross-reference.submitted-by"}} {{this.orgName}}
                 </:title>
                 <:header>
                   <tr>
                     <th></th>
-                    <th>Naam</th>
-                    <th>Datum</th>
+                    <th>{{t "submission.cross-reference.name"}}</th>
+                    <th>{{t "submission.cross-reference.date"}}</th>
                   </tr>
                 </:header>
                 <:body>
@@ -159,7 +159,7 @@ export class AddDocumentsModal extends Component {
                     {{else}}
                       <tr>
                         <td colspan="3">
-                          Geen resultaten
+                          {{t "submission.cross-reference.no-results"}}
                         </td>
                       </tr>
                     {{/each}}
@@ -170,7 +170,7 @@ export class AddDocumentsModal extends Component {
                           @error={{true}}
                           class="au-u-margin-top-none"
                         >
-                          Er ging iets fout bij het zoeken naar documenten
+                          {{t "submission.cross-reference.error-searching"}}
                         </AuHelpText>
                       </td>
                     </tr>
@@ -179,7 +179,7 @@ export class AddDocumentsModal extends Component {
               </AuTable>
             </div>
           {{else}}
-            <AuLoader>Documenten aan het laden</AuLoader>
+            <AuLoader>{{t "submission.cross-reference.loading-documents"}}</AuLoader>
           {{/if}}
         </:body>
         <:footer>
@@ -189,7 +189,7 @@ export class AddDocumentsModal extends Component {
               @skin="naked"
               {{on "click" (fn (mut this.searchMode) false)}}
             >
-              Vorige
+              {{t "submission.cross-reference.previous"}}
             </AuButton>
 
             <AuButton
@@ -197,9 +197,9 @@ export class AddDocumentsModal extends Component {
               {{on "click" (fn @onAdd this.selectedDocuments)}}
             >
               {{#if (eq this.selectedDocuments.length 1)}}
-                Document toevoegen
+                {{t "submission.cross-reference.adding-document"}}
               {{else}}
-                Documenten toevoegen
+                {{t "submission.cross-reference.adding-documents"}}
               {{/if}}
             </AuButton>
           </div>
