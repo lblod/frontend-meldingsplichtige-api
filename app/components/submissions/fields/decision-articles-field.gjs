@@ -34,6 +34,7 @@ import { v4 as uuid } from 'uuid';
 import { ConceptSchemeSelect } from './-shared/concept-scheme-select';
 import { AddDocumentsModal } from './-shared/add-documents-modal';
 import { extractDocumentsFromTtl } from './-shared/utils';
+import { t } from 'ember-intl';
 
 const hasPart = ELI('has_part');
 const documentType = ELI('type_document');

@@ -20,6 +20,7 @@ import { formatDate } from 'frontend-meldingsplichtige-api/utils/date';
 import { isRequiredField } from 'frontend-meldingsplichtige-api/utils/semantic-forms';
 import { AddDocumentsModal } from './-shared/add-documents-modal';
 import { extractDocumentsFromTtl } from './-shared/utils';
+import { t } from 'ember-intl';
 
 export function registerFormField() {
   registerFormFields([

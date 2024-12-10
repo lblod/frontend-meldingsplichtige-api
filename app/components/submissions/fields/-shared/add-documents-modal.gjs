@@ -18,6 +18,7 @@ import { formatDate } from 'frontend-meldingsplichtige-api/utils/date';
 import { prefLabel } from 'frontend-meldingsplichtige-api/rdf/predicates';
 import { ConceptSchemeSelect } from './concept-scheme-select';
 import { extractDocumentsFromTtl } from './utils';
+import { t } from 'ember-intl';
 
 export class AddDocumentsModal extends Component {
   @tracked org;
