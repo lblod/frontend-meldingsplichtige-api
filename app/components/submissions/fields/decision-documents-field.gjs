@@ -15,12 +15,13 @@ import { on } from '@ember/modifier';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import { task } from 'ember-concurrency';
 import worshipDecisionsDatabaseUrl from 'frontend-meldingsplichtige-api/helpers/worship-decisions-database-url';
-import { RDF } from 'frontend-meldingsplichtige-api/rdf/namespaces';
+import { RDF, SKOS } from 'frontend-meldingsplichtige-api/rdf/namespaces';
 import { formatDate } from 'frontend-meldingsplichtige-api/utils/date';
 import { isRequiredField } from 'frontend-meldingsplichtige-api/utils/semantic-forms';
 import { AddDocumentsModal } from './-shared/add-documents-modal';
 import { extractDocumentsFromTtl } from './-shared/utils';
 import { t } from 'ember-intl';
+import { NamedNode } from 'rdflib';
 
 export function registerFormField() {
   registerFormFields([
@@ -62,12 +63,28 @@ class DecisionDocumentsField extends Component {
   }
 
   get decisionType() {
-    return this.args.formStore.any(
-      this.args.sourceNode,
-      RDF('type'),
-      undefined,
-      this.args.graphs.sourceGraph,
+    // A form can have multiple decision types, but just one is in the scheme that interests us
+    const decisionTypes = this.args.formStore
+      .match(
+        this.args.sourceNode,
+        RDF('type'),
+        undefined,
+        this.args.graphs.sourceGraph,
+      )
+      .map((triples) => triples.object);
+
+    const toezichtDossierTypeConceptScheme = new NamedNode(
+      'http://lblod.data.gift/concept-schemes/71e6455e-1204-46a6-abf4-87319f58eaa5',
     );
+
+    return decisionTypes.find((decisionType) => {
+      return this.args.formStore.any(
+        decisionType,
+        SKOS('inScheme'),
+        toezichtDossierTypeConceptScheme,
+        undefined,
+      );
+    });
   }
 
   get path() {
