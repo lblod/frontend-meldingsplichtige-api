@@ -6,9 +6,18 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { SENT_STATUS } from '../../models/submission-document-status';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 import { inject as service } from '@ember/service';
+import { registerFormField } from 'frontend-meldingsplichtige-api/components/submissions/fields/decision-articles-field';
+import { registerFormField as registerDecisionDocumentsField } from 'frontend-meldingsplichtige-api/components/submissions/fields/decision-documents-field';
 
 export default class FormsEditRoute extends Route {
   @service store;
+
+  constructor() {
+    super(...arguments);
+
+    registerFormField();
+    registerDecisionDocumentsField();
+  }
 
   async model(params) {
     // Fetch data from backend

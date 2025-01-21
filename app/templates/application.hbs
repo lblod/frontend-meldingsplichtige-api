@@ -5,11 +5,14 @@
     @homeRoute="index"
     @appTitle={{t "title"}}>
     {{#if this.session.isAuthenticated}}
-      <MockLogout
-        @tagName="button"
-        class="au-c-button au-c-button--naked">
-        <AuIcon @icon="logout"/>&nbsp;{{t "logout"}}
-      </MockLogout>
+      <AuButton
+        @skin="link"
+        @icon="logout"
+        @iconAlignment="left"
+        {{on "click" this.logout}}
+      >
+        {{t "logout"}}
+      </AuButton>
     {{/if}}
   </AuMainHeader>
   <AuBodyContainer

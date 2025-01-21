@@ -9,9 +9,9 @@ export default class ApplicationRoute extends Route {
   @service intl;
 
   async beforeModel() {
-    await this.session.setup();
     const userLocale = navigator.language || navigator.languages[0];
     this.intl.setLocale([userLocale, 'nl-BE']);
+    await this.session.setup();
     return this.loadCurrentSession();
   }
 

@@ -28,12 +28,20 @@
     "test:ember": "ember test",
     "release": "release-it"
   },
+  "overrides": {
+    "ember-math-helpers": "^3.0.0",
+    "ember-truth-helpers": "^3.0.0"
+  },
+  "overridesComments": {
+    "ember-math-helpers": "ember-data-table still brings in v2 but we can't force it to v4 because that's a v2 addon which requires ember-auto-import v2. We can remove the override once this pr is merged: https://github.com/mu-semtech/ember-data-table/pull/35",
+    "ember-truth-helpers": "ember-data-table still brings in v2 but we can't force it to v4 because that's a v2 addon which requires ember-auto-import v2. We can remove the override once this pr is merged: https://github.com/mu-semtech/ember-data-table/pull/35"
+  },
   "dependencies": {
     "date-fns": "^2.29.2",
     "ember-fetch": "^8.1.2"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "^2.5.0",
+    "@appuniversum/ember-appuniversum": "^3.7.0",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@ember/optional-features": "^2.0.0",
@@ -42,14 +50,15 @@
     "@ember/test-helpers": "^2.9.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-submission-form-fields": "^2.11.0",
+    "@lblod/ember-mock-login": "^0.10.2",
+    "@lblod/ember-submission-form-fields": "^2.23.0",
+    "@lblod/submission-form-helpers": "^2.10.2",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.0.1",
     "ember-auto-import": "^2.6.3",
     "ember-cli": "~4.12.2",
     "ember-cli-app-version": "^6.0.0",
-    "ember-cli-babel": "^7.26.11",
+    "ember-cli-babel": "^8.2.0",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-dependency-lint": "^2.0.1",
     "ember-cli-deploy": "^1.0.2",
@@ -68,7 +77,7 @@
     "ember-concurrency": "^3.1.0",
     "ember-data": "~4.11.3",
     "ember-data-table": "^2.1.0",
-    "ember-intl": "^5.7.2",
+    "ember-intl": "^7.0.7",
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
     "ember-mu-transform-helpers": "^2.0.0",
@@ -77,17 +86,18 @@
     "ember-power-select": "^7.0.0",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
-    "ember-simple-auth": "^4.2.2",
+    "ember-simple-auth": "^6.0.0",
     "ember-source": "~4.12.0",
-    "ember-template-lint": "^5.7.2",
+    "ember-template-imports": "^4.1.3",
+    "ember-template-lint": "^5.8.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-ember": "^11.5.0",
+    "eslint-plugin-ember": "^11.6.0",
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-qunit": "^7.3.4",
     "loader.js": "^4.7.0",
-    "prettier": "^2.8.7",
+    "prettier": "^2.8.8",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
     "rdflib": "^2.2.19",
@@ -98,17 +108,11 @@
     "stylelint-config-standard-scss": "^10.0.0",
     "stylelint-prettier": "^3.0.0",
     "tracked-built-ins": "^3.1.1",
-    "webpack": "^5.78.0"
-  },
-  "overrides": {
-    "ember-modifier": "$ember-modifier",
-    "ember-concurrency": "$ember-concurrency",
-    "@lblod/ember-submission-form-fields": {
-      "ember-power-select": "$ember-power-select"
-    }
+    "uuid": "^9.0.1",
+    "webpack": "^5.90.0"
   },
   "engines": {
-    "node": "14.* || 16.* || >= 18"
+    "node": ">= 18"
   },
   "ember": {
     "edition": "octane"
