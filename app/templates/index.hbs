@@ -11,9 +11,21 @@
     <menu.general>
       <AuToolbar class="au-u-padding" as |Group|>
         <Group>
-          <AuHeading @level="1" @skin="1">
-            {{t "main.title"}}
-          </AuHeading>
+          <div>
+            <AuHeading @level="1" @skin="1">
+              {{t "main.title"}}
+            </AuHeading>
+            <p class="au-u-margin-top-small">
+              {{t "main.logged-in-for"}}
+              <strong>{{this.currentSession.group.classificatie.label}} {{this.currentSession.group.naam}}</strong>
+            </p>
+            <p class="au-u-margin-top-tiny">
+              <AuHelpText>
+                {{t "main.user-name"}}:
+                {{this.currentSession.user.fullName}}
+              </AuHelpText>
+            </p>
+          </div>
         </Group>
         <Group>
           <AuLink

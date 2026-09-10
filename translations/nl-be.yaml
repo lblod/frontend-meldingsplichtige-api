@@ -10,6 +10,8 @@ error:
 main:
   title: "Test loket voor meldingen"
   create-submission: "Maak nieuw dossier aan"
+  logged-in-for: "Aangemeld voor"
+  user-name: "Naam gebruiker"
 submission:
   info-title: "Dossierinformatie"
   unit: "Orgaan"

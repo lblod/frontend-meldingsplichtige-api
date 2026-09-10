@@ -10,6 +10,8 @@ error:
 main:
   title: "Test entrypoint for submissions"
   create-submission: "Create new submission"
+  logged-in-for: "Logged in for"
+  user-name: "User name"
 submission:
   info-title: "Submission information"
   unit: "Administrative unit"
