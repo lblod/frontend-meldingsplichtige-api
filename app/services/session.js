@@ -4,8 +4,8 @@ import BaseSessionService from 'ember-simple-auth/services/session';
 export default class SessionService extends BaseSessionService {
   @service currentSession;
 
-  handleAuthentication(routeAfterAuthentication) {
+  async handleAuthentication(routeAfterAuthentication) {
+    await this.currentSession.load();
     super.handleAuthentication(routeAfterAuthentication);
-    this.currentSession.load();
   }
 }
